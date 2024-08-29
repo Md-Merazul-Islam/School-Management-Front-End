@@ -33,3 +33,6 @@
   }
 
   
+  .absolute {
+    z-index: 50; /* or any sufficiently high number */
+  }
