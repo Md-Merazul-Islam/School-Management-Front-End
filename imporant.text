@@ -1,0 +1,34 @@
+npm install react-router-dom
+
+
+
+https://amader-school.up.railway.app/accounts/
+
+https://amader-school.up.railway.app/accounts/register/
+https://amader-school.up.railway.app/accounts/login/
+https://amader-school.up.railway.app/accounts/logout/
+
+{
+    "users": "http://amader-school.up.railway.app/accounts/users/",
+    "profiles": "http://amader-school.up.railway.app/accounts/profiles/"
+}
+
+https://amader-school.up.railway.app/academics/
+
+
+
+{
+    "students": "http://amader-school.up.railway.app/academics/students-list/",
+    "teachers": "http://amader-school.up.railway.app/academics/teachers-list/",
+    "classes": "http://amader-school.up.railway.app/academics/classes/",
+    "subjects": "http://amader-school.up.railway.app/academics/subjects/"
+}
+
+
+https://amader-school.up.railway.app/classes/
+{
+    "attendance": "http://amader-school.up.railway.app/classes/attendance/",
+    "marks": "http://amader-school.up.railway.app/classes/marks/"
+}
+
+Attendance List Create for post - https://amader-school.up.railway.app/classes/attendance-check/
