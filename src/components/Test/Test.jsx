@@ -1,9 +1,34 @@
-import React from 'react'
 
-const Test = () => {
-  return (
-    <div>Test</div>
-  )
-}
+<div className="min-h-screen 0 text-gray-900 flex justify-center">
 
-export default Test
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

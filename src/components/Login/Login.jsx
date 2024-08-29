@@ -1,26 +1,39 @@
-import React from 'react';
-
+import React, { useState } from "react";
+import { login, setToken } from "../Authentication/Authentication";
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await login(username, password);
+      const token = response.data.token;
+      setToken(token);
+      setMessage("Login successful!");
+      setIsModalOpen(true);
+    } catch (error) {
+      setMessage("Login Failed, Please try again.");
+    }
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    navigate("/home"); 
+  };
+
   return (
-    <div className="min-h-screen 0 text-gray-900 flex justify-center">
+    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
       <div className=" m-0 sm:m-10 bg-white  flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-          <div>
-            <img
-              src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
-              className="w-32 mx-auto"
-              alt="Logo"
-            />
-          </div>
+          
           <div className="mt-12 flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold">
-              login up
-            </h1>
+            <h1 className="text-2xl xl:text-3xl font-extrabold">Login Your Account</h1>
             <div className="w-full flex-1 mt-8">
               <div className="flex flex-col items-center">
-                <button
-                  className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline"
-                >
+                <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                   <div className="bg-white p-2 rounded-full">
                     <svg className="w-4" viewBox="0 0 533.5 544.3">
                       <path
@@ -44,9 +57,7 @@ const Login = () => {
                   <span className="ml-4">Login with Google</span>
                 </button>
 
-                <button
-                  className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5"
-                >
+                <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5">
                   <div className="bg-white p-1 rounded-full">
                     <svg className="w-6" viewBox="0 0 32 32">
                       <path
@@ -55,49 +66,79 @@ const Login = () => {
                       />
                     </svg>
                   </div>
-                  <span className="ml-4">login Up with GitHub</span>
+                  <span className="ml-4">Login Up with GitHub</span>
                 </button>
               </div>
 
               <div className=" my-12 border-b text-center ">
                 <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-                  Or login up with e-mail
+                  Or Login up with e-mail
                 </div>
               </div>
 
               <div className="mx-auto max-w-xs">
-                <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="email"
-                  placeholder="Email"
-                />
-                <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                  type="password"
-                  placeholder="Password"
-                />
-                <button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                  <svg
-                    className="w-6 h-6 -ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                <form onSubmit={handleSubmit}>
+                  <input
+                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+
+                  <input
+                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+
+                  <button
+                    type="submit"
+                    className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   >
-                    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="8.5" cy="7" r="4" />
-                    <path d="M20 8v6M23 11h-6" />
-                  </svg>
-                  <span className="ml-3">Login </span>
-                </button>
+                    <svg
+                      className="w-6 h-6 -ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                      <circle cx="8.5" cy="7" r="4" />
+                      <path d="M20 8v6M23 11h-6" />
+                    </svg>
+                    <span className="ml-3">Login </span>
+                  </button>
+                </form>
+                {message && (
+                  <p
+                    className={`mt-4 text-center ${
+                      message.includes("successful")
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {message}
+                  </p>
+                )}
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   I agree to abide by templatana's
-                  <a href="#" className="border-b border-gray-500 border-dotted">
+                  <a
+                    href="#"
+                    className="border-b border-gray-500 border-dotted"
+                  >
                     Terms of Service
                   </a>
                   and its
-                  <a href="#" className="border-b border-gray-500 border-dotted">
+                  <a
+                    href="#"
+                    className="border-b border-gray-500 border-dotted"
+                  >
                     Privacy Policy
                   </a>
                   .
@@ -106,27 +147,25 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="hidden lg:flex flex-1 justify-center p-12 bg-gradient-to-br  rounded-br-lg">
-          <div className="max-w-md text-center ">
-            <h2 className="text-white text-4xl font-extrabold mb-6 leading-tight">
-              Get started with
-              <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-br from-blue-500 to-blue-400">
-                Welcome To Our Website 
-              </span>
-            </h2>
-            <p className="text-white text-lg font-medium">
-              You’ll be creating beautiful websites in no time. Our simple, yet powerful platform will help you make the most out of your skills.
-            </p>
-            <img src="images/login.png" alt="resgister image" />
+    
+      </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full">
+            <h2 className="text-2xl font-bold mb-4">Login Successful!</h2>
+            <p className="mb-6">You are now logged in.</p>
+            <button
+              onClick={closeModal}
+              className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition duration-200"
+            >
+              Ok, thanks
+            </button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
 export default Login;
-
-
-

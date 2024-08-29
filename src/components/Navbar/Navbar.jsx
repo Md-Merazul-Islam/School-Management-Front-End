@@ -1,18 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css'; // Ensure this file includes your custom styles
+import './Navbar.css';
+
+import { Dropdown } from "flowbite-react";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
   const navbarRef = useRef(null);
+  const profileMenuRef = useRef(null);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
 
+  const toggleProfileMenu = () => {
+    setIsProfileMenuOpen((prev) => !prev);
+  };
+
   const handleClickOutside = (event) => {
     if (navbarRef.current && !navbarRef.current.contains(event.target)) {
       setIsMobileMenuOpen(false);
+    }
+    if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+      setIsProfileMenuOpen(false);
     }
   };
 
@@ -27,13 +45,19 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    setIsProfileMenuOpen(false);
+  };
+
   return (
     <nav className="navbar bg-white text-black shadow-md w-full">
       <div className="flex items-center justify-between p-4 w-full">
         {/* Logo */}
         <div className="flex items-center space-x-4">
           <img
-            src="images/logo.png" // Replace with your logo URL
+            src="images/logo.png"
             alt="Logo"
             className="w-12 h-12 rounded-full"
           />
@@ -48,10 +72,41 @@ const Navbar = () => {
           <Link to="/about" className="nav-box hover:bg-gray-200 p-2 rounded">About Us</Link>
           <Link to="/contact" className="nav-box hover:bg-gray-200 p-2 rounded">Contact</Link>
         </div>
-        {/* Login/Signup Buttons */}
-        <div className="hidden md:flex space-x-4">
-          <Link to="/login" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Login</Link>
-          <Link to="/signup" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Sign Up</Link>
+        {/* Profile Icon or Login/Signup Buttons */}
+        <div className="hidden md:flex items-center space-x-4">
+          {isLoggedIn ? (
+            <div className="relative">
+              <button
+                onClick={toggleProfileMenu}
+                ref={profileMenuRef}
+                className="flex items-center p-2"
+              >
+                <img
+                  src="images/profile.png" // Replace with your profile icon URL
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full"
+                />
+              </button>
+              {isProfileMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
+                  <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">My Profile</Link>
+                  <Link to="/activities" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">My Activities</Link>
+                  <Link to="/result" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Result</Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link to="/login" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Login</Link>
+              <Link to="/signup" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Sign Up</Link>
+            </>
+          )}
         </div>
         {/* Mobile Menu Button */}
         <button
@@ -106,8 +161,29 @@ const Navbar = () => {
           <Link to="/about" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>About</Link>
           <Link to="/courses" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Courses</Link>
           <Link to="/contact" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Contact</Link>
-          <Link to="/login" className="bg-gray-800 hover:bg-gray-700 text-white text-center px-4 py-2 rounded" onClick={closeMobileMenu}>Login</Link>
-          <Link to="/signup" className="bg-gray-800 hover:bg-gray-700 text-white text-center px-4 py-2 rounded" onClick={closeMobileMenu}>Sign Up</Link>
+          {isLoggedIn ? (
+            <>
+              <Link to="/profile" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>My Profile</Link>
+              <Link to="/activities" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>My Activities</Link>
+              <Link to="/result" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Result</Link>
+              <button
+                onClick={handleLogout}
+                className="bg-gray-800 hover:bg-gray-700 text-white text-center px-4 py-2 rounded"
+              >
+                Logout
+              </button>
+              
+              
+            </>
+
+
+
+          ) : (
+            <>
+              <Link to="/login" className="bg-gray-800 hover:bg-gray-700 text-white text-center px-4 py-2 rounded" onClick={closeMobileMenu}>Login</Link>
+              <Link to="/signup" className="bg-gray-800 hover:bg-gray-700 text-white text-center px-4 py-2 rounded" onClick={closeMobileMenu}>Sign Up</Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
