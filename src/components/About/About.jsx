@@ -42,12 +42,7 @@ const About = () => {
               <p className="text-gray-700 mb-2" data-aos="fade-up" data-aos-delay="500">
                 <i className="fa fa-check text-blue-500 mr-2"></i>Extensive library resources and online databases.
               </p>
-              <p className="text-gray-700 mb-2"  data-aos="fade-up" data-aos-delay="600">
-                <i className="fa fa-check text-blue-500 mr-2"></i>Strong emphasis on career development and internships.
-              </p>
-              <p className="text-gray-700"  data-aos="fade-up" data-aos-delay="700">
-                <i className="fa fa-check text-blue-500 mr-2"></i>Collaborative research opportunities with leading experts.
-              </p>
+             
             </div>
             <a
               className="inline-block bg-blue-500 text-white font-semibold rounded-full px-6 py-3"
@@ -62,8 +57,8 @@ const About = () => {
           <div className="bg-white p-8 rounded-lg shadow-md" data-aos="fade-left">
             <div className="mb-6 flex justify-center" data-aos="zoom-in">
               <img
-                src="images/about-1.png" // Replace with a real campus image
-                className="w-full h-auto rounded-lg"
+                src="images/ima-about.png" // Replace with a real campus image
+                className="w-96 h-auto rounded-lg"
                 alt="University Campus"
               />
             </div>
