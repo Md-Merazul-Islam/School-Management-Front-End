@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { login, setToken } from "../Authentication/Authentication";
-import { useNavigate } from 'react-router-dom';
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -19,9 +19,10 @@ const Login = () => {
       setMessage("Login Failed, Please try again.");
     }
   };
+
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate("/home"); 
+    window.location.replace('/home'); 
   };
 
   return (
@@ -81,7 +82,7 @@ const Login = () => {
                   <input
                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
-                    placeholder="Username"
+                    placeholder="Email or Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required

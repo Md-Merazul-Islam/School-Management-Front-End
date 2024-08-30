@@ -50,7 +50,6 @@ const Navbar = () => {
       localStorage.removeItem('token');
       setIsLoggedIn(false);
       setIsProfileMenuOpen(false);
-      alert('joy bangla logout done')
       window.location.replace('/login'); 
     } catch (error) {
       console.error("Logout error:", error);
@@ -142,9 +141,7 @@ const Navbar = () => {
               <Link to="/profile" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>My Profile</Link>
               <Link to="/activities" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>My Activities</Link>
               <Link to="/result" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Result</Link>
-              <button onClick={handleLogout} className="bg-gray-800 hover:bg-gray-700 text-white text-center px-4 py-2 rounded">
-                Logout
-              </button>
+          
             </>
           ) : (
             <>
