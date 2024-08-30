@@ -1,0 +1,66 @@
+import React, { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+const Carousel = () => {
+
+  useEffect(() => {
+    AOS.init({
+      duration: 600, // Animation duration (in ms)
+      easing: 'ease-in-out', // Animation easing function
+      once: true, // Whether animation should happen only once
+    });
+  }, []);
+
+  return (
+    <div>
+      {/* Landing Page Header Section */}
+      <div className="header-carousel-item bg-primary h-[750px] relative">
+        <div className="carousel-caption absolute inset-0 flex items-center bg-[#004CA0] bg-opacity-90">
+          <div className="container mx-auto">
+            <div className="flex flex-wrap items-center">
+              {/* Text Content Section */}
+              <div data-aos="fade-right" className="w-full lg:w-7/12 text-center md:text-left">
+                <h4 className="text-white uppercase font-bold mb-4">
+                  Welcome to Our MPI
+                </h4>
+                <h1 className="text-white text-6xl md:text-7xl lg:text-8xl mb-4">
+                  Empowering Future Leaders
+                </h1>
+                <p className="mb-5 text-lg text-white max-w-[819px]">
+                  At MPI, we are dedicated to fostering academic excellence and innovation. Join a diverse community of scholars and experience world-class education.
+                </p>
+                <div className="flex justify-center md:justify-start space-x-4">
+                  <a
+                    className="bg-white text-blue-500 rounded-full py-3 px-6 flex items-center"
+                    href="#apply"
+                  >
+                    <i className="fas fa-play-circle mr-2"></i> Watch Video
+                  </a>
+                  <a
+                    className="bg-black text-white rounded-full py-3 px-6"
+                    href="#learn-more"
+                  >
+                    Learn More
+                  </a>
+                </div>
+              </div>
+              {/* Image Section */}
+              <div data-aos="fade-left" className="w-full lg:w-5/12 mt-8 lg:mt-0">
+                <div className="carousel-img">
+                  <img
+                    src="/images/carousel-2.png"
+                    className="w-full h-full object-cover"
+                    alt="University Campus"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Carousel;

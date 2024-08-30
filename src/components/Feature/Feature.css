@@ -1,0 +1,75 @@
+.feature-card {
+    position: relative;
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: background-color 0.5s ease;
+  }
+  
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: #3b82f6; /* Tailwind blue-500 */
+    z-index: 0;
+    transition: height 0.5s ease;
+  }
+  
+  .feature-card:hover::before {
+    height: 100%;
+  }
+  
+  .feature-card .icon-container {
+    background-color: #e5e7eb; /* Tailwind gray-200 */
+    padding: 1.5rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+    z-index: 1;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.5s ease;
+  }
+  
+  .feature-card:hover .icon-container i {
+    color: #000000; /* Icon color turns black on hover */
+  }
+  
+  .feature-card h4,
+  .feature-card p,
+  .feature-card a {
+    z-index: 1;
+    position: relative;
+    color: #000000;
+    transition: color 0.5s ease;
+  }
+  
+  .feature-card:hover h4,
+  .feature-card:hover p,
+  .feature-card:hover a {
+    color: #ffffff;
+  }
+  
+  .learn-more-btn {
+    display: inline-block;
+    background-color: #3B82F6; /* Button background color is black by default */
+    color: #ffffff; /* Button text is white by default */
+    border-radius: 9999px;
+    padding: 0.5rem 1.5rem;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+  
+  .feature-card:hover .learn-more-btn {
+    background-color: #ffffff; /* Button background becomes white on hover */
+    color: #000000; /* Button text becomes black on hover */
+  }
+  
+  .feature-card:hover .learn-more-btn {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  

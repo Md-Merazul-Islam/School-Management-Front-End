@@ -1,3 +1,5 @@
+
+
 import { useState } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
@@ -5,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./components/Home/Home";
 import SingUp from "./components/SingUp/SingUp";
 import Login from "./components/Login/Login";
+
 
 function App() {
   const [count, setCount] = useState(0);
