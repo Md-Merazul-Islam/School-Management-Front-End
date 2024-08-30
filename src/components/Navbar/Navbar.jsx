@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import { logout } from '../Authentication/Authentication';
 import { FaSignOutAlt } from 'react-icons/fa';
 
 const Navbar = () => {

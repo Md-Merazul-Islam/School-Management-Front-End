@@ -1,14 +1,21 @@
+
+
 import React, { useState } from "react";
 import { login, setToken } from "../Authentication/Authentication";
+import LoadingModal from "../Spinner/Spinner";
+
 
 const Login = () => {
+  const [loading, setLoading] = useState(false); 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); 
     try {
       const response = await login(username, password);
       const token = response.data.token;
@@ -17,13 +24,17 @@ const Login = () => {
       setIsModalOpen(true);
     } catch (error) {
       setMessage("Login Failed, Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    window.location.replace('/home'); 
+    window.location.replace('/home')
+
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
@@ -165,8 +176,10 @@ const Login = () => {
           </div>
         </div>
       )}
+      {loading && <LoadingModal />} 
     </div>
   );
 };
 
 export default Login;
+

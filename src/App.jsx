@@ -6,7 +6,6 @@ import Home from "./components/Home/Home";
 import SingUp from "./components/SingUp/SingUp";
 import Login from "./components/Login/Login";
 
-
 function App() {
   const [count, setCount] = useState(0);
 
@@ -15,9 +14,9 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="signup/" element={<SingUp/>} />
-        <Route path="login/" element={<Login/>} />
-        
+        <Route path="signup/" element={<SingUp />} />
+        <Route path="login/" element={<Login />} />
+
         {/* <Route path="/" element={<Home />} />
         <Route path="/" element={<About />} />
         <Route path="/" element={<Projects />} />
