@@ -3,6 +3,7 @@ import Carousel from '../Carousel/Carousel';
 import Feature from '../Feature/Feature';
 
 import About from '../About/About';
+import Teacher from '../Teacher/Teacher';
 
 
 const Home = () => {
@@ -11,6 +12,8 @@ const Home = () => {
        <Carousel></Carousel>
        <Feature></Feature>
        <About></About>
+       <Teacher></Teacher>
+
     
     </div>
   );

@@ -17,7 +17,11 @@ https://amader-school.up.railway.app/academics/
 
 
 
+ add:   "students": "http://amader-school.up.railway.app/academics/students/",
+
+ add:   "students": "http://amader-school.up.railway.app/academics/teachers/",
 {
+
     "students": "http://amader-school.up.railway.app/academics/students-list/",
     "teachers": "http://amader-school.up.railway.app/academics/teachers-list/",
     "classes": "http://amader-school.up.railway.app/academics/classes/",

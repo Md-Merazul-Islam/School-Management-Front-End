@@ -9,6 +9,16 @@ const About = () => {
 
   return (
     <div className="bg-gray-100 py-10">
+           <div className="text-center mx-auto pb-12"
+              style={{ maxWidth: '800px' }}
+              data-aos="fade-up"
+            >
+              <h4 className="text-blue-500">About Us</h4>
+              <h1 className="text-5xl mb-4">Shaping Future Leaders in Technology</h1>
+              <p className="mb-0">
+                At Tech Innovators Academy, we are dedicated to nurturing the next generation of technology leaders. Our institution offers cutting-edge programs, expert faculty, and state-of-the-art facilities to ensure students excel in their academic and professional journeys. Join us and be part of a community that thrives on innovation and excellence.
+              </p>
+            </div>
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Left Side - Text Section */}

@@ -1,0 +1,19 @@
+/* Teacher.css */
+
+.glide__arrow {
+    position: absolute;
+    display: block;
+    top: 50%;
+    z-index: 2;
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+  
+  .glide__arrow--left {
+    left: 1rem;
+  }
+  
+  .glide__arrow--right {
+    right: 1rem;
+  }
+  
