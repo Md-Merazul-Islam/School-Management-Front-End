@@ -10,6 +10,7 @@ import Login from "./components/Login/Login";
 import Footer from "./components/Footer/Footer";
 import About from "./components/About/About";
 import Subjects from "./components/Subjects/Subjects";
+import Contact from "./components/Contact/Contact";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="login/" element={<Login />} />
         <Route path="about/"element={<About/>}/>
         <Route path="courses/"element={<Subjects/>}/>
+        <Route path="contact/"element={<Contact/>}/>
         
 
         {/* <Route path="/" element={<Home />} />

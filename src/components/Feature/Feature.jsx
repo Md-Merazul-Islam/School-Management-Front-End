@@ -18,7 +18,7 @@ const Feature = () => {
         >
           <h4 className="text-blue-500">Our Features</h4>
           <h1 className="text-5xl mb-4">Empowering Your Educational Journey</h1>
-          <p className="mb-0">
+          <p className="mb-0 mx-1">
             Our institution is committed to providing a supportive and challenging environment that encourages students to achieve their full potential. Discover the features that make our school, college, or university a leader in education.
           </p>
         </div>

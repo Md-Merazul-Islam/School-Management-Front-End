@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import { FaSignOutAlt } from 'react-icons/fa';
+import { FaSignOutAlt, FaCaretDown } from 'react-icons/fa';  // Import FaCaretDown for dropdown icon
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,9 +20,8 @@ const Navbar = () => {
   };
 
   const toggleProfileMenu = () => {
-    setIsProfileMenuOpen((prev) => !prev);
+    setIsProfileMenuOpen(prev => !prev);
   };
-  
 
   const handleClickOutside = (event) => {
     if (navbarRef.current && !navbarRef.current.contains(event.target)) {
@@ -49,49 +48,67 @@ const Navbar = () => {
       localStorage.removeItem('token');
       setIsLoggedIn(false);
       setIsProfileMenuOpen(false);
-      window.location.replace('/login'); 
+      window.location.replace('/login');
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
 
   return (
-    <nav className="navbar bg-white text-black shadow-md w-full">
+    <nav className="navbar bg-gray-100 text-black shadow-lg w-full z-1000 relative">
       <div className="flex items-center justify-between p-4 w-full">
         {/* Logo */}
         <div className="flex items-center space-x-4">
           <img src="images/logo.png" alt="Logo" className="w-12 h-12 rounded-full" />
           <span className="text-2xl font-bold">CST</span>
         </div>
+
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-4">
           <Link to="/" className="nav-box hover:bg-gray-200 p-2 rounded">Home</Link>
-          <Link to="/courses" className="nav-box hover:bg-gray-200 p-2 rounded">Academics</Link>
+
+          {/* Academics Dropdown with Hover */}
+          {isLoggedIn && (
+            <div className="relative group">
+              <div
+                className="nav-box hover:bg-gray-200 p-2 rounded cursor-pointer flex items-center"
+              >
+                Academics <FaCaretDown className="ml-2" />
+              </div>
+
+              {/* Dropdown Menu */}
+              <div className="absolute hidden group-hover:block bg-white border rounded shadow-lg mt-2">
+                <Link to="/teachers" className="block px-4 py-2 hover:bg-gray-200">Teachers</Link>
+                <Link to="/students" className="block px-4 py-2 hover:bg-gray-200">Students</Link>
+                <Link to="/make" className="block px-4 py-2 hover:bg-gray-200">Make</Link>
+              </div>
+            </div>
+          )}
+
           <Link to="/courses" className="nav-box hover:bg-gray-200 p-2 rounded">Courses</Link>
-          <Link to="/courses" className="nav-box hover:bg-gray-200 p-2 rounded">Notice</Link>
+          <Link to="/notice" className="nav-box hover:bg-gray-200 p-2 rounded">Notice</Link>
           <Link to="/about" className="nav-box hover:bg-gray-200 p-2 rounded">About Us</Link>
           <Link to="/contact" className="nav-box hover:bg-gray-200 p-2 rounded">Contact</Link>
         </div>
+
         {/* Profile Icon or Login/Signup Buttons */}
         <div className="hidden md:flex items-center space-x-4">
           {isLoggedIn ? (
-            <div className="relative ">
-            <div className="flex items-center space-x-4">
-              <button onClick={toggleProfileMenu} ref={profileMenuRef} className="flex items-center p-2">
-                <img src="images/profile.png" alt="Profile" className="w-8 h-8 rounded-full" />
-              </button>
-              <button onClick={handleLogout} className="flex items-center bg-gray-800 hover:bg-gray-700 text-white text-center px-2 py-2 rounded">
-                <FaSignOutAlt className="mr-2" />
-                
-              </button>
-            </div>
+            <div className="relative">
+              <div className="flex items-center space-x-4">
+                <button onClick={toggleProfileMenu} ref={profileMenuRef} className="flex items-center p-2">
+                  <img src="images/profile.png" alt="Profile" className="w-8 h-8 rounded-full" />
+                </button>
+                <button onClick={handleLogout} className="flex items-center bg-gray-800 hover:bg-gray-700 text-white text-center px-2 py-2 rounded">
+                  <FaSignOutAlt className="mr-2" />
+                </button>
+              </div>
 
               {isProfileMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
                   <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">My Profile</Link>
                   <Link to="/activities" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">My Activities</Link>
                   <Link to="/result" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Result</Link>
-                 
                 </div>
               )}
             </div>
@@ -102,6 +119,7 @@ const Navbar = () => {
             </>
           )}
         </div>
+
         {/* Mobile Menu Button */}
         <button
           onClick={toggleMobileMenu}
@@ -114,6 +132,7 @@ const Navbar = () => {
           </svg>
         </button>
       </div>
+
       {/* Mobile Menu */}
       <div
         id="mobile-menu"
@@ -135,18 +154,23 @@ const Navbar = () => {
           <Link to="/about" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>About</Link>
           <Link to="/courses" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Courses</Link>
           <Link to="/contact" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Contact</Link>
-          {isLoggedIn ? (
-            <>
-              <Link to="/profile" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>My Profile</Link>
-              <Link to="/activities" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>My Activities</Link>
-              <Link to="/result" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Result</Link>
-          
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="bg-gray-800 hover:bg-gray-700 text-white text-center px-4 py-2 rounded" onClick={closeMobileMenu}>Login</Link>
-              <Link to="/signup" className="bg-gray-800 hover:bg-gray-700 text-white text-center px-4 py-2 rounded" onClick={closeMobileMenu}>Sign Up</Link>
-            </>
+
+          {/* Academics Dropdown for Mobile */}
+          {isLoggedIn && (
+            <div className="relative">
+              <button
+                onClick={toggleMobileMenu}
+                className="nav-box hover:bg-gray-200 p-2 rounded"
+              >
+                Academics <FaCaretDown className="ml-2" />
+              </button>
+
+              <div className="absolute bg-white border rounded shadow-lg mt-2">
+                <Link to="/teachers" className="block px-4 py-2 hover:bg-gray-200" onClick={closeMobileMenu}>Teachers</Link>
+                <Link to="/students" className="block px-4 py-2 hover:bg-gray-200" onClick={closeMobileMenu}>Students</Link>
+                <Link to="/make" className="block px-4 py-2 hover:bg-gray-200" onClick={closeMobileMenu}>Make</Link>
+              </div>
+            </div>
           )}
         </div>
       </div>

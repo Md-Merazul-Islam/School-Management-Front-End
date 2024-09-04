@@ -56,7 +56,7 @@ const Teacher = () => {
 
   return (
     <div className="teacher-section">
-      <div className="flex h-screen justify-center items-center">
+      <div className="flex min-h-screen justify-center items-center">
         <div className="glide max-w-[1680px] px-4 py-8 rounded-3xl">
           <div
             className="text-center mx-auto pb-12"
@@ -67,7 +67,7 @@ const Teacher = () => {
             <h1 className="text-5xl mb-4">
               Inspiring and Guiding the Next Generation
             </h1>
-            <p className="mb-0">
+            <p className="mb-0 mx-1">
               Our dedicated teachers are the cornerstone of our educational
               mission, fostering a nurturing and stimulating environment where
               students can excel. Learn more about the passionate educators who
