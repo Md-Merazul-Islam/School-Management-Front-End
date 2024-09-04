@@ -7,6 +7,9 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./components/Home/Home";
 import SingUp from "./components/SingUp/SingUp";
 import Login from "./components/Login/Login";
+import Footer from "./components/Footer/Footer";
+import About from "./components/About/About";
+import Subjects from "./components/Subjects/Subjects";
 
 
 function App() {
@@ -19,6 +22,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="signup/" element={<SingUp />} />
         <Route path="login/" element={<Login />} />
+        <Route path="about/"element={<About/>}/>
+        <Route path="courses/"element={<Subjects/>}/>
+        
 
         {/* <Route path="/" element={<Home />} />
         <Route path="/" element={<About />} />
@@ -28,7 +34,7 @@ function App() {
         <Route path="/" element={<Contact />} />
         <Route path="/" element={<Home />} /> */}
       </Routes>
-      {/* <Footer /> */}
+      <Footer/>
     </div>
   );
 }

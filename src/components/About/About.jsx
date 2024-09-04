@@ -8,7 +8,7 @@ const About = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 py-10">
+    <div className="bg-gray-200 py-10 min-h-screen">
            <div className="text-center mx-auto pb-12"
               style={{ maxWidth: '800px' }}
               data-aos="fade-up"

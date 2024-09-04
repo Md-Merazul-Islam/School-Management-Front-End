@@ -22,34 +22,36 @@ const Teacher = () => {
     // Initialize AOS animations
     AOS.init({ duration: 1200 }); // You can adjust the duration
 
-    // Initialize the Glide.js carousel with the desired configuration
-    const config = {
-      type: "carousel",
-      startAt: 0,
-      perView: 4, // Show 4 cards per view
-      autoplay: 2000, // Auto-slide every 2 seconds
-      gap: 32,
-      hoverpause: true, // Pause autoplay on hover
-      breakpoints: {
-        1280: {
-          perView: 4,
+    // Initialize the Glide.js carousel only if teachers data is loaded
+    if (teachers.length > 0) {
+      const config = {
+        type: "carousel",
+        startAt: 0,
+        perView: 4, // Show 4 cards per view
+        autoplay: 2000, // Auto-slide every 2 seconds
+        gap: 32,
+        hoverpause: true, // Pause autoplay on hover
+        breakpoints: {
+          1280: {
+            perView: 4,
+          },
+          1024: {
+            perView: 3,
+          },
+          768: {
+            perView: 2,
+          },
+          640: {
+            perView: 1,
+          },
         },
-        1024: {
-          perView: 3,
-        },
-        768: {
-          perView: 2,
-        },
-        640: {
-          perView: 1,
-        },
-      },
-    };
-    const glide = new Glide(".glide", config);
-    glide.mount();
+      };
+      const glide = new Glide(".glide", config);
+      glide.mount();
 
-    // Cleanup on component unmount
-    return () => glide.destroy();
+      // Cleanup on component unmount
+      return () => glide.destroy();
+    }
   }, [teachers]);
 
   return (
@@ -104,20 +106,19 @@ const Teacher = () => {
                         {teacher.email}
                       </p>
                       <TERipple>
-                          <a
-                            href={`https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to=${teacher.email}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a
+                          href={`https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to=${teacher.email}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <button
+                            type="button"
+                            className="inline-block rounded bg-purple-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 focus:bg-purple-700 focus:shadow-lg focus:outline-none active:bg-purple-800"
                           >
-                            <button
-                              type="button"
-                              className="inline-block rounded bg-purple-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 focus:bg-purple-700 focus:shadow-lg focus:outline-none active:bg-purple-800"
-                            >
-                              Contact
-                            </button>
-                          </a>
-                    </TERipple>
-
+                            Contact
+                          </button>
+                        </a>
+                      </TERipple>
                     </div>
                   </div>
                 </li>
