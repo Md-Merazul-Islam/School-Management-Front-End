@@ -7,8 +7,11 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false); // For the dropdown
+
   const navbarRef = useRef(null);
   const profileMenuRef = useRef(null);
+  const dropdownRef = useRef(null); // Ref for the dropdown
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -16,11 +19,15 @@ const Navbar = () => {
   }, []);
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(prev => !prev);
+    setIsMobileMenuOpen((prev) => !prev);
   };
 
   const toggleProfileMenu = () => {
-    setIsProfileMenuOpen(prev => !prev);
+    setIsProfileMenuOpen((prev) => !prev);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
   };
 
   const handleClickOutside = (event) => {
@@ -30,10 +37,9 @@ const Navbar = () => {
     if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
       setIsProfileMenuOpen(false);
     }
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -50,7 +56,7 @@ const Navbar = () => {
       setIsProfileMenuOpen(false);
       window.location.replace('/login');
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     }
   };
 
@@ -67,21 +73,26 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-4">
           <Link to="/" className="nav-box hover:bg-gray-200 p-2 rounded">Home</Link>
 
-          {/* Academics Dropdown with Hover */}
           {isLoggedIn && (
-            <div className="relative group">
+            <div className="relative">
               <div
                 className="nav-box hover:bg-gray-200 p-2 rounded cursor-pointer flex items-center"
+                onClick={toggleDropdown} // Toggle on click
               >
                 Academics <FaCaretDown className="ml-2" />
               </div>
 
               {/* Dropdown Menu */}
-              <div className="absolute hidden group-hover:block bg-white border rounded shadow-lg mt-2">
-                <Link to="/teachers" className="block px-4 py-2 hover:bg-gray-200">Teachers</Link>
-                <Link to="/students" className="block px-4 py-2 hover:bg-gray-200">Students</Link>
-                <Link to="/make" className="block px-4 py-2 hover:bg-gray-200">Make</Link>
-              </div>
+              {dropdownOpen && (
+                <div
+                  ref={dropdownRef}
+                  className="absolute left-0 bg-white border rounded shadow-lg mt-2 z-50"
+                >
+                  <Link to="/teachers" className="block px-7 py-2 hover:bg-gray-200">Teachers</Link>
+                  <Link to="/students" className="block px-7 py-2 hover:bg-gray-200">Students</Link>
+                  <Link to="/make" className="block px-7 py-2 hover:bg-gray-200">Make</Link>
+                </div>
+              )}
             </div>
           )}
 
@@ -106,9 +117,9 @@ const Navbar = () => {
 
               {isProfileMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
-                  <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">My Profile</Link>
-                  <Link to="/activities" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">My Activities</Link>
-                  <Link to="/result" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Result</Link>
+                  <Link to="/profile" className="block px-5 py-2 text-gray-800 hover:bg-gray-100">My Profile</Link>
+                  <Link to="/activities" className="block px-5 py-2 text-gray-800 hover:bg-gray-100">My Activities</Link>
+                  <Link to="/result" className="block px-5 py-2 text-gray-800 hover:bg-gray-100">Result</Link>
                 </div>
               )}
             </div>
@@ -142,7 +153,7 @@ const Navbar = () => {
         <div className="relative flex flex-col space-y-4 p-4 w-full">
           {/* Close Button */}
           <button
-            onClick={closeMobileMenu}
+            onClick={() => setIsMobileMenuOpen(false)}
             className="absolute top-4 right-4 text-gray-600"
             aria-label="Close Menu"
           >
@@ -150,26 +161,27 @@ const Navbar = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <Link to="/" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Home</Link>
-          <Link to="/about" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>About</Link>
-          <Link to="/courses" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Courses</Link>
-          <Link to="/contact" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={closeMobileMenu}>Contact</Link>
+          <Link to="/" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+          <Link to="/about" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+          <Link to="/courses" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Courses</Link>
+          <Link to="/contact" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
 
           {/* Academics Dropdown for Mobile */}
           {isLoggedIn && (
             <div className="relative">
               <button
-                onClick={toggleMobileMenu}
-                className="nav-box hover:bg-gray-200 p-2 rounded"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="nav-box hover:bg-gray-200 p-2 rounded flex items-center"
               >
                 Academics <FaCaretDown className="ml-2" />
               </button>
-
-              <div className="absolute bg-white border rounded shadow-lg mt-2">
-                <Link to="/teachers" className="block px-4 py-2 hover:bg-gray-200" onClick={closeMobileMenu}>Teachers</Link>
-                <Link to="/students" className="block px-4 py-2 hover:bg-gray-200" onClick={closeMobileMenu}>Students</Link>
-                <Link to="/make" className="block px-4 py-2 hover:bg-gray-200" onClick={closeMobileMenu}>Make</Link>
-              </div>
+              {isMobileMenuOpen && (
+                <div className="absolute left-0 bg-white border rounded shadow-lg mt-2 z-50">
+                  <Link to="/teachers" className="block px-4 py-2 hover:bg-gray-200">Teachers</Link>
+                  <Link to="/students" className="block px-4 py-2 hover:bg-gray-200">Students</Link>
+                  <Link to="/make" className="block px-4 py-2 hover:bg-gray-200">Make</Link>
+                </div>
+              )}
             </div>
           )}
         </div>

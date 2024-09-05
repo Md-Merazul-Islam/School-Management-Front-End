@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 const Contact = () => {
   const [selectedMethod, setSelectedMethod] = useState('email');
 
@@ -7,11 +8,15 @@ const Contact = () => {
     setSelectedMethod(method);
   };
 
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
+
   return (
     <section className="py-24 z-10 relative">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 grid-cols-1">
-          <div className="lg:mb-0 mb-10 ">
+          <div className="lg:mb-0 mb-10 "  data-aos="fade-right">
             <div className="group w-full h-full">
               <div className="relative h-full">
                 <img
@@ -92,7 +97,7 @@ const Contact = () => {
             </div>
           </div>
 
-          <div className="bg-gray-50 p-5 lg:p-11 lg:rounded-r-2xl rounded-2xl">
+          <div className="bg-gray-50 p-5 lg:p-11 lg:rounded-r-2xl rounded-2xl"  data-aos="fade-left">
             <h2 className="text-indigo-600 font-manrope text-4xl font-semibold leading-10 mb-11">
               Send Us A Message
             </h2>

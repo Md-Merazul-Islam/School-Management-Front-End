@@ -11,6 +11,8 @@ import Footer from "./components/Footer/Footer";
 import About from "./components/About/About";
 import Subjects from "./components/Subjects/Subjects";
 import Contact from "./components/Contact/Contact";
+import Teacher from "./components/Teacher/Teacher";
+import Students from "./components/Students/Students";
 
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
         <Route path="about/"element={<About/>}/>
         <Route path="courses/"element={<Subjects/>}/>
         <Route path="contact/"element={<Contact/>}/>
+        <Route path="teachers/"element={<Teacher/>}/>
+        <Route path="students/"element={<Students/>}/>
         
 
         {/* <Route path="/" element={<Home />} />
