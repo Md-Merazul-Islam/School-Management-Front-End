@@ -1,39 +1,38 @@
-
-
 import React, { useState } from "react";
-import { login, setToken } from "../Authentication/Authentication";
+import { login, setToken, setUserId } from "../Authentication/Authentication";
 import LoadingModal from "../Spinner/Spinner";
 
-
 const Login = () => {
-  const [loading, setLoading] = useState(false); 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
- 
+    const [loading, setLoading] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true); 
-    try {
-      const response = await login(username, password);
-      const token = response.data.token;
-      setToken(token);
-      setMessage("Login successful!");
-      setIsModalOpen(true);
-    } catch (error) {
-      setMessage("Login Failed, Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await login(username, password);
+            const { token, user_id } = response.data;
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    window.location.replace('/home')
+            setToken(token); // Set the token in localStorage
+            setUserId(user_id); // Set the user_id in localStorage
 
-  };
+            setMessage("Login successful!");
+            setIsModalOpen(true);
+        } catch (error) {
+            setMessage("Login Failed, Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        window.location.replace('/home');
+    };
+
 
 
   return (

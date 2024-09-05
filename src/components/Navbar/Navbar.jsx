@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { FaSignOutAlt, FaCaretDown } from 'react-icons/fa';  // Import FaCaretDown for dropdown icon
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -12,6 +13,12 @@ const Navbar = () => {
   const navbarRef = useRef(null);
   const profileMenuRef = useRef(null);
   const dropdownRef = useRef(null); // Ref for the dropdown
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -22,7 +29,8 @@ const Navbar = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
 
-  const toggleProfileMenu = () => {
+  const toggleProfileMenu = (event) => {
+    event.stopPropagation(); // Prevents closing the dropdown when clicked inside
     setIsProfileMenuOpen((prev) => !prev);
   };
 
@@ -90,7 +98,6 @@ const Navbar = () => {
                 >
                   <Link to="/teachers" className="block px-7 py-2 hover:bg-gray-200">Teachers</Link>
                   <Link to="/students" className="block px-7 py-2 hover:bg-gray-200">Students</Link>
-                  <Link to="/make" className="block px-7 py-2 hover:bg-gray-200">Make</Link>
                 </div>
               )}
             </div>
@@ -104,33 +111,37 @@ const Navbar = () => {
 
         {/* Profile Icon or Login/Signup Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-          {isLoggedIn ? (
-            <div className="relative">
-              <div className="flex items-center space-x-4">
-                <button onClick={toggleProfileMenu} ref={profileMenuRef} className="flex items-center p-2">
-                  <img src="images/profile.png" alt="Profile" className="w-8 h-8 rounded-full" />
-                </button>
-                <button onClick={handleLogout} className="flex items-center bg-gray-800 hover:bg-gray-700 text-white text-center px-2 py-2 rounded">
-                  <FaSignOutAlt className="mr-2" />
-                </button>
-              </div>
+      {isLoggedIn ? (
+        <div className="relative" ref={profileMenuRef}>
+          <div className="flex items-center space-x-4">
+            <button onClick={toggleProfileMenu} className="flex items-center p-2">
+              <img src="images/profile.png" alt="Profile" className="w-8 h-8 rounded-full" />
+              <FaCaretDown className="ml-2" />
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center bg-gray-800 hover:bg-gray-700 text-white text-center px-2 py-2 rounded"
+            >
+              <FaSignOutAlt className="mr-2" />
+            </button>
+          </div>
 
-              {isProfileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
-                  <Link to="/profile" className="block px-5 py-2 text-gray-800 hover:bg-gray-100">My Profile</Link>
-                  <Link to="/activities" className="block px-5 py-2 text-gray-800 hover:bg-gray-100">My Activities</Link>
-                  <Link to="/result" className="block px-5 py-2 text-gray-800 hover:bg-gray-100">Result</Link>
-                </div>
-              )}
+          {isProfileMenuOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+              <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">My Profile</Link>
+              <Link to="/activities" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">My Activities</Link>
+              <Link to="/result" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Result</Link>
+
             </div>
-          ) : (
-            <>
-              <Link to="/login" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Login</Link>
-              <Link to="/signup" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Sign Up</Link>
-            </>
           )}
         </div>
-
+      ) : (
+        <>
+          <Link to="/login" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Login</Link>
+          <Link to="/signup" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded">Sign Up</Link>
+        </>
+      )}
+    </div>
         {/* Mobile Menu Button */}
         <button
           onClick={toggleMobileMenu}
@@ -148,7 +159,9 @@ const Navbar = () => {
       <div
         id="mobile-menu"
         ref={navbarRef}
-        className={`md:hidden fixed inset-0 bg-white text-black transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`md:hidden fixed inset-0 bg-white text-black transition-transform transform ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
         <div className="relative flex flex-col space-y-4 p-4 w-full">
           {/* Close Button */}
@@ -161,28 +174,21 @@ const Navbar = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+
+          {/* Regular Links */}
           <Link to="/" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-          <Link to="/about" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+          <Link to="/about" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>About Us</Link>
           <Link to="/courses" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Courses</Link>
+          <Link to="/notice" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Notice</Link>
           <Link to="/contact" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
 
-          {/* Academics Dropdown for Mobile */}
           {isLoggedIn && (
-            <div className="relative">
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="nav-box hover:bg-gray-200 p-2 rounded flex items-center"
-              >
-                Academics <FaCaretDown className="ml-2" />
-              </button>
-              {isMobileMenuOpen && (
-                <div className="absolute left-0 bg-white border rounded shadow-lg mt-2 z-50">
-                  <Link to="/teachers" className="block px-4 py-2 hover:bg-gray-200">Teachers</Link>
-                  <Link to="/students" className="block px-4 py-2 hover:bg-gray-200">Students</Link>
-                  <Link to="/make" className="block px-4 py-2 hover:bg-gray-200">Make</Link>
-                </div>
-              )}
-            </div>
+            <>
+              <Link to="/profile" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Profile</Link>
+              <Link to="/activities" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Activities</Link>
+              <Link to="/result" className="nav-box hover:bg-gray-200 p-2 rounded" onClick={() => setIsMobileMenuOpen(false)}>Result</Link>
+              <button onClick={handleLogout} className="nav-box hover:bg-gray-200 p-2 rounded">Logout</button>
+            </>
           )}
         </div>
       </div>

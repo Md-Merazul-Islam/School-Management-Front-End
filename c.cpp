@@ -27,40 +27,10 @@ void print(vector<ll> &a) { loop(i, 1, a.size()) cout << a[i] << ' '; }
 template <typename T>
 using my_ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 const int N = 2e5 + 5;
-// const int N = 200010;
-int a[N], b[N];
 void hello_world_solve_here()
 {
-    int n;
-    cin >> n;
-    int appeared = 0;
-    for (int i = 1; i <= n; i++)
-    {
-        cin >> a[i];
-        if (a[i] != -1)
-            b[i] = a[i], appeared = 1;
-        else
-            b[i] = b[i - 1] / 2;
-        if (appeared && b[i] == 0)
-            b[i] = 2;
-    }
-    b[n + 1] = 0;
-    for (int i = n; i >= 1; i--)
-    {
-        if (a[i] == -1)
-            b[i] = max(b[i + 1] / 2, b[i]);
-        if (b[i] == 0)
-            b[i] = 2;
-    }
-    for (int i = 1; i < n; i++)
-        if (b[i] != b[i + 1] / 2 && b[i + 1] != b[i] / 2)
-        {
-            cout << -1 << endl;
-            return;
-        }
-    for (int i = 1; i <= n; i++)
-        cout << b[i] << " ";
-    puts("");
+    int a,b;cin>>a>>b;
+    cout<<abs(a-b)<<endl;
 }
 signed main()
 {

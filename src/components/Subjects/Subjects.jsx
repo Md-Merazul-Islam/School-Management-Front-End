@@ -33,7 +33,15 @@ const Subjects = () => {
   };
 
   return (
+
+
+    <div>
+
+<div className='py-11'>
+        <h1 className='text-2xl text-blue-500 text-center border-b-2 w-96 m-auto'>All Course</h1>
+      </div>
     <section className="py-24 px-4 lg:px-16 min-h-screen z-10 relative">
+     
       <div className="container mx-auto px-[12px] md:px-24 xl:px-12 max-w-[1300px] nanum2">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-28 lg:gap-y-16">
           {/* Dynamically render the subjects */}
@@ -64,6 +72,7 @@ const Subjects = () => {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 

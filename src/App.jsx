@@ -13,6 +13,7 @@ import Subjects from "./components/Subjects/Subjects";
 import Contact from "./components/Contact/Contact";
 import Teacher from "./components/Teacher/Teacher";
 import Students from "./components/Students/Students";
+import Profile from "./components/Profile/Profile";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/*" element={<Home />} />
         <Route path="signup/" element={<SingUp />} />
         <Route path="login/" element={<Login />} />
         <Route path="about/"element={<About/>}/>
@@ -30,6 +32,7 @@ function App() {
         <Route path="contact/"element={<Contact/>}/>
         <Route path="teachers/"element={<Teacher/>}/>
         <Route path="students/"element={<Students/>}/>
+        <Route path="profile/"element={<Profile/>}/>
         
 
         {/* <Route path="/" element={<Home />} />
