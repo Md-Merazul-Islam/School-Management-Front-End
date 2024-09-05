@@ -29,8 +29,9 @@ using my_ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_stati
 const int N = 2e5 + 5;
 void hello_world_solve_here()
 {
-    int a,b;cin>>a>>b;
-    cout<<abs(a-b)<<endl;
+    int x, y, k;
+    cin >> x >> y >> k;
+    cout << max(2 * ((x + k - 1) / k) - 1, 2 * ((y + k - 1) / k)) << endl;
 }
 signed main()
 {

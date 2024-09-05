@@ -4,18 +4,18 @@ import axios from 'axios';
 const API_URL = 'https://amader-school.up.railway.app/accounts/';
 
 // Update profile information
-export const updateProfile = async (userId, token, profileData) => {
-    try {
-        const response = await axios.put(`${API_URL}user-profile-update/${userId}/`, profileData, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response ? error.response.data : 'Error updating profile');
-    }
+export const updateProfile = async (token, profileData) => {
+  try {
+    const response = await axios.put(`${API_URL}user-profile-update/`, profileData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',  // Handle file uploads
+        'Authorization': `Token ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response ? error.response.data : 'Error updating profile');
+  }
 };
 
 const Profile = () => {
@@ -23,20 +23,18 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [userId, setUserId] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
 
   useEffect(() => {
-    // Fetch the token and user ID from localStorage
+    // Fetch the token from localStorage
     const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('user_id');
-    setUserId(userId);
-
-    if (token && userId) {
-      fetch(`${API_URL}user-profile-update/${userId}/`, {
+    if (token) {
+      fetch(`${API_URL}user-profile-update/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`, // Attach the token here
+          'Authorization': `Token ${token}`,
         },
       })
         .then((response) => {
@@ -47,12 +45,13 @@ const Profile = () => {
         })
         .then((data) => {
           setProfile(data);
+          setImagePreview(data.profile_image || 'https://via.placeholder.com/150');
         })
         .catch((error) => {
           setError(error.message);
         });
     } else {
-      setError('No authentication token or user ID found.');
+      setError('No authentication token found.');
     }
   }, []);
 
@@ -63,11 +62,29 @@ const Profile = () => {
     });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setProfileImage(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
   const handleSaveChanges = async () => {
     const token = localStorage.getItem('token');
-    if (userId && token) {
+    const formData = new FormData();
+    
+    formData.append('username', profile.username);
+    formData.append('phone_number', profile.phone_number || '');
+    formData.append('address', profile.address || '');
+    formData.append('date_of_birth', profile.date_of_birth || '');
+    formData.append('department', profile.department || '');
+    
+    if (profileImage) {
+      formData.append('profile_image', profileImage);
+    }
+
+    if (token) {
       try {
-        const updatedProfile = await updateProfile(userId, token, profile);
+        const updatedProfile = await updateProfile(token, formData);
         setProfile(updatedProfile);
         setEditMode(false);
         setSuccessMessage('Profile updated successfully.');
@@ -75,31 +92,58 @@ const Profile = () => {
         setError(error.message);
       }
     } else {
-      setError('No authentication token or user ID found.');
+      setError('No authentication token found.');
     }
   };
 
   if (error) {
     return <div className="text-red-600 text-center mt-5">Error: {error}</div>;
   }
-
   if (!profile) {
     return (
-      <div className="text-center mt-5">
-        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-500"></div>
-        <p>Loading profile data...</p>
+      <div className="text-center mt-5 min-h-screen flex flex-col items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+        <p className="mt-4 text-lg text-blue-600">Loading profile data...</p>
       </div>
     );
   }
-
+  
   return (
-    <div className="max-w-md mx-auto bg-white p-5 rounded-lg shadow-lg mt-10">
-      <h2 className="text-2xl font-bold mb-4 text-center">User Profile</h2>
+    <div className="min-h-screen py-24">
+    <div className=" max-w-lg mx-auto bg-white p-5 rounded-lg shadow-lg mt-10 ">
+      <h2 className="text-3xl font-bold mb-4 text-center text-blue-600">User Profile</h2>
 
       {successMessage && <div className="text-green-500 mb-4">{successMessage}</div>}
 
+      <div className="flex items-center justify-center mb-6">
+        <img
+          src={imagePreview}
+          alt="Profile"
+          className="w-32 h-32 rounded-full object-cover shadow-md border"
+        />
+      </div>
+
       {editMode ? (
         <div className="space-y-4">
+            <div>
+            <label className="block text-sm font-medium">Profile Image:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="mt-1 block w-full text-sm text-gray-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Username:</label>
+            <input
+              type="text"
+              name="username"
+              value={profile.username || ''}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border px-3 py-2 rounded-md"
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium">Phone Number:</label>
             <input
@@ -140,17 +184,8 @@ const Profile = () => {
               className="mt-1 block w-full border px-3 py-2 rounded-md"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium">Account No:</label>
-            <input
-              type="text"
-              name="account_no"
-              value={profile.account_no || ''}
-              readOnly
-              className="mt-1 block w-full border px-3 py-2 rounded-md bg-gray-200 cursor-not-allowed"
-            />
-          </div>
-          <div className="flex space-x-4">
+        
+          <div className="flex space-x-4 mt-5">
             <button
               onClick={handleSaveChanges}
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
@@ -167,19 +202,20 @@ const Profile = () => {
         </div>
       ) : (
         <div className="space-y-4">
+          <p><strong>Username:</strong> {profile.username || 'Not provided'}</p>
           <p><strong>Phone Number:</strong> {profile.phone_number || 'Not provided'}</p>
           <p><strong>Address:</strong> {profile.address || 'Not provided'}</p>
           <p><strong>Date of Birth:</strong> {profile.date_of_birth || 'Not provided'}</p>
           <p><strong>Department:</strong> {profile.department || 'Not provided'}</p>
-          <p><strong>Account No:</strong> {profile.account_no || 'Not provided'}</p>
           <button
             onClick={() => setEditMode(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full"
           >
             Edit Profile
           </button>
         </div>
       )}
+    </div>
     </div>
   );
 };
