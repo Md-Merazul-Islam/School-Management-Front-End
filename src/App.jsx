@@ -16,6 +16,7 @@ import Students from "./components/Students/Students";
 import Profile from "./components/Profile/Profile";
 import Notices from "./components/Notices/Notices";
 import Activities from "./components/Activities/Activities";
+import Result from "./components/Result/Result";
 
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
         <Route path="profile/"element={<Profile/>}/>
         <Route path="notice/"element={<Notices/>}/>
         <Route path="activities/"element={<Activities/>}/>
+        <Route path="result/"element={<Result/>}/>
+        
         
 
         {/* <Route path="/" element={<Home />} />

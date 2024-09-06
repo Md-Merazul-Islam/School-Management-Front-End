@@ -15,7 +15,7 @@ const Subjects = () => {
 
     // Initialize AOS
     AOS.init({
-      duration: 1000, // Animation duration
+      duration: 500, // Animation duration
       easing: 'ease-in-out', // Animation easing
       once: true, // Only animate once when scrolling
     });
@@ -42,7 +42,7 @@ const Subjects = () => {
       </div>
     <section className="py-24 px-4 lg:px-16 min-h-screen z-10 relative">
      
-      <div className="container mx-auto px-[12px] md:px-24 xl:px-12 max-w-[1300px] nanum2">
+      <div className="container mx-auto px-[12px] md:px-24 xl:px-12 max-w-[1300px] ">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-28 lg:gap-y-16">
           {/* Dynamically render the subjects */}
           {subjects.map((subject, index) => (

@@ -29,7 +29,7 @@ https://amader-school.up.railway.app/academics/
     "teachers": "http://amader-school.up.railway.app/academics/teachers-list/",
     "classes": "http://amader-school.up.railway.app/academics/classes/",
     "subjects": "http://amader-school.up.railway.app/academics/subjects/"
-    "subjects": "http://amader-school.up.railway.app/academics/notices/"
+    "notices": "http://amader-school.up.railway.app/academics/notices/"
 }
 
 
