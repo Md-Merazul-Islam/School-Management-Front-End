@@ -5,7 +5,6 @@ import Feature from '../Feature/Feature';
 import About from '../About/About';
 import Teacher from '../Teacher/Teacher';
 import Contact from "../Contact/Contact";
-import Notices from '../Notices/Notices';
 
 
 const Home = () => {
@@ -16,7 +15,6 @@ const Home = () => {
        <About></About>
        <Teacher></Teacher>
        <Contact/>
-       <Notices></Notices>
 
     
     </div>
