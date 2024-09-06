@@ -29,6 +29,7 @@ https://amader-school.up.railway.app/academics/
     "teachers": "http://amader-school.up.railway.app/academics/teachers-list/",
     "classes": "http://amader-school.up.railway.app/academics/classes/",
     "subjects": "http://amader-school.up.railway.app/academics/subjects/"
+    "subjects": "http://amader-school.up.railway.app/academics/notices/"
 }
 
 
@@ -39,3 +40,7 @@ https://amader-school.up.railway.app/classes/
 }
 
 Attendance List Create for post - https://amader-school.up.railway.app/classes/attendance-check/
+
+
+
+academics/notices/

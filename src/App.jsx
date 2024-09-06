@@ -14,6 +14,7 @@ import Contact from "./components/Contact/Contact";
 import Teacher from "./components/Teacher/Teacher";
 import Students from "./components/Students/Students";
 import Profile from "./components/Profile/Profile";
+import Notices from "./components/Notices/Notices";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="teachers/"element={<Teacher/>}/>
         <Route path="students/"element={<Students/>}/>
         <Route path="profile/"element={<Profile/>}/>
+        <Route path="notice/"element={<Notices/>}/>
         
 
         {/* <Route path="/" element={<Home />} />
