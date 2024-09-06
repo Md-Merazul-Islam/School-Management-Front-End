@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import AOS from "aos";
+import "aos/dist/aos.css"; // Import AOS styles
 
 // Helper function to check if the file is an image
 const isImageFile = (fileUrl) => {
@@ -13,6 +15,9 @@ const Notices = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
+    // Initialize AOS
+    AOS.init({ duration: 1000, once: true });
+
     axios
       .get("http://amader-school.up.railway.app/academics/notices/")
       .then((response) => {
@@ -67,7 +72,7 @@ const Notices = () => {
   };
 
   return (
-    <div className="flex items-center justify-center   bg-gray-200 min-h-screen">
+    <div className="flex items-center justify-center bg-gray-200 min-h-screen">
       <div className="w-full max-w-6xl">
         <h1 className="text-3xl font-bold text-center mb-6 bg-slate-300 w-full">Official Notices</h1>
         <div className="space-y-6">
@@ -75,6 +80,7 @@ const Notices = () => {
             <div
               key={notice.id}
               className="p-6 bg-white rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-xl"
+              data-aos="fade-up" // AOS animation
             >
               <h2 className="text-xl font-semibold mb-3 text-center">{notice.title}</h2>
               <p className="text-gray-700 mb-4 text-center">{notice.description}</p>
@@ -87,6 +93,7 @@ const Notices = () => {
                     alt={notice.title}
                     className="w-full h-64 object-cover rounded mb-4 cursor-pointer"
                     onClick={() => openFullScreen(notice.file)} // Click to open full screen
+                    data-aos="zoom-in" // AOS animation for image
                   />
                 ) : (
                   <a

@@ -15,6 +15,7 @@ import Teacher from "./components/Teacher/Teacher";
 import Students from "./components/Students/Students";
 import Profile from "./components/Profile/Profile";
 import Notices from "./components/Notices/Notices";
+import Activities from "./components/Activities/Activities";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="students/"element={<Students/>}/>
         <Route path="profile/"element={<Profile/>}/>
         <Route path="notice/"element={<Notices/>}/>
+        <Route path="activities/"element={<Activities/>}/>
         
 
         {/* <Route path="/" element={<Home />} />
