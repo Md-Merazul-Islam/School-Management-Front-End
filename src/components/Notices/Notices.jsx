@@ -17,7 +17,6 @@ const Spinner = () => (
   </div>
 );
 
-
 const Notices = () => {
   const [notices, setNotices] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -27,8 +26,9 @@ const Notices = () => {
     // Initialize AOS
     AOS.init({ duration: 1000, once: true });
 
+    // Use HTTPS instead of HTTP in the API request
     axios
-      .get("http://amader-school.up.railway.app/academics/notices/")
+      .get("https://amader-school.up.railway.app/academics/notices/") // Changed to HTTPS
       .then((response) => {
         setNotices(response.data);
         setLoading(false); // Set loading to false once data is fetched
@@ -85,7 +85,9 @@ const Notices = () => {
   return (
     <div className="flex items-center justify-center bg-gray-200 min-h-screen">
       <div className="w-full max-w-6xl">
-        <h1 className="text-3xl font-bold text-center mb-6 bg-slate-300 w-full">Official Notices</h1>
+        <h1 className="text-3xl font-bold text-center mb-6 bg-slate-300 w-full">
+          Official Notices
+        </h1>
         {loading ? ( // Show spinner while loading
           <Spinner />
         ) : (
@@ -96,11 +98,15 @@ const Notices = () => {
                 className="p-6 bg-white rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-xl"
                 data-aos="fade-up" // AOS animation
               >
-                <h2 className="text-xl font-semibold mb-3 text-center">{notice.title}</h2>
-                <p className="text-gray-700 mb-4 text-center">{notice.description}</p>
+                <h2 className="text-xl font-semibold mb-3 text-center">
+                  {notice.title}
+                </h2>
+                <p className="text-gray-700 mb-4 text-center">
+                  {notice.description}
+                </p>
 
                 {/* Check if the file is an image */}
-                {/* {notice.file ? (
+                {notice.file ? (
                   isImageFile(notice.file) ? (
                     <img
                       src={notice.file}
@@ -118,7 +124,7 @@ const Notices = () => {
                       Download File
                     </a>
                   )
-                ) : null} */}
+                ) : null}
 
                 <p className="text-sm text-gray-500 text-center">
                   Posted on: {formatDateTime(notice.created_at)}
