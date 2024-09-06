@@ -100,7 +100,7 @@ const Notices = () => {
                 <p className="text-gray-700 mb-4 text-center">{notice.description}</p>
 
                 {/* Check if the file is an image */}
-                {notice.file ? (
+                {/* {notice.file ? (
                   isImageFile(notice.file) ? (
                     <img
                       src={notice.file}
@@ -118,7 +118,7 @@ const Notices = () => {
                       Download File
                     </a>
                   )
-                ) : null}
+                ) : null} */}
 
                 <p className="text-sm text-gray-500 text-center">
                   Posted on: {formatDateTime(notice.created_at)}
