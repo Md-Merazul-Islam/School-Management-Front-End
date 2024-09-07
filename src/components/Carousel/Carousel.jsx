@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import './carousel.css'
 
 const Carousel = () => {
 
@@ -17,7 +18,7 @@ const Carousel = () => {
       {/* Landing Page Header Section */}
       <div className="header-carousel-item bg-primary h-[750px] relative">
         <div className="carousel-caption absolute inset-0 flex items-center bg-[#004CA0] bg-opacity-90">
-          <div className="container mx-auto max-w-full">
+          <div className="container mx-auto">
             <div className="flex flex-wrap items-center">
               {/* Text Content Section */}
               <div data-aos="fade-right" className="w-full lg:w-7/12 text-center md:text-left">
@@ -50,7 +51,7 @@ const Carousel = () => {
                 <div className="carousel-img">
                   <img
                     src="/images/carousel-2.png"
-                    className="w-full h-auto object-cover"
+                    className="w-full h-full object-cover"
                     alt="University Campus"
                   />
                 </div>
