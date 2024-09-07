@@ -10,6 +10,17 @@ const Signup = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isPassword1Visible, setIsPassword1Visible] = useState(false);
+  const [isPassword2Visible, setIsPassword2Visible] = useState(false);
+
+  const togglePassword1Visibility = () => {
+    setIsPassword1Visible(!isPassword1Visible);
+  };
+
+  const togglePassword2Visibility = () => {
+    setIsPassword2Visible(!isPassword2Visible);
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,8 +38,8 @@ const Signup = () => {
 
   return (
     <div>
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-      <div className="m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+    <div className="min-h-screen  text-gray-900 flex justify-center">
+      <div className="m-0 sm:m-10  sm:rounded-lg flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div>
             <img
@@ -87,22 +98,61 @@ const Signup = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
-                <input
+                {/* <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                   type="password"
                   placeholder="Password"
                   value={password1}
                   onChange={(e) => setPassword1(e.target.value)}
                   required
-                />
-                <input
+                /> */}
+                {/* <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                   type="password"
                   placeholder="Confirm Password"
                   value={password2}
                   onChange={(e) => setPassword2(e.target.value)}
                   required
-                />
+                /> */}
+
+                <div className="relative">
+                        <input
+                          className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                          type={isPassword1Visible ? 'text' : 'password'}
+                          placeholder="Password"
+                          value={password1}
+                          onChange={(e) => setPassword1(e.target.value)}
+                          required
+                        />
+                        {/* Toggle Button for Password 1 */}
+                        <button
+                          type="button"
+                          className="absolute right-3 top-9 text-gray-600"
+                          onClick={togglePassword1Visibility}
+                        >
+                          {isPassword1Visible ? '🙈' : '👁️'}
+                        </button>
+                </div>
+
+                  {/* Confirm Password Input */}
+                <div className="relative mt-5">
+                  <input
+                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type={isPassword2Visible ? 'text' : 'password'}
+                    placeholder="Confirm Password"
+                    value={password2}
+                    onChange={(e) => setPassword2(e.target.value)}
+                    required
+                  />
+                  {/* Toggle Button for Password 2 */}
+                  <button
+                    type="button"
+                    className="absolute right-3 top-4 text-gray-600"
+                    onClick={togglePassword2Visibility}
+                  >
+                    {isPassword2Visible ? '🙈' : '👁️'}
+                  </button>
+                </div>
                 <button
                   type="submit"
                   className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"

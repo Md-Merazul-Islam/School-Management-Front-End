@@ -87,10 +87,12 @@ const Contact = () => {
                   />
                 </div>
               </div>
-              <textarea
+            <div className="pt-5">
+            <textarea
                 placeholder="Message"
                 className="w-full placeholder:text-gray-500 px-5 pt-3 bg-white rounded-lg border border-indigo-600 focus:outline-none focus:border-blue-400 text-black h-[7.625rem] mb-5"
               ></textarea>
+            </div>
               <div className="relative mb-5">
                 <label
                   className="font-normal text-base leading-6 text-gray-500"

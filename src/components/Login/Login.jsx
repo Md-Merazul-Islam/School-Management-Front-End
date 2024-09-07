@@ -9,6 +9,13 @@ const Login = () => {
     const [message, setMessage] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  
+    const togglePasswordVisibility = () => {
+      setIsPasswordVisible(!isPasswordVisible);
+    };
+  
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -36,8 +43,8 @@ const Login = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-      <div className=" m-0 sm:m-10 bg-white  flex justify-center flex-1">
+    <div className="min-h-screen  text-gray-900 flex justify-center">
+      <div className=" m-0 sm:m-10 flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           
           <div className="mt-12 flex flex-col items-center">
@@ -98,14 +105,33 @@ const Login = () => {
                     required
                   />
 
-                  <input
+                  {/* <input
                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                  />
+                  /> */}
+
+                  <div className="relative">
+                        <input
+                          className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                          type={isPasswordVisible ? 'text' : 'password'}
+                          placeholder="Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                        />
+                        {/* Toggle Password Visibility Button */}
+                        <button
+                          type="button"
+                          className="absolute right-3 top-9 text-gray-600"
+                          onClick={togglePasswordVisibility}
+                        >
+                          {isPasswordVisible ? '🙈' : '👁️'}
+                        </button>
+                  </div>
 
                   <button
                     type="submit"
