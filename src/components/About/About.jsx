@@ -30,7 +30,7 @@ const About = () => {
           {/* Left Side - Text Section */}
           <div
             className="bg-white p-8 rounded-lg shadow-md"
-          data-aos="fade-right"
+           data-aos="zoom-in"
           >
             <h4 className="text-blue-500 font-semibold">
               About Our University
@@ -106,7 +106,7 @@ const About = () => {
           {/* Right Side - Image and Stats Section */}
           <div
             className="bg-white p-8 rounded-lg shadow-md"
-          data-aos="fade-left"
+            data-aos="zoom-in"
           >
             <div className="mb-6 flex justify-center" data-aos="zoom-in">
               <img
