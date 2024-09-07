@@ -322,22 +322,24 @@ const Navbar = () => {
         )}
 
         {!isLoggedIn && (
-          <>
-            <Link
-              to="/login"
-              className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-center"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-center"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Sign Up
-            </Link>
-          </>
+        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
+        <Link
+          to="/login"
+          className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full sm:w-auto max-w-xs sm:max-w-none text-center transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Login
+        </Link>
+        <Link
+          to="/signup"
+          className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full sm:w-auto max-w-xs sm:max-w-none text-center transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Sign Up
+        </Link>
+      </div>
+      
+       
         )}
       </div>
     </div>
