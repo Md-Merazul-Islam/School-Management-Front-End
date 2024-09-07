@@ -17,12 +17,12 @@ const Carousel = () => {
       {/* Landing Page Header Section */}
       <div className="header-carousel-item bg-primary h-[750px] relative">
         <div className="carousel-caption absolute inset-0 flex items-center bg-[#004CA0] bg-opacity-90">
-          <div className="container mx-auto">
+          <div className="container mx-auto max-w-full">
             <div className="flex flex-wrap items-center">
               {/* Text Content Section */}
               <div data-aos="fade-right" className="w-full lg:w-7/12 text-center md:text-left">
                 <h4 className="text-white uppercase font-bold mb-4">
-                  Welcome to Our MPI
+                  Welcome to Our CST
                 </h4>
                 <h1 className="text-white text-6xl md:text-7xl lg:text-8xl mb-4">
                   Empowering Future Leaders
@@ -50,7 +50,7 @@ const Carousel = () => {
                 <div className="carousel-img">
                   <img
                     src="/images/carousel-2.png"
-                    className="w-full h-full object-cover"
+                    className="w-full h-auto object-cover"
                     alt="University Campus"
                   />
                 </div>

@@ -1,0 +1,10 @@
+body {
+    overflow-x: hidden;
+  }
+  
+
+  .carousel-img img {
+    width: 100%;
+    height: auto;
+  }
+  
