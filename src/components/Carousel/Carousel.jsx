@@ -29,7 +29,7 @@ const Carousel = () => {
                   Empowering Future Leaders
                 </h1>
                 <p className="mb-5 text-lg text-white max-w-[819px]">
-                  At MPI, we are dedicated to fostering academic excellence and innovation. Join a diverse community of scholars and experience world-class education.
+                  At CST, we are dedicated to fostering academic excellence and innovation. Join a diverse community of scholars and experience world-class education.
                 </p>
                 <div className="flex justify-center md:justify-start space-x-4">
                   <a
