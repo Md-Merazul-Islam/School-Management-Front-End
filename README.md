@@ -39,5 +39,4 @@ Admin Panel: Manage and configure system settings, user roles, and permissions.
 
 Data Security: Ensured through robust authentication and encryption measures.
 
-
-[live link  : https://amader-cst.netlify.app/ ] (https://amader-cst.netlify.app/)
+Live Link : [https://amader-cst.netlify.app/](https://amader-cst.netlify.app/)
