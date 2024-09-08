@@ -17,6 +17,7 @@ import Profile from "./components/Profile/Profile";
 import Notices from "./components/Notices/Notices";
 import Activities from "./components/Activities/Activities";
 import Result from "./components/Result/Result";
+// import Register from "./components/Register/Register";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/*" element={<Home />} />
         <Route path="signup/" element={<SingUp />} />
+        {/* <Route path="signup/" element={<Register/> } /> */}
         <Route path="login/" element={<Login />} />
         <Route path="about/"element={<About/>}/>
         <Route path="courses/"element={<Subjects/>}/>
@@ -39,6 +41,7 @@ function App() {
         <Route path="notice/"element={<Notices/>}/>
         <Route path="activities/"element={<Activities/>}/>
         <Route path="result/"element={<Result/>}/>
+        
         
         
 
