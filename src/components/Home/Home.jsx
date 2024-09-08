@@ -10,7 +10,7 @@ import Contact from "../Contact/Contact";
 const Home = () => {
   return (
     <div>
-       <Carousel></Carousel>
+       {/* <Carousel></Carousel> */}
        <Feature></Feature>
        <About></About>
        <Teacher></Teacher>
