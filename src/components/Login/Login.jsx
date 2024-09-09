@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { login, setToken, setUserId } from "../Authentication/Authentication";
 import LoadingModal from "../Spinner/Spinner";
+import axios from "axios";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -8,28 +9,46 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  
+
     const togglePasswordVisibility = () => {
       setIsPasswordVisible(!isPasswordVisible);
     };
-  
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
+            // Step 1: Login to get the token and user ID
             const response = await login(username, password);
             const { token, user_id } = response.data;
 
-            setToken(token); // Set the token in localStorage
-            setUserId(user_id); // Set the user_id in localStorage
+            // Store token and user ID in localStorage
+            setToken(token);
+            setUserId(user_id);
+
+            // Step 2: Fetch all users
+            const usersResponse = await axios.get("https://amader-school.up.railway.app/accounts/users/", {
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+
+            // Step 3: Find the logged-in user using user_id and check if they are staff
+            const currentUser = usersResponse.data.find(user => user.id === user_id);
+
+            if (currentUser && currentUser.is_staff) {
+                // User is staff, redirect to admin dashboard
+                window.location.replace("/admin_dashboard");
+            } else {
+                // Normal user, redirect to home page
+                window.location.replace("/home");
+            }
 
             setMessage("Login successful!");
             setIsModalOpen(true);
         } catch (error) {
-            setMessage("Login Failed, Please try again.");
+            setMessage("Login failed. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -37,9 +56,7 @@ const Login = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
-        window.location.replace('/home');
     };
-
 
 
   return (
