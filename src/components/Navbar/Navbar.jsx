@@ -72,6 +72,7 @@ const Navbar = () => {
       console.error("Logout error:", error);
     }
   };
+  const isStaff = localStorage.getItem("isStaff");
 
   return (
     <nav className="navbar bg-gray-100 text-black shadow-lg w-full z-1000 relative">
@@ -88,6 +89,12 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-4">
+        {isLoggedIn && isStaff && (
+          <Link to="/admin_dashboard" className="nav-box bg-gray-200 hover:bg-gray-200 p-2 rounded">
+            Admin Dashboard
+          </Link>
+        )}
+
           <Link to="/" className="nav-box hover:bg-gray-200 p-2 rounded">
             Home
           </Link>
@@ -226,126 +233,124 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-      id="mobile-menu"
-      ref={navbarRef}
-      className={`md:hidden fixed inset-0 bg-white text-black transition-transform transform ${
-        isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-      }`}
-    >
-      <div className="relative flex flex-col space-y-4 p-4 w-full">
-        {/* Close Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(false)}
-          className="absolute top-4 right-4 text-gray-600"
-          aria-label="Close Menu"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+        id="mobile-menu"
+        ref={navbarRef}
+        className={`md:hidden fixed inset-0 bg-white text-black transition-transform transform ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="relative flex flex-col space-y-4 p-4 w-full">
+          {/* Close Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="absolute top-4 right-4 text-gray-600"
+            aria-label="Close Menu"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
 
-        {/* Regular Links */}
-        <Link
-          to="/"
-          className="nav-box hover:bg-gray-200 p-2 rounded"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          Home
-        </Link>
-        <Link
-          to="/about"
-          className="nav-box hover:bg-gray-200 p-2 rounded"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          About Us
-        </Link>
-        <Link
-          to="/courses"
-          className="nav-box hover:bg-gray-200 p-2 rounded"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          Courses
-        </Link>
-        <Link
-          to="/notice"
-          className="nav-box hover:bg-gray-200 p-2 rounded"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          Notice
-        </Link>
-        <Link
-          to="/contact"
-          className="nav-box hover:bg-gray-200 p-2 rounded"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          Contact
-        </Link>
+          {/* Regular Links */}
+          <Link
+            to="/"
+            className="nav-box hover:bg-gray-200 p-2 rounded"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            to="/about"
+            className="nav-box hover:bg-gray-200 p-2 rounded"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            About Us
+          </Link>
+          <Link
+            to="/courses"
+            className="nav-box hover:bg-gray-200 p-2 rounded"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Courses
+          </Link>
+          <Link
+            to="/notice"
+            className="nav-box hover:bg-gray-200 p-2 rounded"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Notice
+          </Link>
+          <Link
+            to="/contact"
+            className="nav-box hover:bg-gray-200 p-2 rounded"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Contact
+          </Link>
 
-        {isLoggedIn && (
-          <>
-            <Link
-              to="/profile"
-              className="nav-box hover:bg-gray-200 p-2 rounded"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Profile
-            </Link>
-            <Link
-              to="/activities"
-              className="nav-box hover:bg-gray-200 p-2 rounded"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Activities
-            </Link>
-            <Link
-              to="/result"
-              className="nav-box hover:bg-gray-200 p-2 rounded"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Result
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-center"
-            >
-              Logout
-            </button>
-          </>
-        )}
+          {isLoggedIn && (
+            <>
+              <Link
+                to="/profile"
+                className="nav-box hover:bg-gray-200 p-2 rounded"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Profile
+              </Link>
+              <Link
+                to="/activities"
+                className="nav-box hover:bg-gray-200 p-2 rounded"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Activities
+              </Link>
+              <Link
+                to="/result"
+                className="nav-box hover:bg-gray-200 p-2 rounded"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Result
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-center"
+              >
+                Logout
+              </button>
+            </>
+          )}
 
-        {!isLoggedIn && (
-        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
-        <Link
-          to="/login"
-          className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full sm:w-auto max-w-xs sm:max-w-none text-center transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          Login
-        </Link>
-        <Link
-          to="/signup"
-          className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full sm:w-auto max-w-xs sm:max-w-none text-center transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          Sign Up
-        </Link>
+          {!isLoggedIn && (
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
+              <Link
+                to="/login"
+                className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full sm:w-auto max-w-xs sm:max-w-none text-center transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full sm:w-auto max-w-xs sm:max-w-none text-center transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
-      
-       
-        )}
-      </div>
-    </div>
     </nav>
   );
 };
