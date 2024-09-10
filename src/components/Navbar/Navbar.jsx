@@ -62,6 +62,9 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       localStorage.removeItem("token");
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("isStaff");
+      localStorage.clear();
       setIsLoggedIn(false);
       setIsProfileMenuOpen(false);
       window.location.replace("/login");

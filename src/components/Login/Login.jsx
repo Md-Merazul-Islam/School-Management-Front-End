@@ -20,36 +20,20 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Step 1: Login to get the token and user ID
+      // // Step 1: Login to get the token and user ID
       const response = await login(username, password);
-      const { token, user_id } = response.data;
+      const { token, user_id, is_staff } = response.data;
 
       // Store token and user ID in localStorage
       setToken(token);
       setUserId(user_id);
-
-      // Step 2: Fetch all users
-      const usersResponse = await axios.get(
-        "https://amader-school.up.railway.app/accounts/users/",
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      );
-
-      // Step 3: Find the logged-in user using user_id and check if they are staff
-      const loggedInUser = usersResponse.data.find(
-        (user) => user.id === user_id
-      );
-
-      if (loggedInUser) {
-        setCurrentUser(loggedInUser); // Store the current user for use later
-        setMessage("Login successful!");
-        setIsModalOpen(true); // Open the modal after a successful login
+      localStorage.setItem("isStaff", is_staff);
+      if (is_staff) {
+        window.location.replace("/admin_dashboard"); 
       } else {
-        setMessage("Login failed. User not found.");
+        window.location.replace("/home"); 
       }
+      
     } catch (error) {
       setMessage("Login failed. Please try again.");
     } finally {
@@ -64,8 +48,7 @@ const Login = () => {
     } else {
       window.location.replace("/home");
     }
-
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false); 
   };
 
   const closeModal = () => {
@@ -76,9 +59,10 @@ const Login = () => {
     <div className="min-h-screen  text-gray-900 flex justify-center">
       <div className=" m-0 sm:m-10 flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-          
           <div className="mt-12 flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold">Login Your Account</h1>
+            <h1 className="text-2xl xl:text-3xl font-extrabold">
+              Login Your Account
+            </h1>
             <div className="w-full flex-1 mt-8">
               <div className="flex flex-col items-center">
                 <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
@@ -145,22 +129,22 @@ const Login = () => {
                   /> */}
 
                   <div className="relative">
-                        <input
-                          className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                          type={isPasswordVisible ? 'text' : 'password'}
-                          placeholder="Password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          required
-                        />
-                        {/* Toggle Password Visibility Button */}
-                        <button
-                          type="button"
-                          className="absolute right-3 top-9 text-gray-600"
-                          onClick={togglePasswordVisibility}
-                        >
-                          {isPasswordVisible ? '🙈' : '👁️'}
-                        </button>
+                    <input
+                      className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                      type={isPasswordVisible ? "text" : "password"}
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    {/* Toggle Password Visibility Button */}
+                    <button
+                      type="button"
+                      className="absolute right-3 top-9 text-gray-600"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {isPasswordVisible ? "🙈" : "👁️"}
+                    </button>
                   </div>
 
                   <button
@@ -214,29 +198,26 @@ const Login = () => {
             </div>
           </div>
         </div>
-    
       </div>
 
-        {/* Modal */}
-        {isModalOpen && (
+      {/* Modal */}
+      {isModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-lg text-center">
-          <h2 className="text-2xl font-bold mb-4">Login Successful!</h2>
+            <h2 className="text-2xl font-bold mb-4">Login Successful!</h2>
             <p className="mb-6">You are now logged in.</p>
             <button
               className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
               onClick={handleModalConfirm}
             >
-             Ok, Thanks
+              Ok, Thanks
             </button>
-            
           </div>
         </div>
       )}
-      {loading && <LoadingModal />} 
+      {loading && <LoadingModal />}
     </div>
   );
 };
 
 export default Login;
-

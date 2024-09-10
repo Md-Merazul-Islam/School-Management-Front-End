@@ -28,11 +28,21 @@ const Sidebar = () => {
     // Clear user session data
     localStorage.removeItem("token");
     localStorage.removeItem("user_id");
-    localStorage.removeItem("username");
-    localStorage.removeItem("is_staff");
+    localStorage.removeItem("isStaff");
+    localStorage.clear();
+
+
 
     // Redirect to the login page
     navigate("/login");
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("isStaff");
+    localStorage.clear();
+    window.location.replace("/login");
   };
 
   return (
@@ -116,6 +126,8 @@ const Sidebar = () => {
             Logout
           </button>
         </div>
+
+        <button onClick={handleLogout}>Logout</button>
       </div>
 
       {/* Overlay for mobile */}

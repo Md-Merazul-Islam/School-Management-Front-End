@@ -12,6 +12,13 @@ https://amader-school.up.railway.app/accounts/login/
 https://amader-school.up.railway.app/accounts/logout/
 
 {
+    "message": "successfully login.\n",
+    "token": "6c0279bf8e3cc78ba9dc14b9460481377ed18e46",
+    "user_id": 24,
+    "is_staff": true
+}
+
+{
     "users": "http://amader-school.up.railway.app/accounts/users/",
     "profiles": "http://amader-school.up.railway.app/accounts/profiles/"
 }
