@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Admin from "../Admin/Admin";
 
 const AdNotices = () => {
   return (
-    <div>AdNotices</div>
-  )
-}
+    <div>
+      <Admin>AdNotices</Admin>
+    </div>
+  );
+};
 
-export default AdNotices
+export default AdNotices;

@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Admin from "../Admin/Admin";
 
 const AdUser = () => {
   return (
-    <div>AdUser</div>
-  )
-}
+    <div>
+      <Admin>AdUser</Admin>
+    </div>
+  );
+};
 
-export default AdUser
+export default AdUser;

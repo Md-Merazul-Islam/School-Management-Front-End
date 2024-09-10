@@ -1,8 +1,16 @@
 import React from 'react'
+import Admin from '../Admin/Admin'
 
 const AdResult = () => {
   return (
-    <div>AdResult</div>
+    <div>
+        <Admin>
+
+        AdResult
+        </Admin>
+
+
+    </div>
   )
 }
 

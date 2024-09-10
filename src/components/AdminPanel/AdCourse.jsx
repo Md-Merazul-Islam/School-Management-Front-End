@@ -1,7 +1,14 @@
 import React from 'react'
+import Admin from '../Admin/Admin'
 
 export const AdCourse = () => {
   return (
-    <div>AdCourse</div>
+    <div>
+        <Admin>
+        AdCourse
+
+        </Admin>
+        
+    </div>
   )
 }
