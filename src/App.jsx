@@ -16,46 +16,67 @@ import Notices from "./components/Notices/Notices";
 import Activities from "./components/Activities/Activities";
 import Result from "./components/Result/Result";
 import Admin from "./components/Admin/Admin";
+import AdTeacher from "./components/AdminPanel/AdTeacher";
+import AdStudents from "./components/AdminPanel/AdStudents";
+import AdNotices from "./components/AdminPanel/AdNotices";
+import { AdCourse } from "./components/AdminPanel/AdCourse";
+import AdResult from "./components/AdminPanel/AdResult";
+import AdUser from "./components/AdminPanel/AdUser";
+import AdNotification from "./components/AdminPanel/AdNotification";
+import AdAttendance from "./components/AdminPanel/AdAttendance";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  // Get the current route
   const location = useLocation();
 
-  // List of paths where Navbar and Footer should not be shown
-  const hideNavFooterRoutes = ["/admin_dashboard"];
+  const hideNavFooterRoutes = ["/admin"];
+  const isAuthenticated = localStorage.getItem("token");
 
-  // Check if the current path is in the list to hide Navbar and Footer
-  const shouldHideNavFooter = hideNavFooterRoutes.includes(location.pathname);
+  const shouldHideNavFooter = hideNavFooterRoutes.some((path) =>
+    location.pathname.startsWith(path)
+  );
 
   return (
     <div>
-      {/* Conditionally render Navbar and Footer based on the current route */}
       {!shouldHideNavFooter && <Navbar />}
-      
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/*" element={<Home />} />
-        <Route path="signup/" element={<SingUp />} />
-        <Route path="login/" element={<Login />} />
-        <Route path="about/" element={<About />} />
-        <Route path="courses/" element={<Subjects />} />
-        <Route path="contact/" element={<Contact />} />
-        <Route path="teachers/" element={<Teacher />} />
-        <Route path="students/" element={<Students />} />
-        <Route path="profile/" element={<Profile />} />
-        <Route path="notice/" element={<Notices />} />
-        <Route path="activities/" element={<Activities />} />
-        <Route path="result/" element={<Result />} />
-        <Route path="admin_dashboard/" element={<Admin />} />
-      </Routes>
 
-      {/* Conditionally render Footer based on the current route */}
+      <Routes>
+        {/* Catch-all route for 404 page */}
+        {isAuthenticated ? (
+          <>
+            <Route path="activities/" element={<Activities />} />
+            <Route path="profile/" element={<Profile />} />
+            <Route path="result/" element={<Result />} />
+            <Route path="teachers/" element={<Teacher />} />
+            <Route path="students/" element={<Students />} />
+
+            {/* Admin Sub-Routes */}
+            <Route path="admin/" element={<Admin />} />
+            <Route path="/admin/teachers/" element={<AdTeacher />} />
+            <Route path="/admin/students/" element={<AdStudents />} />
+            <Route path="/admin/notices/" element={<AdNotices />} />
+            <Route path="/admin/course/" element={<AdCourse />} />
+            <Route path="/admin/notification/" element={<AdNotification />} />
+            <Route path="/admin/result/" element={<AdResult />} />
+            <Route path="/admin/users/" element={<AdUser />} />
+            <Route path="/admin/attendance/" element={<AdAttendance />} />
+            
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="signup/" element={<SingUp />} />
+            <Route path="login/" element={<Login />} />
+            <Route path="about/" element={<About />} />
+            <Route path="courses/" element={<Subjects />} />
+            <Route path="contact/" element={<Contact />} />
+            <Route path="notice/" element={<Notices />} />
+          </>
+        )}
+        <Route path="*" element={<Home />} />
+      </Routes>
       {!shouldHideNavFooter && <Footer />}
     </div>
   );
 }
 
 export default App;
-

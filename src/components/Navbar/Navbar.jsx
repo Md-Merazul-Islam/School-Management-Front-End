@@ -90,7 +90,7 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-4">
         {isLoggedIn && isStaff && (
-          <Link to="/admin_dashboard" className="nav-box bg-gray-200 hover:bg-gray-200 p-2 rounded">
+          <Link to="/admin" className="nav-box bg-gray-200 hover:bg-gray-200 p-2 rounded">
             Admin Dashboard
           </Link>
         )}
@@ -239,7 +239,7 @@ const Navbar = () => {
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="relative flex flex-col space-y-4 p-4 w-full">
+        <div className="relative flex flex-col space-y-4 p-4 w-full text-center">
           {/* Close Button */}
           <button
             onClick={() => setIsMobileMenuOpen(false)}
@@ -263,6 +263,11 @@ const Navbar = () => {
           </button>
 
           {/* Regular Links */}
+          {isLoggedIn && isStaff && (
+          <Link to="/admin" className="nav-box bg-gray-200 hover:bg-gray-200 p-2 rounded">
+            Admin Dashboard
+          </Link>
+        )}
           <Link
             to="/"
             className="nav-box hover:bg-gray-200 p-2 rounded"

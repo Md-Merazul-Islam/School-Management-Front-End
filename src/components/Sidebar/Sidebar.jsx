@@ -13,12 +13,13 @@ import {
   FaUserFriends,
   FaChartLine,
   FaClipboardCheck,
-} from "react-icons/fa"; // Import necessary icons
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+  FaTachometerAlt,
+} from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom"; 
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -30,19 +31,7 @@ const Sidebar = () => {
     localStorage.removeItem("user_id");
     localStorage.removeItem("isStaff");
     localStorage.clear();
-
-
-
-    // Redirect to the login page
     navigate("/login");
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_id");
-    localStorage.removeItem("isStaff");
-    localStorage.clear();
-    window.location.replace("/login");
   };
 
   return (
@@ -68,52 +57,47 @@ const Sidebar = () => {
 
         {/* Sidebar menu */}
         <nav className="mt-6 space-y-2">
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          <Link to="/home" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaHome className="mr-3" />
+            Website Home
+          </Link>
+          <Link to="/admin" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+            <FaTachometerAlt className="mr-3" />
             Dashboard
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
-            <FaUser className="mr-3" />
-            Profile
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
-            <FaTable className="mr-3" />
-            Tables
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          </Link>
+          <Link to="/admin/notification" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaBell className="mr-3" />
             Notifications
-          </a>
-
-          {/* New Menu Items */}
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          </Link>
+          <Link to="/admin/teachers" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaChalkboardTeacher className="mr-3" />
             Teachers
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          </Link>
+          <Link to="/admin/students" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaUserGraduate className="mr-3" />
             Students
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          </Link>
+          <Link to="/admin/course" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaBookOpen className="mr-3" />
             Courses
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          </Link>
+          <Link to="/admin/notices" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaClipboardList className="mr-3" />
             Notices
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          </Link>
+          <Link to="/admin/result" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaChartLine className="mr-3" />
             Results
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          </Link>
+          <Link to="/admin/attendance" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaClipboardCheck className="mr-3" />
             Attendance
-          </a>
-          <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          </Link>
+          <Link to="/admin/users" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaUserFriends className="mr-3" />
             Users
-          </a>
+          </Link>
+      
         </nav>
 
         {/* Logout button */}
@@ -126,8 +110,6 @@ const Sidebar = () => {
             Logout
           </button>
         </div>
-
-        <button onClick={handleLogout}>Logout</button>
       </div>
 
       {/* Overlay for mobile */}

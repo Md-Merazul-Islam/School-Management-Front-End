@@ -29,7 +29,7 @@ const Login = () => {
       setUserId(user_id);
       localStorage.setItem("isStaff", is_staff);
       if (is_staff) {
-        window.location.replace("/admin_dashboard"); 
+        window.location.replace("/admin"); 
       } else {
         window.location.replace("/home"); 
       }
@@ -44,7 +44,7 @@ const Login = () => {
   const handleModalConfirm = () => {
     // Redirect based on whether the user is staff or not
     if (currentUser && currentUser.is_staff) {
-      window.location.replace("/admin_dashboard");
+      window.location.replace("/admin");
     } else {
       window.location.replace("/home");
     }
