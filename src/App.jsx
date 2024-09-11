@@ -43,11 +43,16 @@ function App() {
         {/* Catch-all route for 404 page */}
         {isAuthenticated ? (
           <>
-            <Route path="activities/" element={<Activities />} />
-            <Route path="profile/" element={<Profile />} />
+            <Route path="/" element={<Home />} />
             <Route path="result/" element={<Result />} />
             <Route path="teachers/" element={<Teacher />} />
             <Route path="students/" element={<Students />} />
+            <Route path="about/" element={<About />} />
+            <Route path="courses/" element={<Subjects />} />
+            <Route path="contact/" element={<Contact />} />
+            <Route path="notice/" element={<Notices />} />
+            <Route path="activities/" element={<Activities />} />
+            <Route path="profile/" element={<Profile />} />
 
             {/* Admin Sub-Routes */}
             <Route path="admin/" element={<Admin />} />
@@ -59,6 +64,7 @@ function App() {
             <Route path="/admin/result/" element={<AdResult />} />
             <Route path="/admin/users/" element={<AdUser />} />
             <Route path="/admin/attendance/" element={<AdAttendance />} />
+            
             
           </>
         ) : (
