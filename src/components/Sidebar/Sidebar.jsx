@@ -32,7 +32,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex ">
       {/* Hamburger Icon for mobile */}
       <div className="lg:hidden p-4">
         <FaBars
@@ -43,7 +43,7 @@ const Sidebar = () => {
 
       {/* Sidebar container */}
       <div
-        className={`fixed top-0 left-0 h-screen bg-gray-800 text-white w-64 z-50 transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full bg-gray-800 text-white w-64 z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
@@ -110,7 +110,7 @@ const Sidebar = () => {
       )}
 
       {/* Main content area */}
-      <div className="flex-grow ml-64 p-4 overflow-y-auto">
+      <div className="flex-grow p-4 overflow-y-auto lg:ml-64">
         {/* Your main content goes here */}
       </div>
     </div>
