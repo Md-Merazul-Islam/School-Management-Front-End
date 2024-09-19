@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import {
   FaHome,
-  FaUser,
-  FaTable,
-  FaBell,
   FaSignOutAlt,
   FaBars,
   FaChalkboardTeacher,
@@ -15,11 +12,11 @@ import {
   FaClipboardCheck,
   FaTachometerAlt,
 } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -46,9 +43,9 @@ const Sidebar = () => {
 
       {/* Sidebar container */}
       <div
-        className={`fixed lg:relative h-screen bg-gray-800 text-white transition-all duration-300 ease-in-out z-50 ${
+        className={`fixed top-0 left-0 h-screen bg-gray-800 text-white w-64 z-50 transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        } lg:block w-64`}
+        }`}
       >
         {/* Sidebar header */}
         <div className="text-center p-6 border-b border-gray-700">
@@ -65,10 +62,6 @@ const Sidebar = () => {
             <FaTachometerAlt className="mr-3" />
             Dashboard
           </Link>
-          {/* <Link to="/admin/notification" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
-            <FaBell className="mr-3" />
-            Notifications
-          </Link> */}
           <Link to="/admin/teachers" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaChalkboardTeacher className="mr-3" />
             Teachers
@@ -97,7 +90,6 @@ const Sidebar = () => {
             <FaUserFriends className="mr-3" />
             Users
           </Link>
-      
         </nav>
 
         {/* Logout button */}
@@ -113,7 +105,14 @@ const Sidebar = () => {
       </div>
 
       {/* Overlay for mobile */}
-      {isOpen && <div className="fixed inset-0 bg-black opacity-50 lg:hidden" onClick={toggleSidebar}></div>}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black opacity-50 lg:hidden" onClick={toggleSidebar}></div>
+      )}
+
+      {/* Main content area */}
+      <div className="flex-grow ml-64 p-4 overflow-y-auto">
+        {/* Your main content goes here */}
+      </div>
     </div>
   );
 };
