@@ -65,10 +65,10 @@ const Sidebar = () => {
             <FaTachometerAlt className="mr-3" />
             Dashboard
           </Link>
-          <Link to="/admin/notification" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
+          {/* <Link to="/admin/notification" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaBell className="mr-3" />
             Notifications
-          </Link>
+          </Link> */}
           <Link to="/admin/teachers" className="flex items-center px-4 py-2 hover:bg-gray-700 transition-colors">
             <FaChalkboardTeacher className="mr-3" />
             Teachers
