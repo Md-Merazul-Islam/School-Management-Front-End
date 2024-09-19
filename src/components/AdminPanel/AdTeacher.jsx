@@ -76,34 +76,32 @@ const AdTeacher = () => {
   };
 
   // Edit a teacher
-  const updateTeacher = () => {
-    const formData = new FormData();
-    formData.append('first_name', editTeacher.first_name);
-    formData.append('last_name', editTeacher.last_name);
-    formData.append('email', editTeacher.email);
-    formData.append('subject', editTeacher.subject_id); // Use subject_id here
-
-    axios
-      .put(
-        `https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      )
-      .then((response) => {
-        setTeachers(
-          teachers.map((teacher) =>
-            teacher.id === editTeacher.id ? response.data : teacher
-          )
-        );
-        setEditTeacher(null);
-      })
-      .catch((error) => console.error("Error editing teacher:", error));
+  const updateTeacher = async () => {
+    try {
+      const payload = {
+        first_name: editTeacher.first_name,
+        last_name: editTeacher.last_name,
+        email: editTeacher.email,
+        subject_id: editTeacher.subject_id, // Ensure this matches what the backend expects
+      };
+      
+      console.log('Sending payload:', payload); // Debugging line
+      await axios.put(`https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      // Handle success
+    } catch (error) {
+      // Log the detailed error response
+      if (error.response) {
+        console.error('Error editing teacher:', error.response.data); // Log the server response for debugging
+      } else {
+        console.error('Error editing teacher:', error);
+      }
+    }
   };
+  
 
   // Delete a teacher
   const deleteTeacher = (id) => {
