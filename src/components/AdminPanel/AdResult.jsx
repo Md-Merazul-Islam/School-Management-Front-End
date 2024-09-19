@@ -23,7 +23,7 @@ const AdResult = () => {
 
   const fetchMarks = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/classes/marks/");
+      const response = await axios.get("http://amader-school.up.railway.app/classes/marks/");
       setMarks(response.data);
     } catch (error) {
       console.error("Error fetching marks:", error);
@@ -68,7 +68,7 @@ const AdResult = () => {
       };
   
       console.log("New mark added", dataToSend);
-      await axios.post("http://127.0.0.1:8000/classes/marks/", dataToSend);
+      await axios.post("http://amader-school.up.railway.app/classes/marks/", dataToSend);
       fetchMarks(); // Refresh the mark list after adding
       setNewMark({ student: "", subject: "", marks: "" }); // Reset form
     } catch (error) {
@@ -85,7 +85,7 @@ const AdResult = () => {
   // Update an existing mark
   const updateMark = async () => {
     try {
-      await axios.put(`http://127.0.0.1:8000/classes/marks/${editingMark.id}/`, editingMark);
+      await axios.put(`http://amader-school.up.railway.app/classes/marks/${editingMark.id}/`, editingMark);
       fetchMarks();
       setEditingMark(null);
     } catch (error) {
@@ -96,7 +96,7 @@ const AdResult = () => {
   // Delete a mark
   const deleteMark = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/classes/marks/${id}/`);
+      await axios.delete(`http://amader-school.up.railway.app/classes/marks/${id}/`);
       fetchMarks();
     } catch (error) {
       console.error("Error deleting mark:", error);
