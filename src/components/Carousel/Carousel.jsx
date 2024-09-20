@@ -18,10 +18,10 @@ const Carousel = () => {
       {/* Landing Page Header Section */}
       <div className="header-carousel-item bg-primary h-[750px] relative">
         <div className="carousel-caption absolute inset-0 flex items-center bg-[#004CA0] bg-opacity-90">
-          <div className="container mx-auto">
-            <div className="flex flex-wrap items-center">
+          <div className="container mx-auto sm:mt-10">
+            <div className="flex flex-wrap items-center ">
               {/* Text Content Section */}
-              <div data-aos="fade-right" className="w-full lg:w-7/12 text-center md:text-left">
+              <div data-aos="fade-right" className="w-full lg:w-7/12 text-center md:text-left ">
                 <h4 className="text-white uppercase font-bold mb-4">
                   Welcome to Our CST
                 </h4>

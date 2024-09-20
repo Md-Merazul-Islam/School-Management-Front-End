@@ -23,7 +23,7 @@ const AdResult = () => {
 
   const fetchMarks = async () => {
     try {
-      const response = await axios.get("http://amader-school.up.railway.app/classes/marks/");
+      const response = await axios.get("https://amader-school.up.railway.app/classes/marks/");
       setMarks(response.data);
     } catch (error) {
       console.error("Error fetching marks:", error);
@@ -32,7 +32,7 @@ const AdResult = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get("http://amader-school.up.railway.app/academics/students-list/");
+      const response = await axios.get("https://amader-school.up.railway.app/academics/students-list/");
       setStudents(response.data);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -41,11 +41,17 @@ const AdResult = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("http://amader-school.up.railway.app/academics/subjects/");
+      const response = await axios.get("https://amader-school.up.railway.app/academics/subjects/");
       setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
     }
+  };
+
+  // Find the student roll number by matching the student ID in marks with the student list
+  const getStudentRollNo = (studentId) => {
+    const student = students.find((s) => s.id === studentId);
+    return student ? student.roll_no : "Unknown";
   };
 
   // Handle form input change for new mark
@@ -60,32 +66,23 @@ const AdResult = () => {
   // Add new mark
   const addMark = async () => {
     try {
-      // Ensure that `student` and `subject` are IDs, and `marks` is a number
       const dataToSend = {
-        student: parseInt(newMark.student, 10), // Ensure it's an integer
-        subject: parseInt(newMark.subject, 10), // Ensure it's an integer
-        marks: parseInt(newMark.marks, 10) // Ensure it's a number
+        student: parseInt(newMark.student, 10),
+        subject: parseInt(newMark.subject, 10),
+        marks: parseInt(newMark.marks, 10),
       };
-  
-      console.log("New mark added", dataToSend);
-      await axios.post("http://amader-school.up.railway.app/classes/marks/", dataToSend);
+      await axios.post("https://amader-school.up.railway.app/classes/marks/", dataToSend);
       fetchMarks(); // Refresh the mark list after adding
       setNewMark({ student: "", subject: "", marks: "" }); // Reset form
     } catch (error) {
-      if (error.response) {
-        console.error("Error adding mark:", error.response.data); // This will give you more details about the error
-      } else {
-        console.error("Error adding mark:", error.message);
-      }
+      console.error("Error adding mark:", error.response ? error.response.data : error.message);
     }
-    
   };
-  
 
   // Update an existing mark
   const updateMark = async () => {
     try {
-      await axios.put(`http://amader-school.up.railway.app/classes/marks/${editingMark.id}/`, editingMark);
+      await axios.put(`https://amader-school.up.railway.app/classes/marks/${editingMark.id}/`, editingMark);
       fetchMarks();
       setEditingMark(null);
     } catch (error) {
@@ -96,7 +93,7 @@ const AdResult = () => {
   // Delete a mark
   const deleteMark = async (id) => {
     try {
-      await axios.delete(`http://amader-school.up.railway.app/classes/marks/${id}/`);
+      await axios.delete(`https://amader-school.up.railway.app/classes/marks/${id}/`);
       fetchMarks();
     } catch (error) {
       console.error("Error deleting mark:", error);
@@ -128,9 +125,8 @@ const AdResult = () => {
               <option value="">Select Student</option>
               {students.map((student) => (
                 <option key={student.id} value={student.id}>
-                {student.first_name} {student.last_name}
-              </option>
-              
+                  {student.roll_no} 
+                </option>
               ))}
             </select>
 
@@ -182,7 +178,7 @@ const AdResult = () => {
           <thead>
             <tr>
               <th className="px-4 py-2 border">ID</th>
-              <th className="px-4 py-2 border">Student</th>
+              <th className="px-4 py-2 border">Student Roll</th>
               <th className="px-4 py-2 border">Subject</th>
               <th className="px-4 py-2 border">Marks</th>
               <th className="px-4 py-2 border">Grade</th>
@@ -193,7 +189,7 @@ const AdResult = () => {
             {marks.map((mark) => (
               <tr key={mark.id}>
                 <td className="px-4 py-2 border">{mark.id}</td>
-                <td className="px-4 py-2 border">{mark.student_name}</td>
+                <td className="px-4 py-2 border">{getStudentRollNo(mark.student)}</td>
                 <td className="px-4 py-2 border">{mark.subject_name}</td>
                 <td className="px-4 py-2 border">{mark.marks}</td>
                 <td className="px-4 py-2 border">{mark.grade}</td>
