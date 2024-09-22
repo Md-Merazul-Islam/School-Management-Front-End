@@ -9,10 +9,12 @@ const AdTeacher = () => {
     first_name: "",
     last_name: "",
     email: "",
-    subject_id: "", // Change this to subject_id
+    subject_id: "",
     photo: "",
   });
   const [editTeacher, setEditTeacher] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const token = localStorage.getItem("token");
 
   // Fetch all teachers
@@ -49,7 +51,7 @@ const AdTeacher = () => {
     formData.append('first_name', newTeacher.first_name);
     formData.append('last_name', newTeacher.last_name);
     formData.append('email', newTeacher.email);
-    formData.append('subject', newTeacher.subject_id); // Use subject_id here
+    formData.append('subject', newTeacher.subject_id);
     formData.append('photo', newTeacher.photo);
 
     axios.post(
@@ -68,9 +70,10 @@ const AdTeacher = () => {
             first_name: "",
             last_name: "",
             email: "",
-            subject_id: "", // Update this field
+            subject_id: "",
             photo: "",
         });
+        setShowAddModal(false); // Close modal after adding
     })
     .catch((error) => console.error("Error adding new teacher:", error.response.data));
   };
@@ -82,26 +85,19 @@ const AdTeacher = () => {
         first_name: editTeacher.first_name,
         last_name: editTeacher.last_name,
         email: editTeacher.email,
-        subject_id: editTeacher.subject_id, // Ensure this matches what the backend expects
+        subject_id: editTeacher.subject_id,
       };
-      
-      console.log('Sending payload:', payload); // Debugging line
+
       await axios.put(`https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`, payload, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      // Handle success
+      setShowEditModal(false); // Close modal after editing
     } catch (error) {
-      // Log the detailed error response
-      if (error.response) {
-        console.error('Error editing teacher:', error.response.data); // Log the server response for debugging
-      } else {
-        console.error('Error editing teacher:', error);
-      }
+      console.error('Error editing teacher:', error.response ? error.response.data : error);
     }
   };
-  
 
   // Delete a teacher
   const deleteTeacher = (id) => {
@@ -125,122 +121,12 @@ const AdTeacher = () => {
       <div className="container mx-auto p-4">
         <h1 className="text-3xl font-bold text-center mb-6">Teacher Management</h1>
 
-        {/* Add New Teacher Form */}
-        <div className="mb-6 p-4 bg-white rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Add New Teacher</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="First Name"
-              value={newTeacher.first_name}
-              onChange={(e) =>
-                setNewTeacher({ ...newTeacher, first_name: e.target.value })
-              }
-              className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <input
-              type="text"
-              placeholder="Last Name"
-              value={newTeacher.last_name}
-              onChange={(e) =>
-                setNewTeacher({ ...newTeacher, last_name: e.target.value })
-              }
-              className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={newTeacher.email}
-              onChange={(e) =>
-                setNewTeacher({ ...newTeacher, email: e.target.value })
-              }
-              className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <select
-              value={newTeacher.subject_id} // Use subject_id here
-              onChange={(e) =>
-                setNewTeacher({ ...newTeacher, subject_id: e.target.value }) // Set subject_id here
-              }
-              className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select Subject</option>
-              {subjects.map((subject) => (
-                <option key={subject.id} value={subject.id}>
-                  {subject.name} {/* Display subject name here */}
-                </option>
-              ))}
-            </select>
-            <input
-              type="file"
-              onChange={(e) =>
-                setNewTeacher({ ...newTeacher, photo: e.target.files[0] })
-              }
-              className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <button
-            onClick={addTeacher}
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
-          >
-            Add Teacher
-          </button>
-        </div>
-
-        {/* Edit Teacher Form */}
-        {editTeacher && (
-          <div className="mb-6 p-4 bg-yellow-100 rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold mb-4">Edit Teacher</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="First Name"
-                value={editTeacher.first_name}
-                onChange={(e) =>
-                  setEditTeacher({ ...editTeacher, first_name: e.target.value })
-                }
-                className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              />
-              <input
-                type="text"
-                placeholder="Last Name"
-                value={editTeacher.last_name}
-                onChange={(e) =>
-                  setEditTeacher({ ...editTeacher, last_name: e.target.value })
-                }
-                className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                value={editTeacher.email}
-                onChange={(e) =>
-                  setEditTeacher({ ...editTeacher, email: e.target.value })
-                }
-                className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              />
-              <select
-                value={editTeacher.subject_id} // Use subject_id here
-                onChange={(e) =>
-                  setEditTeacher({ ...editTeacher, subject_id: e.target.value }) // Set subject_id here
-                }
-                className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              >
-                <option value="">Select Subject</option>
-                {subjects.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
-                    {subject.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <button
-              onClick={updateTeacher}
-              className="mt-4 bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600"
-            >
-              Save Changes
-            </button>
-          </div>
-        )}
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mb-6"
+        >
+          Add New Teacher
+        </button>
 
         {/* List of Teachers */}
         <div className="grid grid-cols-1 gap-4">
@@ -254,7 +140,10 @@ const AdTeacher = () => {
               </div>
               <div>
                 <button
-                  onClick={() => setEditTeacher(teacher)}
+                  onClick={() => {
+                    setEditTeacher(teacher);
+                    setShowEditModal(true);
+                  }}
                   className="bg-yellow-500 text-white py-1 px-2 rounded-lg hover:bg-yellow-600 mr-2"
                 >
                   Edit
@@ -269,6 +158,127 @@ const AdTeacher = () => {
             </div>
           ))}
         </div>
+
+        {/* Add Teacher Modal */}
+        {showAddModal && (
+          <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-semibold mb-4">Add New Teacher</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  value={newTeacher.first_name}
+                  onChange={(e) => setNewTeacher({ ...newTeacher, first_name: e.target.value })}
+                  className="p-2 border rounded-lg"
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  value={newTeacher.last_name}
+                  onChange={(e) => setNewTeacher({ ...newTeacher, last_name: e.target.value })}
+                  className="p-2 border rounded-lg"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={newTeacher.email}
+                  onChange={(e) => setNewTeacher({ ...newTeacher, email: e.target.value })}
+                  className="p-2 border rounded-lg"
+                />
+                <select
+                  value={newTeacher.subject_id}
+                  onChange={(e) => setNewTeacher({ ...newTeacher, subject_id: e.target.value })}
+                  className="p-2 border rounded-lg"
+                >
+                  <option value="">Select Subject</option>
+                  {subjects.map((subject) => (
+                    <option key={subject.id} value={subject.id}>
+                      {subject.name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="file"
+                  onChange={(e) => setNewTeacher({ ...newTeacher, photo: e.target.files[0] })}
+                  className="p-2 border rounded-lg"
+                />
+              </div>
+              <div className="mt-4">
+                <button
+                  onClick={addTeacher}
+                  className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+                >
+                  Add Teacher
+                </button>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="ml-4 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Teacher Modal */}
+        {showEditModal && (
+          <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-semibold mb-4">Edit Teacher</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  value={editTeacher.first_name}
+                  onChange={(e) => setEditTeacher({ ...editTeacher, first_name: e.target.value })}
+                  className="p-2 border rounded-lg"
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  value={editTeacher.last_name}
+                  onChange={(e) => setEditTeacher({ ...editTeacher, last_name: e.target.value })}
+                  className="p-2 border rounded-lg"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={editTeacher.email}
+                  onChange={(e) => setEditTeacher({ ...editTeacher, email: e.target.value })}
+                  className="p-2 border rounded-lg"
+                />
+                <select
+                  value={editTeacher.subject_id}
+                  onChange={(e) => setEditTeacher({ ...editTeacher, subject_id: e.target.value })}
+                  className="p-2 border rounded-lg"
+                >
+                  <option value="">Select Subject</option>
+                  {subjects.map((subject) => (
+                    <option key={subject.id} value={subject.id}>
+                      {subject.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mt-4">
+                <button
+                  onClick={updateTeacher}
+                  className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => setShowEditModal(false)}
+                  className="ml-4 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </Admin>
   );

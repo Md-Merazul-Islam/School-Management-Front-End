@@ -26,15 +26,14 @@ const Notices = () => {
     // Initialize AOS
     AOS.init({ duration: 1000, once: true });
 
-    // Use HTTPS instead of HTTP in the API request
     axios
-      .get("https://amader-school.up.railway.app/academics/notices/") // Changed to HTTPS
+      .get("https://amader-school.up.railway.app/academics/notices/") // HTTPS
       .then((response) => {
         setNotices(response.data);
         setLoading(false); // Set loading to false once data is fetched
       })
       .catch((error) => {
-        console.error("There was an error fetching the notices!", error);
+        console.error("Error fetching notices!", error);
         setLoading(false); // Ensure loading is set to false on error
       });
   }, []);
@@ -66,16 +65,8 @@ const Notices = () => {
   // Helper function to format date and time
   const formatDateTime = (dateTime) => {
     const date = new Date(dateTime);
-    const options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    const timeOptions = {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    };
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const timeOptions = { hour: "2-digit", minute: "2-digit", hour12: true };
     return `${date.toLocaleDateString(undefined, options)}, ${date.toLocaleTimeString(
       undefined,
       timeOptions
@@ -83,22 +74,23 @@ const Notices = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-200 min-h-screen">
+    <div className="flex items-center justify-center bg-gradient-to-r bg-slate-50 min-h-screen p-8">
       <div className="w-full max-w-6xl">
-        <h1 className="text-3xl font-bold text-center mb-6 bg-slate-300 w-full">
+        <h1 className="text-4xl font-bold text-center mb-10 text-white bg-gradient-to-r from-blue-500  via-purple-700 to-blue-500 p-5 rounded-lg shadow-lg">
           Official Notices
         </h1>
-        {loading ? ( // Show spinner while loading
+
+        {loading ? (
           <Spinner />
         ) : (
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {notices.map((notice) => (
               <div
                 key={notice.id}
-                className="p-6 bg-white rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-xl"
-                data-aos="fade-up" // AOS animation
+                className="p-6 bg-white rounded-lg shadow-lg transform transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                data-aos="fade-up"
               >
-                <h2 className="text-xl font-semibold mb-3 text-center">
+                <h2 className="text-2xl font-semibold mb-3 text-center text-indigo-800">
                   {notice.title}
                 </h2>
                 <p className="text-gray-700 mb-4 text-center">
@@ -111,14 +103,14 @@ const Notices = () => {
                     <img
                       src={notice.file}
                       alt={notice.title}
-                      className="w-full h-64 object-cover rounded mb-4 cursor-pointer"
-                      onClick={() => openFullScreen(notice.file)} // Click to open full screen
-                      data-aos="zoom-in" // AOS animation for image
+                      className="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-90 transition-opacity duration-300"
+                      onClick={() => openFullScreen(notice.file)}
+                      data-aos="zoom-in"
                     />
                   ) : (
                     <a
                       href={notice.file}
-                      className="block text-center bg-blue-500 text-white px-4 py-2 rounded mt-2 hover:bg-blue-700"
+                      className="block text-center bg-blue-600 text-white px-4 py-2 rounded-lg mt-2 hover:bg-blue-700 transition-colors duration-300"
                       download
                     >
                       Download File
@@ -141,17 +133,17 @@ const Notices = () => {
           ref={imageModalRef}
           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
           style={{ display: "none" }}
-          onClick={closeFullScreen} // Click outside the image to close
+          onClick={closeFullScreen}
         >
           <div className="relative">
             <img
               src={selectedImage}
               alt="Full Screen"
-              className="w-4/5 h-4/5 object-contain rounded-lg" // 80% width and height
+              className="w-full h-auto max-w-screen-lg object-contain rounded-lg"
             />
             {/* Close Button */}
             <button
-              className="absolute top-2 right-2 text-white text-3xl font-bold"
+              className="absolute top-4 right-4 text-white text-4xl font-bold hover:text-gray-300 transition-colors duration-300"
               onClick={handleClose}
             >
               &times;

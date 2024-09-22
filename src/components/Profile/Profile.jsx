@@ -27,7 +27,6 @@ const Profile = () => {
   const [imagePreview, setImagePreview] = useState('');
 
   useEffect(() => {
-    // Fetch the token from localStorage
     const token = localStorage.getItem('token');
     if (token) {
       fetch(`${API_URL}user-profile-update/`, {
@@ -109,113 +108,113 @@ const Profile = () => {
   }
   
   return (
-    <div className="min-h-screen py-24">
-    <div className=" max-w-lg mx-auto bg-white p-5 rounded-lg shadow-lg mt-10 ">
-      <h2 className="text-3xl font-bold mb-4 text-center text-blue-600">User Profile</h2>
+    <div className="min-h-screen py-24 bg-gradient-to-r from-blue-100 via-white to-blue-50">
+      <div className="max-w-lg mx-auto bg-white p-6 rounded-xl shadow-2xl transform transition duration-500 hover:scale-105 mt-10">
+        <h2 className="text-4xl font-extrabold mb-6 text-center text-blue-700">User Profile</h2>
 
-      {successMessage && <div className="text-green-500 mb-4">{successMessage}</div>}
+        {successMessage && <div className="text-green-600 text-center mb-4 font-semibold">{successMessage}</div>}
 
-      <div className="flex items-center justify-center mb-6">
-        <img
-          src={imagePreview}
-          alt="Profile"
-          className="w-32 h-32 rounded-full object-cover shadow-md border"
-        />
-      </div>
+        <div className="flex items-center justify-center mb-6">
+          <img
+            src={imagePreview}
+            alt="Profile"
+            className="w-32 h-32 rounded-full object-cover shadow-lg border-4 border-blue-300"
+          />
+        </div>
 
-      {editMode ? (
-        <div className="space-y-4">
+        {editMode ? (
+          <div className="space-y-6">
             <div>
-            <label className="block text-sm font-medium">Profile Image:</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="mt-1 block w-full text-sm text-gray-500"
-            />
+              <label className="block text-sm font-semibold text-gray-700">Profile Image:</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="mt-2 block w-full text-sm text-gray-500 file:bg-blue-100 file:border-none file:rounded-md file:py-2 file:px-4"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Username:</label>
+              <input
+                type="text"
+                name="username"
+                value={profile.username || ''}
+                onChange={handleInputChange}
+                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Phone Number:</label>
+              <input
+                type="text"
+                name="phone_number"
+                value={profile.phone_number || ''}
+                onChange={handleInputChange}
+                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Address:</label>
+              <input
+                type="text"
+                name="address"
+                value={profile.address || ''}
+                onChange={handleInputChange}
+                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Date of Birth:</label>
+              <input
+                type="date"
+                name="date_of_birth"
+                value={profile.date_of_birth || ''}
+                onChange={handleInputChange}
+                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Department:</label>
+              <input
+                type="text"
+                name="department"
+                value={profile.department || ''}
+                onChange={handleInputChange}
+                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+            
+            <div className="flex space-x-4 mt-6">
+              <button
+                onClick={handleSaveChanges}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                Save Changes
+              </button>
+              <button
+                onClick={() => setEditMode(false)}
+                className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-gray-300"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium">Username:</label>
-            <input
-              type="text"
-              name="username"
-              value={profile.username || ''}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border px-3 py-2 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Phone Number:</label>
-            <input
-              type="text"
-              name="phone_number"
-              value={profile.phone_number || ''}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border px-3 py-2 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Address:</label>
-            <input
-              type="text"
-              name="address"
-              value={profile.address || ''}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border px-3 py-2 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Date of Birth:</label>
-            <input
-              type="date"
-              name="date_of_birth"
-              value={profile.date_of_birth || ''}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border px-3 py-2 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Department:</label>
-            <input
-              type="text"
-              name="department"
-              value={profile.department || ''}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border px-3 py-2 rounded-md"
-            />
-          </div>
-        
-          <div className="flex space-x-4 mt-5">
+        ) : (
+          <div className="space-y-4">
+            <p><strong>Username:</strong> {profile.username || 'Not provided'}</p>
+            <p><strong>Phone Number:</strong> {profile.phone_number || 'Not provided'}</p>
+            <p><strong>Address:</strong> {profile.address || 'Not provided'}</p>
+            <p><strong>Date of Birth:</strong> {profile.date_of_birth || 'Not provided'}</p>
+            <p><strong>Department:</strong> {profile.department || 'Not provided'}</p>
             <button
-              onClick={handleSaveChanges}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+              onClick={() => setEditMode(true)}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg w-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
-              Save Changes
-            </button>
-            <button
-              onClick={() => setEditMode(false)}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
-            >
-              Cancel
+              Edit Profile
             </button>
           </div>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <p><strong>Username:</strong> {profile.username || 'Not provided'}</p>
-          <p><strong>Phone Number:</strong> {profile.phone_number || 'Not provided'}</p>
-          <p><strong>Address:</strong> {profile.address || 'Not provided'}</p>
-          <p><strong>Date of Birth:</strong> {profile.date_of_birth || 'Not provided'}</p>
-          <p><strong>Department:</strong> {profile.department || 'Not provided'}</p>
-          <button
-            onClick={() => setEditMode(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full"
-          >
-            Edit Profile
-          </button>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </div>
   );
 };
