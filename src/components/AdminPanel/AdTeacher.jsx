@@ -16,6 +16,7 @@ const AdTeacher = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const token = localStorage.getItem("token");
+  const [errorMessage, setErrorMessage] = useState(""); // Add error message state
 
   // Fetch all teachers
   useEffect(() => {
@@ -45,7 +46,6 @@ const AdTeacher = () => {
       .catch((error) => console.error("Error fetching subjects:", error));
   }, []);
 
-  // Add new teacher
   const addTeacher = () => {
     const formData = new FormData();
     formData.append("first_name", newTeacher.first_name);
@@ -53,7 +53,7 @@ const AdTeacher = () => {
     formData.append("email", newTeacher.email);
     formData.append("subject", newTeacher.subject_id);
     formData.append("photo", newTeacher.photo);
-
+  
     axios
       .post(
         "https://amader-school.up.railway.app/academics/teachers/",
@@ -75,11 +75,15 @@ const AdTeacher = () => {
           photo: "",
         });
         setShowAddModal(false); // Close modal after adding
+        setErrorMessage(""); // Clear error message after successful submission
       })
-      .catch((error) =>
-        console.error("Error adding new teacher:", error.response.data)
-      );
+      .catch((error) => {
+        const errMessage = error.response?.data?.detail || "Error adding new teacher";
+        setErrorMessage(errMessage); // Set error message in state
+        console.error("Error adding new teacher:", error.response.data);
+      });
   };
+  
 
   // // Edit a teacher
   // const updateTeacher = async () => {
@@ -103,40 +107,38 @@ const AdTeacher = () => {
   // };
 
   // Edit a teacher
-const updateTeacher = async () => {
-  try {
-    const formData = new FormData();
-    
-    // Append the fields
-    formData.append("first_name", editTeacher.first_name);
-    formData.append("last_name", editTeacher.last_name);
-    formData.append("email", editTeacher.email);
-    formData.append("subject", editTeacher.subject_id);
-
-    // Append the photo file only if a new file is selected
-    if (editTeacher.photo && editTeacher.photo instanceof File) {
-      formData.append("photo", editTeacher.photo);
-    }
-
-    await axios.patch(
-      `https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`,
-      formData,
-      {
-        headers: {
-          Authorization: `Token ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
+  const updateTeacher = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("first_name", editTeacher.first_name);
+      formData.append("last_name", editTeacher.last_name);
+      formData.append("email", editTeacher.email);
+      formData.append("subject", editTeacher.subject_id);
+  
+      if (editTeacher.photo && editTeacher.photo instanceof File) {
+        formData.append("photo", editTeacher.photo);
       }
-    );
-
-    setShowEditModal(false); // Close modal after editing
-  } catch (error) {
-    console.error(
-      "Error editing teacher:",
-      error.response ? error.response.data : error
-    );
-  }
-};
+  
+      await axios.patch(
+        `https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+  
+      setShowEditModal(false); // Close modal after editing
+      setErrorMessage(""); // Clear error message after successful submission
+    } catch (error) {
+      const errMessage = error.response?.data?.detail || "Error editing teacher";
+      setErrorMessage(errMessage); // Set error message in state
+      console.error("Error editing teacher:", error.response ? error.response.data : error);
+    }
+  };
+  
 
   // Delete a teacher
   const deleteTeacher = (id) => {
@@ -208,6 +210,7 @@ const updateTeacher = async () => {
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4">Add New Teacher</h2>
+              {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
                   type="text"
@@ -281,6 +284,7 @@ const updateTeacher = async () => {
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4">Edit Teacher</h2>
+              {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
                   type="text"
