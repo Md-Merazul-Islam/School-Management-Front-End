@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useParams, useNavigate } from 'react-router-dom'; // Import useParams and useNavigate
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Admin from "../Admin/Admin";
 
 const API_BASE_URL = 'https://amader-school.up.railway.app/academics';
@@ -19,14 +19,15 @@ const AdStudents = () => {
     class_name: '',
   });
   const [editingStudent, setEditingStudent] = useState(null);
-  const { id } = useParams(); // Get the URL parameter
-  const navigate = useNavigate(); // Use useNavigate for redirecting
+  const [successMessage, setSuccessMessage] = useState(''); // Success message state
+  const [errorMessage, setErrorMessage] = useState(''); // Error message state
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchStudents();
     fetchClasses();
 
-    // If there is an id in the URL, fetch the student for editing
     if (id) {
       fetchStudent(id);
     }
@@ -37,7 +38,7 @@ const AdStudents = () => {
       const response = await axios.get(`${API_BASE_URL}/students/`);
       setStudents(response.data);
     } catch (error) {
-      console.error('Error fetching students:', error.response ? error.response.data : error.message);
+      setErrorMessage('Error fetching students: ' + (error.response ? error.response.data : error.message));
     }
   };
 
@@ -46,7 +47,7 @@ const AdStudents = () => {
       const response = await axios.get(`${API_BASE_URL}/classes/`);
       setClasses(response.data);
     } catch (error) {
-      console.error('Error fetching classes:', error.response ? error.response.data : error.message);
+      setErrorMessage('Error fetching classes: ' + (error.response ? error.response.data : error.message));
     }
   };
 
@@ -61,11 +62,11 @@ const AdStudents = () => {
         email: response.data.email,
         phone_number: response.data.phone_number,
         address: response.data.address,
-        photo: null, // Keep this as null since we're not updating the photo
+        photo: null,
         class_name: response.data.class_name,
       });
     } catch (error) {
-      console.error('Error fetching student for editing:', error.response ? error.response.data : error.message);
+      setErrorMessage('Error fetching student for editing: ' + (error.response ? error.response.data : error.message));
     }
   };
 
@@ -93,26 +94,26 @@ const AdStudents = () => {
 
     try {
       if (editingStudent) {
-        // Update student
         await axios.put(`${API_BASE_URL}/students/${editingStudent.id}/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
+        setSuccessMessage('Student updated successfully!');
         setEditingStudent(null);
       } else {
-        // Create student
         await axios.post(`${API_BASE_URL}/students/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
+        setSuccessMessage('Student added successfully!');
       }
       fetchStudents();
       resetForm();
-      navigate('/admin/students'); // Redirect after submit
+      navigate('/admin/students');
     } catch (error) {
-      console.error('Error saving student:', error.response ? error.response.data : error.message);
+      setErrorMessage('Error saving student: ' + (error.response ? error.response.data : error.message));
     }
   };
 
@@ -127,6 +128,8 @@ const AdStudents = () => {
       photo: null,
       class_name: '',
     });
+    setSuccessMessage(''); // Reset success message
+    setErrorMessage(''); // Reset error message
   };
 
   const handleEdit = (student) => {
@@ -141,15 +144,18 @@ const AdStudents = () => {
       photo: null,
       class_name: student.class_name,
     });
+    setSuccessMessage(''); // Reset success message when editing
+    setErrorMessage(''); // Reset error message when editing
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
       try {
         await axios.delete(`${API_BASE_URL}/students/${id}/`);
+        setSuccessMessage('Student deleted successfully!');
         fetchStudents();
       } catch (error) {
-        console.error('Error deleting student:', error.response ? error.response.data : error.message);
+        setErrorMessage('Error deleting student: ' + (error.response ? error.response.data : error.message));
       }
     }
   };
@@ -158,6 +164,11 @@ const AdStudents = () => {
     <Admin>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Students and Classes</h1>
+
+        {/* Display success message */}
+        {successMessage && <div className="mb-4 p-2 bg-green-200 text-green-800 rounded">{successMessage}</div>}
+        {/* Display error message */}
+        {errorMessage && <div className="mb-4 p-2 bg-red-200 text-red-800 rounded">{errorMessage}</div>}
 
         {/* Student Form */}
         <form onSubmit={handleSubmit} className="mb-8 bg-white p-4 rounded shadow-md">
@@ -262,17 +273,15 @@ const AdStudents = () => {
               {students.map((student) => (
                 <tr key={student.id}>
                   <td className="border p-2">{student.username}</td>
-                  <td className="border p-2">{student.first_name} {student.last_name}</td>
+                  <td className="border p-2">{`${student.first_name} ${student.last_name}`}</td>
                   <td className="border p-2">{student.email}</td>
                   <td className="border p-2">{student.phone_number}</td>
                   <td className="border p-2">{student.class_name}</td>
                   <td className="border p-2">
-                    <Link to={`/admin/students/edit/${student.id}`} className="text-blue-500 hover:underline" onClick={() => handleEdit(student)}>
+                  <Link to={`/admin/students/edit/${student.id}`} className="text-blue-500 hover:underline" onClick={() => handleEdit(student)}>
                       Edit
                     </Link>
-                    <button onClick={() => handleDelete(student.id)} className="text-red-500 hover:underline ml-4">
-                      Delete
-                    </button>
+                    <button onClick={() => handleDelete(student.id)} className="text-red-500 ml-2">Delete</button>
                   </td>
                 </tr>
               ))}
