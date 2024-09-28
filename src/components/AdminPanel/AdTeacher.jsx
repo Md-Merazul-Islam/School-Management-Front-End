@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Admin from "../Admin/Admin";
+import { Link } from "react-router-dom";
 
 const AdTeacher = () => {
   const [teachers, setTeachers] = useState([]);
@@ -185,15 +186,13 @@ const AdTeacher = () => {
                 <p>{teacher.subject_name}</p>
               </div>
               <div>
-                <button
-                  onClick={() => {
+             
+                <Link to={`/admin/teachers/edit/${teacher.id}`}  onClick={() => {
                     setEditTeacher(teacher);
                     setShowEditModal(true);
-                  }}
-                  className="bg-yellow-500 text-white py-1 px-2 rounded-lg hover:bg-yellow-600 mr-2"
-                >
-                  Edit
-                </button>
+                  }} className="bg-yellow-500 text-white py-1 px-2 rounded-lg hover:bg-yellow-600 mr-2">
+                      Edit
+                    </Link>
                 <button
                   onClick={() => deleteTeacher(teacher.id)}
                   className="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-600"

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link, useParams } from 'react-router-dom'; // Import useParams to get URL parameters
 import Admin from "../Admin/Admin";
 
-// Set up base URL for axios
 const API_BASE_URL = 'https://amader-school.up.railway.app/academics';
 
 const AdStudents = () => {
@@ -20,11 +20,17 @@ const AdStudents = () => {
   });
   const [editingStudent, setEditingStudent] = useState(null);
 
-  // Fetch students and classes data
+  const { id } = useParams(); // Get the URL parameter
+
   useEffect(() => {
     fetchStudents();
     fetchClasses();
-  }, []);
+
+    // If there is an id in the URL, fetch the student for editing
+    if (id) {
+      fetchStudent(id);
+    }
+  }, [id]); // Add id to the dependency array
 
   const fetchStudents = async () => {
     try {
@@ -41,6 +47,25 @@ const AdStudents = () => {
       setClasses(response.data);
     } catch (error) {
       console.error('Error fetching classes:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  const fetchStudent = async (studentId) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/students/${studentId}/`);
+      setEditingStudent(response.data);
+      setStudentForm({
+        username: response.data.username,
+        first_name: response.data.first_name,
+        last_name: response.data.last_name,
+        email: response.data.email,
+        phone_number: response.data.phone_number,
+        address: response.data.address,
+        photo: null, // Keep this as null since we're not updating the photo
+        class_name: response.data.class_name,
+      });
+    } catch (error) {
+      console.error('Error fetching student for editing:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -223,25 +248,17 @@ const AdStudents = () => {
             </thead>
             <tbody>
               {students.map((student) => (
-                <tr key={student.id} className="text-center">
+                <tr key={student.id}>
                   <td className="border p-2">{student.username}</td>
-                  <td className="border p-2">
-                    {student.first_name} {student.last_name}
-                  </td>
+                  <td className="border p-2">{student.first_name} {student.last_name}</td>
                   <td className="border p-2">{student.email}</td>
                   <td className="border p-2">{student.phone_number}</td>
                   <td className="border p-2">{student.class_name}</td>
                   <td className="border p-2">
-                    <button
-                      onClick={() => handleEdit(student)}
-                      className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 mr-2"
-                    >
+                  <Link to={`/admin/students/edit/${student.id}`} className="text-blue-500 hover:underline">
                       Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(student.id)}
-                      className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                    >
+                    </Link>
+                    <button onClick={() => handleDelete(student.id)} className="text-red-500 hover:underline ml-2">
                       Delete
                     </button>
                   </td>
