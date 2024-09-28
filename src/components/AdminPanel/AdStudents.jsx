@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom'; // Import useParams to get URL parameters
+import { Link, useParams, useNavigate } from 'react-router-dom'; // Import useParams and useNavigate
 import Admin from "../Admin/Admin";
 
 const API_BASE_URL = 'https://amader-school.up.railway.app/academics';
@@ -19,8 +19,8 @@ const AdStudents = () => {
     class_name: '',
   });
   const [editingStudent, setEditingStudent] = useState(null);
-
   const { id } = useParams(); // Get the URL parameter
+  const navigate = useNavigate(); // Use useNavigate for redirecting
 
   useEffect(() => {
     fetchStudents();
@@ -30,7 +30,7 @@ const AdStudents = () => {
     if (id) {
       fetchStudent(id);
     }
-  }, [id]); // Add id to the dependency array
+  }, [id]);
 
   const fetchStudents = async () => {
     try {
@@ -109,19 +109,24 @@ const AdStudents = () => {
         });
       }
       fetchStudents();
-      setStudentForm({
-        username: '',
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone_number: '',
-        address: '',
-        photo: null,
-        class_name: '',
-      });
+      resetForm();
+      navigate('/admin/students'); // Redirect after submit
     } catch (error) {
       console.error('Error saving student:', error.response ? error.response.data : error.message);
     }
+  };
+
+  const resetForm = () => {
+    setStudentForm({
+      username: '',
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone_number: '',
+      address: '',
+      photo: null,
+      class_name: '',
+    });
   };
 
   const handleEdit = (student) => {
@@ -139,11 +144,13 @@ const AdStudents = () => {
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API_BASE_URL}/students/${id}/`);
-      fetchStudents();
-    } catch (error) {
-      console.error('Error deleting student:', error.response ? error.response.data : error.message);
+    if (window.confirm("Are you sure you want to delete this student?")) {
+      try {
+        await axios.delete(`${API_BASE_URL}/students/${id}/`);
+        fetchStudents();
+      } catch (error) {
+        console.error('Error deleting student:', error.response ? error.response.data : error.message);
+      }
     }
   };
 
@@ -163,6 +170,7 @@ const AdStudents = () => {
               value={studentForm.username}
               onChange={handleInputChange}
               className="p-2 border rounded"
+              required
             />
             <input
               type="text"
@@ -171,6 +179,7 @@ const AdStudents = () => {
               value={studentForm.first_name}
               onChange={handleInputChange}
               className="p-2 border rounded"
+              required
             />
             <input
               type="text"
@@ -179,6 +188,7 @@ const AdStudents = () => {
               value={studentForm.last_name}
               onChange={handleInputChange}
               className="p-2 border rounded"
+              required
             />
             <input
               type="email"
@@ -187,6 +197,7 @@ const AdStudents = () => {
               value={studentForm.email}
               onChange={handleInputChange}
               className="p-2 border rounded"
+              required
             />
             <input
               type="text"
@@ -215,10 +226,11 @@ const AdStudents = () => {
               value={studentForm.class_name}
               onChange={handleInputChange}
               className="p-2 border rounded"
+              required
             >
               <option value="">Select Class</option>
               {classes.map((cls) => (
-                <option key={cls.id} value={cls.name}>
+                <option key={cls.id} value={cls.id}>
                   {cls.name} - Section {cls.section}
                 </option>
               ))}
@@ -255,10 +267,10 @@ const AdStudents = () => {
                   <td className="border p-2">{student.phone_number}</td>
                   <td className="border p-2">{student.class_name}</td>
                   <td className="border p-2">
-                  <Link to={`/admin/students/edit/${student.id}`} className="text-blue-500 hover:underline">
+                    <Link to={`/admin/students/edit/${student.id}`} className="text-blue-500 hover:underline" onClick={() => handleEdit(student)}>
                       Edit
                     </Link>
-                    <button onClick={() => handleDelete(student.id)} className="text-red-500 hover:underline ml-2">
+                    <button onClick={() => handleDelete(student.id)} className="text-red-500 hover:underline ml-4">
                       Delete
                     </button>
                   </td>
