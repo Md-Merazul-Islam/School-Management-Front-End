@@ -48,56 +48,95 @@ const AdTeacher = () => {
   // Add new teacher
   const addTeacher = () => {
     const formData = new FormData();
-    formData.append('first_name', newTeacher.first_name);
-    formData.append('last_name', newTeacher.last_name);
-    formData.append('email', newTeacher.email);
-    formData.append('subject', newTeacher.subject_id);
-    formData.append('photo', newTeacher.photo);
+    formData.append("first_name", newTeacher.first_name);
+    formData.append("last_name", newTeacher.last_name);
+    formData.append("email", newTeacher.email);
+    formData.append("subject", newTeacher.subject_id);
+    formData.append("photo", newTeacher.photo);
 
-    axios.post(
+    axios
+      .post(
         "https://amader-school.up.railway.app/academics/teachers/",
         formData,
         {
-            headers: {
-                Authorization: `Token ${token}`,
-                'Content-Type': 'multipart/form-data',
-            },
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
-    )
-    .then((response) => {
+      )
+      .then((response) => {
         setTeachers([...teachers, response.data]);
         setNewTeacher({
-            first_name: "",
-            last_name: "",
-            email: "",
-            subject_id: "",
-            photo: "",
+          first_name: "",
+          last_name: "",
+          email: "",
+          subject_id: "",
+          photo: "",
         });
         setShowAddModal(false); // Close modal after adding
-    })
-    .catch((error) => console.error("Error adding new teacher:", error.response.data));
+      })
+      .catch((error) =>
+        console.error("Error adding new teacher:", error.response.data)
+      );
   };
+
+  // // Edit a teacher
+  // const updateTeacher = async () => {
+  //   try {
+  //     const payload = {
+  //       first_name: editTeacher.first_name,
+  //       last_name: editTeacher.last_name,
+  //       email: editTeacher.email,
+  //       subject_id: editTeacher.subject_id,
+  //     };
+
+  //     await axios.put(`https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`, payload, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     setShowEditModal(false); // Close modal after editing
+  //   } catch (error) {
+  //     console.error('Error editing teacher:', error.response ? error.response.data : error);
+  //   }
+  // };
 
   // Edit a teacher
-  const updateTeacher = async () => {
-    try {
-      const payload = {
-        first_name: editTeacher.first_name,
-        last_name: editTeacher.last_name,
-        email: editTeacher.email,
-        subject_id: editTeacher.subject_id,
-      };
+const updateTeacher = async () => {
+  try {
+    const formData = new FormData();
+    
+    // Append the fields
+    formData.append("first_name", editTeacher.first_name);
+    formData.append("last_name", editTeacher.last_name);
+    formData.append("email", editTeacher.email);
+    formData.append("subject", editTeacher.subject_id);
 
-      await axios.put(`https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`, payload, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      setShowEditModal(false); // Close modal after editing
-    } catch (error) {
-      console.error('Error editing teacher:', error.response ? error.response.data : error);
+    // Append the photo file only if a new file is selected
+    if (editTeacher.photo && editTeacher.photo instanceof File) {
+      formData.append("photo", editTeacher.photo);
     }
-  };
+
+    await axios.patch(
+      `https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`,
+      formData,
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    setShowEditModal(false); // Close modal after editing
+  } catch (error) {
+    console.error(
+      "Error editing teacher:",
+      error.response ? error.response.data : error
+    );
+  }
+};
 
   // Delete a teacher
   const deleteTeacher = (id) => {
@@ -119,7 +158,9 @@ const AdTeacher = () => {
   return (
     <Admin>
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold text-center mb-6">Teacher Management</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">
+          Teacher Management
+        </h1>
 
         <button
           onClick={() => setShowAddModal(true)}
@@ -132,7 +173,10 @@ const AdTeacher = () => {
         <div className="grid grid-cols-1 gap-4">
           <h2 className="text-2xl font-semibold mb-4">Teachers List</h2>
           {teachers.map((teacher) => (
-            <div key={teacher.id} className="p-4 bg-gray-100 rounded-lg shadow-md flex justify-between items-center">
+            <div
+              key={teacher.id}
+              className="p-4 bg-gray-100 rounded-lg shadow-md flex justify-between items-center"
+            >
               <div>
                 <h3 className="text-xl">{`${teacher.first_name} ${teacher.last_name}`}</h3>
                 <p>{teacher.email}</p>
@@ -169,26 +213,34 @@ const AdTeacher = () => {
                   type="text"
                   placeholder="First Name"
                   value={newTeacher.first_name}
-                  onChange={(e) => setNewTeacher({ ...newTeacher, first_name: e.target.value })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, first_name: e.target.value })
+                  }
                   className="p-2 border rounded-lg"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   value={newTeacher.last_name}
-                  onChange={(e) => setNewTeacher({ ...newTeacher, last_name: e.target.value })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, last_name: e.target.value })
+                  }
                   className="p-2 border rounded-lg"
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={newTeacher.email}
-                  onChange={(e) => setNewTeacher({ ...newTeacher, email: e.target.value })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, email: e.target.value })
+                  }
                   className="p-2 border rounded-lg"
                 />
                 <select
                   value={newTeacher.subject_id}
-                  onChange={(e) => setNewTeacher({ ...newTeacher, subject_id: e.target.value })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, subject_id: e.target.value })
+                  }
                   className="p-2 border rounded-lg"
                 >
                   <option value="">Select Subject</option>
@@ -200,7 +252,9 @@ const AdTeacher = () => {
                 </select>
                 <input
                   type="file"
-                  onChange={(e) => setNewTeacher({ ...newTeacher, photo: e.target.files[0] })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, photo: e.target.files[0] })
+                  }
                   className="p-2 border rounded-lg"
                 />
               </div>
@@ -232,26 +286,43 @@ const AdTeacher = () => {
                   type="text"
                   placeholder="First Name"
                   value={editTeacher.first_name}
-                  onChange={(e) => setEditTeacher({ ...editTeacher, first_name: e.target.value })}
+                  onChange={(e) =>
+                    setEditTeacher({
+                      ...editTeacher,
+                      first_name: e.target.value,
+                    })
+                  }
                   className="p-2 border rounded-lg"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   value={editTeacher.last_name}
-                  onChange={(e) => setEditTeacher({ ...editTeacher, last_name: e.target.value })}
+                  onChange={(e) =>
+                    setEditTeacher({
+                      ...editTeacher,
+                      last_name: e.target.value,
+                    })
+                  }
                   className="p-2 border rounded-lg"
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={editTeacher.email}
-                  onChange={(e) => setEditTeacher({ ...editTeacher, email: e.target.value })}
+                  onChange={(e) =>
+                    setEditTeacher({ ...editTeacher, email: e.target.value })
+                  }
                   className="p-2 border rounded-lg"
                 />
                 <select
                   value={editTeacher.subject_id}
-                  onChange={(e) => setEditTeacher({ ...editTeacher, subject_id: e.target.value })}
+                  onChange={(e) =>
+                    setEditTeacher({
+                      ...editTeacher,
+                      subject_id: e.target.value,
+                    })
+                  }
                   className="p-2 border rounded-lg"
                 >
                   <option value="">Select Subject</option>
@@ -261,6 +332,12 @@ const AdTeacher = () => {
                     </option>
                   ))}
                 </select>
+                <input
+              type="file"
+              onChange={(e) => setEditTeacher({ ...editTeacher, photo: e.target.files[0] })}
+              className="p-2 border rounded-lg"
+            />
+
               </div>
               <div className="mt-4">
                 <button
