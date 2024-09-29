@@ -24,6 +24,7 @@ import AdResult from "./components/AdminPanel/AdResult";
 import AdUser from "./components/AdminPanel/AdUser";
 import AdNotification from "./components/AdminPanel/AdNotification";
 import AdAttendance from "./components/AdminPanel/AdAttendance";
+import TestimonialCarousel from "./components/TestimonialCarousel/TestimonialCarousel";
 
 function App() {
   const location = useLocation();
@@ -53,6 +54,8 @@ function App() {
             <Route path="notice/" element={<Notices />} />
             <Route path="activities/" element={<Activities />} />
             <Route path="profile/" element={<Profile />} />
+            <Route path="reviews/" element={<TestimonialCarousel />} />
+            <Route path="reviews/edit/:id" element={<TestimonialCarousel />} />
 
             {/* Admin Sub-Routes */}
             <Route path="admin/" element={<Admin />} />
@@ -66,6 +69,7 @@ function App() {
             <Route path="/admin/attendance/" element={<AdAttendance />} />
             <Route path="/admin/students/edit/:id" element={<AdStudents />}/>
             <Route path="/admin/teachers/edit/:id" element={<AdStudents />}/>
+
             
             
           </>
