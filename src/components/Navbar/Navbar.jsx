@@ -89,7 +89,7 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-4">
-        {isLoggedIn && isStaff && (
+        {isLoggedIn && isStaff=='true' && (
           <Link to="/admin" className="nav-box bg-gray-200 hover:bg-gray-200 p-2 rounded">
             Admin Dashboard
           </Link>
@@ -263,7 +263,7 @@ const Navbar = () => {
           </button>
 
           {/* Regular Links */}
-          {isLoggedIn && isStaff && (
+          {isLoggedIn && isStaff=='true' && (
           <Link to="/admin" className="nav-box bg-gray-200 hover:bg-gray-200 p-2 rounded">
             Admin Dashboard
           </Link>
