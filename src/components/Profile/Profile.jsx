@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const API_URL = 'https://amader-school.up.railway.app/accounts/';
+const API_URL = 'https://school-management-five-iota.vercel.app/accounts/';
 
 // Update profile information
 export const updateProfile = async (token, profileData) => {

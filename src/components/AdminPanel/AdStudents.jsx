@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import Admin from "../Admin/Admin";
 
-const API_BASE_URL = 'https://amader-school.up.railway.app/academics';
+const API_BASE_URL = 'https://school-management-five-iota.vercel.app/academics';
 
 const AdStudents = () => {
   const [students, setStudents] = useState([]);

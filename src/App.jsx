@@ -55,7 +55,7 @@ function App() {
             <Route path="activities/" element={<Activities />} />
             <Route path="profile/" element={<Profile />} />
             <Route path="reviews/" element={<TestimonialCarousel />} />
-            <Route path="reviews/edit/:id" element={<TestimonialCarousel />} />
+            <Route path="/reviews/edit/:id" element={<TestimonialCarousel />} />
 
             {/* Admin Sub-Routes */}
             <Route path="admin/" element={<Admin />} />
@@ -82,6 +82,7 @@ function App() {
             <Route path="courses/" element={<Subjects />} />
             <Route path="contact/" element={<Contact />} />
             <Route path="notice/" element={<Notices />} />
+            
           </>
         )}
         <Route path="*" element={<Home />} />

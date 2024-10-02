@@ -8,50 +8,56 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Link } from "react-router-dom"; 
-
 const TestimonialCarousel = () => {
   const [reviews, setReviews] = useState([]);
+  const [users, setUsers] = useState([]);
   const [newReview, setNewReview] = useState({ body: "" });
   const [activeIndex, setActiveIndex] = useState(0);
-  const [editingReviewId, setEditingReviewId] = useState(null); // Track which review is being edited
-  const token = localStorage.getItem("token"); // Auth token from localStorage
-  const author_id = localStorage.getItem("user_id"); // Logged-in user's ID
-  const API_BASE_URL = "http://127.0.0.1:8000" ;
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const token = localStorage.getItem("token");
+  const author_id = localStorage.getItem("user_id");
+  const API_BASE_URL = "https://school-management-five-iota.vercel.app";
 
-  // Fetch reviews from the API
   useEffect(() => {
-    axios
-      .get(`${API_BASE_URL}/academics/reviews/`) // Use the base URL here
-      .then((response) => {
+    const fetchUsers = async () => {
+      try {
+        // const response = await axios.get("https://school-management-five-iota.vercel.app/accounts/users/");
+        const response = await axios.get(`${API_BASE_URL}/accounts/users`);
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/academics/reviews/`);
         setReviews(response.data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching reviews:", error);
-      });
+      }
+    };
+
+    fetchUsers();
+    fetchReviews();
   }, []);
 
-  // Auto-slide functionality with 2-second interval (only when reviews.length >= 3)
   useEffect(() => {
-    if (reviews.length >= 3) {
-      const interval = setInterval(() => {
-        setActiveIndex((prevIndex) => (prevIndex + 3) % reviews.length);
-      }, 2000);
+    const interval = setInterval(() => {
+      handleNext();
+    }, 4000); // Change to 4000 milliseconds for 4 seconds
 
-      return () => clearInterval(interval); // Clear interval when component unmounts
-    }
-  }, [reviews]);
+    return () => clearInterval(interval);
+  }, [activeIndex, reviews]); // Depend on activeIndex and reviews
 
-  // Handle next/previous carousel buttons
   const handleNext = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 3) % reviews.length);
+    setActiveIndex((prevIndex) => (prevIndex + 1) % Math.ceil(reviews.length / 3));
   };
 
   const handlePrev = () => {
-    setActiveIndex((prevIndex - 3 + reviews.length) % reviews.length);
+    setActiveIndex((prevIndex) => (prevIndex - 1 + Math.ceil(reviews.length / 3)) % Math.ceil(reviews.length / 3));
   };
 
-  // Handle form input changes
   const handleChange = (e) => {
     setNewReview({
       ...newReview,
@@ -59,106 +65,77 @@ const TestimonialCarousel = () => {
     });
   };
 
-  // Handle form submission for both creating and editing reviews
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const reviewWithAuthor = { ...newReview, author: parseInt(author_id) };
 
-    // If editingReviewId is null, it's a new review, otherwise it's an update
-    if (editingReviewId === null) {
-      axios
-        .post(`${API_BASE_URL}/academics/reviews/`, reviewWithAuthor, {
+    try {
+      if (editingReviewId === null) {
+        const response = await axios.post(`${API_BASE_URL}/academics/reviews/`, reviewWithAuthor, {
           headers: {
-            Authorization: `Token  ${token}`,
+            Authorization: `Token ${token}`,
             "Content-Type": "application/json",
           },
-        })
-        .then((response) => {
-          setReviews([...reviews, response.data]);
-          setNewReview({ body: "" });
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(
-            "Error submitting review:",
-            error.response ? error.response.data : error.message
-          );
         });
-    } else {
-      axios
-        .put(
-          `${API_BASE_URL}/academics/reviews/${editingReviewId}/`,
-          reviewWithAuthor,
-          {
-            headers: {
-              Authorization: `Token  ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((response) => {
-          setReviews(
-            reviews.map((review) =>
-              review.id === editingReviewId ? response.data : review
-            )
-          );
-          setEditingReviewId(null); // Reset after editing
-          setNewReview({ body: "" });
-        })
-        .catch((error) => {
-          console.error(
-            "Error updating review:",
-            error.response ? error.response.data : error.message
-          );
+        setReviews([...reviews, response.data]);
+      } else {
+        const response = await axios.put(`${API_BASE_URL}/academics/reviews/${editingReviewId}/`, reviewWithAuthor, {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
         });
+        setReviews(
+          reviews.map((review) =>
+            review.id === editingReviewId ? response.data : review
+          )
+        );
+        setEditingReviewId(null);
+      }
+      setNewReview({ body: "" });
+    } catch (error) {
+      console.error("Error submitting review:", error);
     }
   };
 
-  // Handle delete review
-  const handleDelete = (reviewId) => {
-    axios
-      .delete(`${API_BASE_URL}/academics/reviews/${reviewId}/`, {
+  const handleDelete = async (reviewId) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/academics/reviews/${reviewId}/`, {
         headers: {
-          Authorization: `Token  ${token}`,
+          Authorization: `Token ${token}`,
         },
-      })
-      .then(() => {
-        // Remove the deleted review from the state
-        setReviews(reviews.filter((review) => review.id !== reviewId));
-      })
-      .catch((error) => {
-        console.error("Error deleting review:", error);
       });
+      setReviews(reviews.filter((review) => review.id !== reviewId));
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
   };
 
-  // Handle edit button click
   const handleEditClick = (review) => {
     setNewReview({ body: review.body });
-    setEditingReviewId(review.id); // Set the review being edited
+    setEditingReviewId(review.id);
   };
 
-  // Get three reviews to display per slide
   const getVisibleReviews = () => {
-    const start = activeIndex;
-    const end = (activeIndex + 3) % reviews.length;
-    if (start < end) {
-      return reviews.slice(start, end);
-    } else {
-      return [...reviews.slice(start), ...reviews.slice(0, end)];
-    }
+    const start = activeIndex * 3;
+    return reviews.slice(start, start + 3);
+  };
+
+  const getUsernameById = (id) => {
+    const user = users.find((user) => user.id === id);
+    return user ? user.username : "Unknown User";
   };
 
   return (
-    <div className="flex flex-col items-center bg-slate-100 justify-center space-y-8 p-8">
-      {/* Carousel Section */}
-      <div className="relative w-full">
+    <div className="flex flex-col items-center bg-gray-200 justify-center space-y-8 p-8">
+      <div className="relative max-w-[1535px]">
         {reviews.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {getVisibleReviews().map((review) => (
                 <div
-                  key={review.id} // Use review.id for key
-                  className="p-6 bg-gradient-to-r from-purple-200 via-pink-100 to-blue-200 shadow-md rounded-lg text-gray-800"
+                  key={review.id}
+                  className="p-6 bg-white shadow-md rounded-lg text-gray-800"
                 >
                   <div className="flex items-start space-x-2">
                     <FontAwesomeIcon
@@ -173,19 +150,16 @@ const TestimonialCarousel = () => {
                         icon={faUser}
                         className="text-sm text-gray-500"
                       />
-                      <p className="text-sm text-gray-600">
-                        {review.author_name}
-                      </p>
+                      <p className="text-sm text-gray-600">{getUsernameById(review.author)}</p>
                     </div>
-                    {/* Conditionally render Edit/Delete buttons for the review author */}
                     {review.author === parseInt(author_id) && (
                       <div className="flex space-x-2">
-                        {/* Edit Button */}
-                        <Link to={`edit/${review.id}`} className="text-blue-500 hover:text-blue-700">
+                        <button
+                          onClick={() => handleEditClick(review)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
                           <FontAwesomeIcon icon={faEdit} /> Edit
-                        </Link>
-
-                        {/* Delete Button */}
+                        </button>
                         <button
                           onClick={() => handleDelete(review.id)}
                           className="text-red-500 hover:text-red-700"
@@ -199,8 +173,7 @@ const TestimonialCarousel = () => {
               ))}
             </div>
 
-            {/* Carousel controls */}
-            {reviews.length > 3 && ( // Only show controls if there are more than 3 reviews
+            {reviews.length > 3 && (
               <div className="absolute inset-0 flex items-center justify-between">
                 <button
                   className="bg-gray-300 text-gray-800 p-2 rounded-full hover:bg-gray-400"
@@ -222,11 +195,7 @@ const TestimonialCarousel = () => {
         )}
       </div>
 
-      {/* Form Section */}
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md bg-gray-100 p-6 shadow-md rounded-lg"
-      >
+      <form onSubmit={handleSubmit} className="w-full max-w-md bg-gray-100 p-6 shadow-md rounded-lg">
         <h2 className="text-xl font-semibold mb-4">
           {editingReviewId ? "Edit Review" : "Add Review"}
         </h2>
@@ -244,6 +213,9 @@ const TestimonialCarousel = () => {
           {editingReviewId ? "Update Review" : "Submit Review"}
         </button>
       </form>
+
+
+      <img src="https://ibb.co.com/TrcjZVM" alt="" />
     </div>
   );
 };

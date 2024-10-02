@@ -10,7 +10,7 @@ const Result = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `https://amader-school.up.railway.app/academics/students-list/?first_name=${firstName}&username=${username}&roll_no=${rollNo}`
+        `https://school-management-five-iota.vercel.app/academics/students-list/?first_name=${firstName}&username=${username}&roll_no=${rollNo}`
       );
       const fetchedStudents = await response.json();
 

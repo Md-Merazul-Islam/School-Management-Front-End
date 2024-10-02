@@ -27,7 +27,7 @@ const Notices = () => {
     AOS.init({ duration: 1000, once: true });
 
     axios
-      .get("https://amader-school.up.railway.app/academics/notices/") // HTTPS
+      .get("https://school-management-five-iota.vercel.app/academics/notices/") // HTTPS
       .then((response) => {
         setNotices(response.data);
         setLoading(false); // Set loading to false once data is fetched

@@ -8,7 +8,7 @@ const Activities = () => {
 
   // Fetch attendance data from API
   useEffect(() => {
-    axios.get('https://amader-school.up.railway.app/classes/attendance/')
+    axios.get('https://school-management-five-iota.vercel.app/classes/attendance/')
       .then(response => {
         setAttendanceData(response.data);
       })

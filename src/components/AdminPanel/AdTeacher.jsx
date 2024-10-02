@@ -22,7 +22,7 @@ const AdTeacher = () => {
   // Fetch all teachers
   useEffect(() => {
     axios
-      .get("https://amader-school.up.railway.app/academics/teachers/", {
+      .get("https://school-management-five-iota.vercel.app/academics/teachers/", {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -36,7 +36,7 @@ const AdTeacher = () => {
   // Fetch all subjects
   useEffect(() => {
     axios
-      .get("https://amader-school.up.railway.app/academics/subjects/", {
+      .get("https://school-management-five-iota.vercel.app/academics/subjects/", {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -57,7 +57,7 @@ const AdTeacher = () => {
   
     axios
       .post(
-        "https://amader-school.up.railway.app/academics/teachers/",
+        "https://school-management-five-iota.vercel.app/academics/teachers/",
         formData,
         {
           headers: {
@@ -96,7 +96,7 @@ const AdTeacher = () => {
   //       subject_id: editTeacher.subject_id,
   //     };
 
-  //     await axios.put(`https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`, payload, {
+  //     await axios.put(`https://school-management-five-iota.vercel.app/academics/teachers/${editTeacher.id}/`, payload, {
   //       headers: {
   //         'Content-Type': 'application/json',
   //       },
@@ -121,7 +121,7 @@ const AdTeacher = () => {
       }
   
       await axios.patch(
-        `https://amader-school.up.railway.app/academics/teachers/${editTeacher.id}/`,
+        `https://school-management-five-iota.vercel.app/academics/teachers/${editTeacher.id}/`,
         formData,
         {
           headers: {
@@ -145,7 +145,7 @@ const AdTeacher = () => {
   const deleteTeacher = (id) => {
     axios
       .delete(
-        `https://amader-school.up.railway.app/academics/teachers/${id}/`,
+        `https://school-management-five-iota.vercel.app/academics/teachers/${id}/`,
         {
           headers: {
             Authorization: `Token ${token}`,

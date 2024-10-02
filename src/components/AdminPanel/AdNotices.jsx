@@ -5,7 +5,7 @@ import axios from 'axios';
 import Admin from '../Admin/Admin';
 
 // Set up base URL for axios
-const API_BASE_URL = 'https://amader-school.up.railway.app/academics';
+const API_BASE_URL = 'https://school-management-five-iota.vercel.app/academics';
 
 const AdNotices = () => {
   const [notices, setNotices] = useState([]);

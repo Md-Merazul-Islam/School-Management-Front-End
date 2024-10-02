@@ -1,5 +1,6 @@
 import axios from "axios";
-const API_URL = 'https://amader-school.up.railway.app/accounts/';
+
+const API_URL = 'https://school-management-five-iota.vercel.app/accounts/';
 
 export const register = async (username, email, password1, password2) => {
     return await axios.post(`${API_URL}register/`, {

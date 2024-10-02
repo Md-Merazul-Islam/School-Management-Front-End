@@ -1,0 +1,16 @@
+.testimonial-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .testimonial-card-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Optional styling for hover effects */
+  .testimonial-card:hover {
+    transform: scale(1.05);
+  }
+  

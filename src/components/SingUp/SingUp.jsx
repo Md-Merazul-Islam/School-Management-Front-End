@@ -13,6 +13,7 @@ const Signup = () => {
   const [isPassword1Visible, setIsPassword1Visible] = useState(false);
   const [isPassword2Visible, setIsPassword2Visible] = useState(false);
   const navigate = useNavigate();
+  const API_LINK = "https://school-management-five-iota.vercel.app/"
 
   const handleInputChange = (e) => {
     setFormData({
@@ -49,7 +50,7 @@ const Signup = () => {
     }
 
     try {
-      const usersResponse = await fetch("https://amader-school.up.railway.app/accounts/users/");
+      const usersResponse = await fetch("https://school-management-five-iota.vercel.app/accounts/users/");
       if (!usersResponse.ok) {
         throw new Error("Failed to fetch existing users");
       }
@@ -67,7 +68,7 @@ const Signup = () => {
       }
 
       // Proceed with registration if no duplicates are found
-      const registrationResponse = await fetch('https://amader-school.up.railway.app/accounts/register/', {
+      const registrationResponse = await fetch('https://school-management-five-iota.vercel.app/accounts/register/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

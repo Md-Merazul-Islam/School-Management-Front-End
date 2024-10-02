@@ -23,7 +23,7 @@ const AdResult = () => {
 
   const fetchMarks = async () => {
     try {
-      const response = await axios.get("https://amader-school.up.railway.app/classes/marks/");
+      const response = await axios.get("https://school-management-five-iota.vercel.app/classes/marks/");
       setMarks(response.data);
     } catch (error) {
       console.error("Error fetching marks:", error);
@@ -32,7 +32,7 @@ const AdResult = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get("https://amader-school.up.railway.app/academics/students-list/");
+      const response = await axios.get("https://school-management-five-iota.vercel.app/academics/students-list/");
       setStudents(response.data);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -41,7 +41,7 @@ const AdResult = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("https://amader-school.up.railway.app/academics/subjects/");
+      const response = await axios.get("https://school-management-five-iota.vercel.app/academics/subjects/");
       setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -71,7 +71,7 @@ const AdResult = () => {
         subject: parseInt(newMark.subject, 10),
         marks: parseInt(newMark.marks, 10),
       };
-      await axios.post("https://amader-school.up.railway.app/classes/marks/", dataToSend);
+      await axios.post("https://school-management-five-iota.vercel.app/classes/marks/", dataToSend);
       fetchMarks(); // Refresh the mark list after adding
       setNewMark({ student: "", subject: "", marks: "" }); // Reset form
     } catch (error) {
@@ -82,7 +82,7 @@ const AdResult = () => {
   // Update an existing mark
   const updateMark = async () => {
     try {
-      await axios.put(`https://amader-school.up.railway.app/classes/marks/${editingMark.id}/`, editingMark);
+      await axios.put(`https://school-management-five-iota.vercel.app/classes/marks/${editingMark.id}/`, editingMark);
       fetchMarks();
       setEditingMark(null);
     } catch (error) {
@@ -93,7 +93,7 @@ const AdResult = () => {
   // Delete a mark
   const deleteMark = async (id) => {
     try {
-      await axios.delete(`https://amader-school.up.railway.app/classes/marks/${id}/`);
+      await axios.delete(`https://school-management-five-iota.vercel.app/classes/marks/${id}/`);
       fetchMarks();
     } catch (error) {
       console.error("Error deleting mark:", error);

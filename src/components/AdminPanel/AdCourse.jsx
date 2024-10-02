@@ -18,7 +18,7 @@ export const AdCourse = () => {
 
   useEffect(() => {
     axios
-      .get("https://amader-school.up.railway.app/academics/subjects/", {
+      .get("https://school-management-five-iota.vercel.app/academics/subjects/", {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -48,7 +48,7 @@ export const AdCourse = () => {
 
   const addSubject = () => {
     axios
-      .post("https://amader-school.up.railway.app/academics/subjects/", newSubject, {
+      .post("https://school-management-five-iota.vercel.app/academics/subjects/", newSubject, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -70,7 +70,7 @@ export const AdCourse = () => {
     }
 
     axios
-      .put(`https://amader-school.up.railway.app/academics/subjects/${editSubject.id}/`, editSubject, {
+      .put(`https://school-management-five-iota.vercel.app/academics/subjects/${editSubject.id}/`, editSubject, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -91,7 +91,7 @@ export const AdCourse = () => {
 
   const deleteSubject = (id) => {
     axios
-      .delete(`https://amader-school.up.railway.app/academics/subjects/${id}/`, {
+      .delete(`https://school-management-five-iota.vercel.app/academics/subjects/${id}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },

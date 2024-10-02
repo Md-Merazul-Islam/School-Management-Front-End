@@ -18,7 +18,7 @@ const AdAttendance = () => {
 
   const token = localStorage.getItem("token");
 
-  const apiUrl = "https://amader-school.up.railway.app/";
+  const apiUrl = "https://school-management-five-iota.vercel.app/";
 
   useEffect(() => {
     fetchStudents();

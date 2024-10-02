@@ -5,11 +5,11 @@ npm install react-router-dom
     "password":"meraz2004"
 }
 
-https://amader-school.up.railway.app/accounts/
+https://school-management-five-iota.vercel.app/accounts/
 
-https://amader-school.up.railway.app/accounts/register/
-https://amader-school.up.railway.app/accounts/login/
-https://amader-school.up.railway.app/accounts/logout/
+https://school-management-five-iota.vercel.app/accounts/register/
+https://school-management-five-iota.vercel.app/accounts/login/
+https://school-management-five-iota.vercel.app/accounts/logout/
 
 {
     "message": "successfully login.\n",
@@ -23,7 +23,7 @@ https://amader-school.up.railway.app/accounts/logout/
     "profiles": "http://amader-school.up.railway.app/accounts/profiles/"
 }
 
-https://amader-school.up.railway.app/academics/
+https://school-management-five-iota.vercel.app/academics/
 
 
 
@@ -41,7 +41,7 @@ https://amader-school.up.railway.app/academics/
 }
 
 
-https://amader-school.up.railway.app/classes/
+https://school-management-five-iota.vercel.app/classes/
 
 
 {
@@ -49,7 +49,7 @@ https://amader-school.up.railway.app/classes/
     "marks": "http://amader-school.up.railway.app/classes/marks/"
 }
 
-Attendance List Create for post - https://amader-school.up.railway.app/classes/attendance-check/
+Attendance List Create for post - https://school-management-five-iota.vercel.app/classes/attendance-check/
 
 
 

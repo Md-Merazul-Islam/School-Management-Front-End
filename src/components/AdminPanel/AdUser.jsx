@@ -6,7 +6,7 @@ const AdUser = () => {
 
   useEffect(() => {
     // Fetch the user data from the API
-    fetch("https://amader-school.up.railway.app/accounts/users/")
+    fetch("https://school-management-five-iota.vercel.app/accounts/users/")
       .then((response) => response.json())
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error fetching data:", error));

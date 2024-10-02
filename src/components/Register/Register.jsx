@@ -42,7 +42,7 @@ const Register = () => {
 
         try {
             // Fetch all users to check for existing username or email
-            const usersResponse = await fetch('https://amader-school.up.railway.app/accounts/users/');
+            const usersResponse = await fetch('https://school-management-five-iota.vercel.app/accounts/users/');
             if (!usersResponse.ok) {
                 throw new Error('Failed to fetch existing users');
             }
@@ -63,7 +63,7 @@ const Register = () => {
             }
 
             // Proceed with registration if no duplicates are found
-            const registrationResponse = await fetch('https://amader-school.up.railway.app/accounts/register/', {
+            const registrationResponse = await fetch('https://school-management-five-iota.vercel.app/accounts/register/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
