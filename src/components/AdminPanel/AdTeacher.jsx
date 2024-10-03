@@ -17,7 +17,7 @@ const AdTeacher = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(true); // Initialize loading state
+  const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -31,7 +31,7 @@ const AdTeacher = () => {
   // Fetch all subjects
   useEffect(() => {
     const fetchSubjects = async () => {
-      setLoading(true); // Set loading to true before fetching
+      setLoading(true); 
       try {
         const response = await axios.get(API_URL_subject);
         setSubjects(response.data);
@@ -49,14 +49,14 @@ const AdTeacher = () => {
   // Fetch Teachers
   useEffect(() => {
     const fetchTeachers = async () => {
-      setLoading(true); // Set loading to true before fetching
+      setLoading(true); 
       try {
         const response = await axios.get(API_URL);
         setTeachers(response.data);
       } catch (error) {
         console.error("Error fetching teachers:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false); 
       }
     };
 
@@ -78,10 +78,10 @@ const AdTeacher = () => {
         `https://api.imgbb.com/1/upload?key=${imgBBAPIKey}`,
         formDataImage
       );
-      return imgBBResponse.data.data.url; // Return the uploaded image URL
+      return imgBBResponse.data.data.url;
     } catch (error) {
       console.error("Error uploading image to ImgBB:", error);
-      return null; // Return null if there is an error
+      return null; 
     }
   };
 
@@ -93,21 +93,20 @@ const addTeacher = async () => {
   formData.append("first_name", newTeacher.first_name);
   formData.append("last_name", newTeacher.last_name);
   formData.append("email", newTeacher.email);
-  
-  // Ensure you're using the correct field name for the subject
-  formData.append("subject", newTeacher.subject); // Make sure this matches your backend API expectations
+  formData.append("subject", newTeacher.subject); 
 
   if (photoUrl) {
-    formData.append("photo", photoUrl); // This should be the URL returned from ImgBB
+    formData.append("photo", photoUrl); 
   }
 
   try {
     await axios.post(API_URL, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    setSuccessMessage("Teacher added successfully!");
     setShowAddModal(false);
+    setSuccessMessage("Teacher added successfully!");
     fetchTeachers();
+  
     // Reset the form after adding
     setNewTeacher({
       first_name: "",
@@ -117,12 +116,13 @@ const addTeacher = async () => {
       photo: null,
     });
   } catch (error) {
-    if (error.response && error.response.data) {
-      setErrorMessage("Error adding teacher: " + error.response.data.error); // Log detailed error response from API
-    } else {
-      setErrorMessage("Error adding teacher: " + error.message); // Log the error message
-    }
-    console.error("Error adding teacher:", error.response.data); // Log the response data for more details
+   console.log("error data : ", error);
+  
+    setShowAddModal(false);
+    setSuccessMessage("Error adding teacher, Please try again!");
+    fetchTeachers();
+  
+  
   }
 };
 
@@ -145,16 +145,16 @@ const addTeacher = async () => {
       await axios.put(`${API_URL}${editTeacher.id}/`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      setShowEditModal(false);
       setSuccessMessage("Teacher updated successfully!");
       fetchTeachers();
-      setShowEditModal(false);
     } catch (error) {
       if (error.response && error.response.data) {
       
-        console.error("Error updating teacher:", error.response.data); // Log detailed error response from API
+        console.error("Error updating teacher:", error.response.data); 
       } else {
 
-        console.error("Error updating teacher:", error.message); // Log the error message
+        console.error("Error updating teacher:", error.message); 
       }
     }
   };
@@ -164,9 +164,9 @@ const addTeacher = async () => {
   const deleteTeacher = async () => {
     try {
       await axios.delete(`${API_URL}${selectedTeacher.id}/`);
+      setSuccessMessage("Teacher deleted successfully!");
       setShowConfirmModal(false);
       fetchTeachers();
-      setSuccessMessage("Teacher deleted successfully!");
     } catch (error) {
 
       console.error("Error deleting teacher:", error);
@@ -235,7 +235,7 @@ const addTeacher = async () => {
                 <td className="border px-4 py-2">
                 <button
                   onClick={() => {
-                    setEditTeacher(teacher);  // Make sure all fields, including 'subject', are correctly set in 'teacher'
+                    setEditTeacher(teacher); 
                     setShowEditModal(true);
                   }}
                   className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 mr-2"
@@ -286,9 +286,9 @@ const addTeacher = async () => {
                   className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
               <select
-                  value={newTeacher.subject} // Ensure this uses the correct value
+                  value={newTeacher.subject}
                   onChange={(e) =>
-                    setNewTeacher({ ...newTeacher, subject: e.target.value }) // This must match what your API expects
+                    setNewTeacher({ ...newTeacher, subject: e.target.value }) 
                   }
                   className="p-2 border rounded-lg"
                 >
