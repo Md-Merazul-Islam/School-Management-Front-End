@@ -1,170 +1,205 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Admin from "../Admin/Admin";
-import { Link } from "react-router-dom";
 
 const AdTeacher = () => {
   const [teachers, setTeachers] = useState([]);
-  const [subjects, setSubjects] = useState([]);
   const [newTeacher, setNewTeacher] = useState({
     first_name: "",
     last_name: "",
     email: "",
-    subject_id: "",
-    photo: "",
+    subject: "",
+    photo: null,
   });
   const [editTeacher, setEditTeacher] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const token = localStorage.getItem("token");
-  const [errorMessage, setErrorMessage] = useState(""); // Add error message state
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [subjects, setSubjects] = useState([]);
+  const [loading, setLoading] = useState(true); // Initialize loading state
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Fetch all teachers
-  useEffect(() => {
-    axios
-      .get("https://school-management-five-iota.vercel.app/academics/teachers/", {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      })
-      .then((response) => {
-        setTeachers(response.data);
-      })
-      .catch((error) => console.error("Error fetching teacher data:", error));
-  }, []);
+  const API_URL = "https://school-management-five-iota.vercel.app/academics/teachers/";
+  const API_URL_subject = "https://school-management-five-iota.vercel.app/academics/subjects/";
+
+  const imgBBAPIKey = 'ea67728858ffc5a28d530570bfc45b40';
+  const token = localStorage.getItem('token');
 
   // Fetch all subjects
   useEffect(() => {
-    axios
-      .get("https://school-management-five-iota.vercel.app/academics/subjects/", {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      })
-      .then((response) => {
+    const fetchSubjects = async () => {
+      setLoading(true); // Set loading to true before fetching
+      try {
+        const response = await axios.get(API_URL_subject);
         setSubjects(response.data);
-      })
-      .catch((error) => console.error("Error fetching subjects:", error));
+      } catch (error) {
+        console.error("Error fetching subject:", error);
+        setError("Error fetching subject:", error);
+      } finally {
+        setLoading(false); 
+      }
+    };
+
+    fetchSubjects();
   }, []);
 
-  const addTeacher = () => {
-    const formData = new FormData();
-    formData.append("first_name", newTeacher.first_name);
-    formData.append("last_name", newTeacher.last_name);
-    formData.append("email", newTeacher.email);
-    formData.append("subject", newTeacher.subject_id);
-    formData.append("photo", newTeacher.photo);
-  
-    axios
-      .post(
-        "https://school-management-five-iota.vercel.app/academics/teachers/",
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((response) => {
-        setTeachers([...teachers, response.data]);
-        setNewTeacher({
-          first_name: "",
-          last_name: "",
-          email: "",
-          subject_id: "",
-          photo: "",
-        });
-        setShowAddModal(false); // Close modal after adding
-        setErrorMessage(""); // Clear error message after successful submission
-      })
-      .catch((error) => {
-        const errMessage = error.response?.data?.detail || "Error adding new teacher";
-        setErrorMessage(errMessage); // Set error message in state
-        console.error("Error adding new teacher:", error.response.data);
-      });
-  };
-  
-
-  // // Edit a teacher
-  // const updateTeacher = async () => {
-  //   try {
-  //     const payload = {
-  //       first_name: editTeacher.first_name,
-  //       last_name: editTeacher.last_name,
-  //       email: editTeacher.email,
-  //       subject_id: editTeacher.subject_id,
-  //     };
-
-  //     await axios.put(`https://school-management-five-iota.vercel.app/academics/teachers/${editTeacher.id}/`, payload, {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-  //     setShowEditModal(false); // Close modal after editing
-  //   } catch (error) {
-  //     console.error('Error editing teacher:', error.response ? error.response.data : error);
-  //   }
-  // };
-
-  // Edit a teacher
-  const updateTeacher = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("first_name", editTeacher.first_name);
-      formData.append("last_name", editTeacher.last_name);
-      formData.append("email", editTeacher.email);
-      formData.append("subject", editTeacher.subject_id);
-  
-      if (editTeacher.photo && editTeacher.photo instanceof File) {
-        formData.append("photo", editTeacher.photo);
+  // Fetch Teachers
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      setLoading(true); // Set loading to true before fetching
+      try {
+        const response = await axios.get(API_URL);
+        setTeachers(response.data);
+      } catch (error) {
+        console.error("Error fetching teachers:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
-  
-      await axios.patch(
-        `https://school-management-five-iota.vercel.app/academics/teachers/${editTeacher.id}/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
+    };
+
+    fetchTeachers();
+  }, []);
+
+ 
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  // Upload Image to ImgBB
+  const uploadImageToImgBB = async (imageFile) => {
+    const formDataImage = new FormData();
+    formDataImage.append("image", imageFile);
+
+    try {
+      const imgBBResponse = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${imgBBAPIKey}`,
+        formDataImage
       );
-  
-      setShowEditModal(false); // Close modal after editing
-      setErrorMessage(""); // Clear error message after successful submission
+      return imgBBResponse.data.data.url; // Return the uploaded image URL
     } catch (error) {
-      const errMessage = error.response?.data?.detail || "Error editing teacher";
-      setErrorMessage(errMessage); // Set error message in state
-      console.error("Error editing teacher:", error.response ? error.response.data : error);
+      console.error("Error uploading image to ImgBB:", error);
+      return null; // Return null if there is an error
+    }
+  };
+
+// Add Teacher
+const addTeacher = async () => {
+  const photoUrl = newTeacher.photo ? await uploadImageToImgBB(newTeacher.photo) : null;
+
+  const formData = new FormData();
+  formData.append("first_name", newTeacher.first_name);
+  formData.append("last_name", newTeacher.last_name);
+  formData.append("email", newTeacher.email);
+  
+  // Ensure you're using the correct field name for the subject
+  formData.append("subject", newTeacher.subject); // Make sure this matches your backend API expectations
+
+  if (photoUrl) {
+    formData.append("photo", photoUrl); // This should be the URL returned from ImgBB
+  }
+
+  try {
+    await axios.post(API_URL, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    setSuccessMessage("Teacher added successfully!");
+    setShowAddModal(false);
+    fetchTeachers();
+    // Reset the form after adding
+    setNewTeacher({
+      first_name: "",
+      last_name: "",
+      email: "",
+      subject: "",
+      photo: null,
+    });
+  } catch (error) {
+    if (error.response && error.response.data) {
+      setErrorMessage("Error adding teacher: " + error.response.data.error); // Log detailed error response from API
+    } else {
+      setErrorMessage("Error adding teacher: " + error.message); // Log the error message
+    }
+    console.error("Error adding teacher:", error.response.data); // Log the response data for more details
+  }
+};
+
+
+  // Edit Teacher
+  const editTeacherDetails = async () => {
+    const photoUrl = editTeacher.photo ? await uploadImageToImgBB(editTeacher.photo) : null;
+  
+    const formData = new FormData();
+    formData.append("first_name", editTeacher.first_name);
+    formData.append("last_name", editTeacher.last_name);
+    formData.append("email", editTeacher.email);
+    formData.append("subject", editTeacher.subject); 
+    
+    if (photoUrl) {
+      formData.append("photo", photoUrl);
+    }
+  
+    try {
+      await axios.put(`${API_URL}${editTeacher.id}/`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setSuccessMessage("Teacher updated successfully!");
+      fetchTeachers();
+      setShowEditModal(false);
+    } catch (error) {
+      if (error.response && error.response.data) {
+      
+        console.error("Error updating teacher:", error.response.data); // Log detailed error response from API
+      } else {
+
+        console.error("Error updating teacher:", error.message); // Log the error message
+      }
     }
   };
   
 
-  // Delete a teacher
-  const deleteTeacher = (id) => {
-    axios
-      .delete(
-        `https://school-management-five-iota.vercel.app/academics/teachers/${id}/`,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      )
-      .then(() => {
-        setTeachers(teachers.filter((t) => t.id !== id));
-      })
-      .catch((error) => console.error("Error deleting teacher:", error));
+  // Delete Teacher
+  const deleteTeacher = async () => {
+    try {
+      await axios.delete(`${API_URL}${selectedTeacher.id}/`);
+      setShowConfirmModal(false);
+      fetchTeachers();
+      setSuccessMessage("Teacher deleted successfully!");
+    } catch (error) {
+
+      console.error("Error deleting teacher:", error);
+    }
   };
+
+ // Modal to display success or error messages
+  const MessageModal = ({ message, onClose }) => (
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-6 rounded-lg shadow-2xl max-w-lg w-full">
+        <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">
+          {message}
+        </h2>
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={onClose}
+            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Admin>
-      <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold text-center mb-6">
-          Teacher Management
-        </h1>
-
+       {/* Render the message modals */}
+       {successMessage && <MessageModal message={successMessage} onClose={() => setSuccessMessage("")} />}
+      {errorMessage && <MessageModal message={errorMessage} onClose={() => setErrorMessage("")} />}
+      {/* Main page content */}
+      <div className="container mx-auto py-8">
+        <h1 className="text-3xl font-bold mb-6">Teachers List</h1>
         <button
           onClick={() => setShowAddModal(true)}
           className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mb-6"
@@ -172,76 +207,88 @@ const AdTeacher = () => {
           Add New Teacher
         </button>
 
-        {/* List of Teachers */}
-        <div className="grid grid-cols-1 gap-4">
-          <h2 className="text-2xl font-semibold mb-4">Teachers List</h2>
-          {teachers.map((teacher) => (
-            <div
-              key={teacher.id}
-              className="p-4 bg-gray-100 rounded-lg shadow-md flex justify-between items-center"
-            >
-              <div>
-                <h3 className="text-xl">{`${teacher.first_name} ${teacher.last_name}`}</h3>
-                <p>{teacher.email}</p>
-                <p>{teacher.subject_name}</p>
-              </div>
-              <div>
-             
-                <Link to={`/admin/teachers/edit/${teacher.id}`}  onClick={() => {
-                    setEditTeacher(teacher);
-                    setShowEditModal(true);
-                  }} className="bg-yellow-500 text-white py-1 px-2 rounded-lg hover:bg-yellow-600 mr-2">
-                      Edit
-                    </Link>
+        <table className="min-w-full bg-white border">
+          <thead>
+            <tr>
+              <th className="border px-4 py-2">ID</th>
+              <th className="border px-4 py-2">Employee ID</th>
+              <th className="border px-4 py-2">First Name</th>
+              <th className="border px-4 py-2">Last Name</th>
+              <th className="border px-4 py-2">Email</th>
+              <th className="border px-4 py-2">Subject</th>
+              <th className="border px-4 py-2">Photo</th>
+              <th className="border px-4 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teachers.map((teacher) => (
+              <tr key={teacher.id}>
+                <td className="border px-4 py-2">{teacher.id}</td>
+                <td className="border px-4 py-2">{teacher.employee_id}</td>
+                <td className="border px-4 py-2">{teacher.first_name}</td>
+                <td className="border px-4 py-2">{teacher.last_name}</td>
+                <td className="border px-4 py-2">{teacher.email}</td>
+                <td className="border px-4 py-2">{teacher.subject_name}</td>
+                <td className="border px-4 py-2">
+                  <img src={teacher.photo} alt="Teacher" className="w-16 h-16 rounded-full" />
+                </td>
+                <td className="border px-4 py-2">
                 <button
-                  onClick={() => deleteTeacher(teacher.id)}
-                  className="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-600"
+                  onClick={() => {
+                    setEditTeacher(teacher);  // Make sure all fields, including 'subject', are correctly set in 'teacher'
+                    setShowEditModal(true);
+                  }}
+                  className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 mr-2"
                 >
-                  Delete
+                  Edit
                 </button>
-              </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Add Teacher Modal */}
+                  <button
+                    onClick={() => {
+                      setSelectedTeacher(teacher);
+                      setShowConfirmModal(true);
+                    }}
+                    className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Add Modal */}
         {showAddModal && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-semibold mb-4">Add New Teacher</h2>
-              {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white p-6 rounded-lg shadow-2xl max-w-lg w-full">
+              <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Add Teacher</h2>
+              <div className="space-y-4">
                 <input
                   type="text"
                   placeholder="First Name"
                   value={newTeacher.first_name}
-                  onChange={(e) =>
-                    setNewTeacher({ ...newTeacher, first_name: e.target.value })
-                  }
-                  className="p-2 border rounded-lg"
+                  onChange={(e) => setNewTeacher({ ...newTeacher, first_name: e.target.value })}
+                  className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   value={newTeacher.last_name}
-                  onChange={(e) =>
-                    setNewTeacher({ ...newTeacher, last_name: e.target.value })
-                  }
-                  className="p-2 border rounded-lg"
+                  onChange={(e) => setNewTeacher({ ...newTeacher, last_name: e.target.value })}
+                  className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={newTeacher.email}
-                  onChange={(e) =>
-                    setNewTeacher({ ...newTeacher, email: e.target.value })
-                  }
-                  className="p-2 border rounded-lg"
+                  onChange={(e) => setNewTeacher({ ...newTeacher, email: e.target.value })}
+                  className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
-                <select
-                  value={newTeacher.subject_id}
+              <select
+                  value={newTeacher.subject} // Ensure this uses the correct value
                   onChange={(e) =>
-                    setNewTeacher({ ...newTeacher, subject_id: e.target.value })
+                    setNewTeacher({ ...newTeacher, subject: e.target.value }) // This must match what your API expects
                   }
                   className="p-2 border rounded-lg"
                 >
@@ -252,24 +299,24 @@ const AdTeacher = () => {
                     </option>
                   ))}
                 </select>
+
                 <input
                   type="file"
-                  onChange={(e) =>
-                    setNewTeacher({ ...newTeacher, photo: e.target.files[0] })
-                  }
-                  className="p-2 border rounded-lg"
+                  accept="image/*"
+                  onChange={(e) => setNewTeacher({ ...newTeacher, photo: e.target.files[0] })}
+                  className="p-2 border rounded-lg w-full"
                 />
               </div>
-              <div className="mt-4">
+              <div className="mt-6 flex justify-end space-x-4">
                 <button
                   onClick={addTeacher}
-                  className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+                  className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
                 >
-                  Add Teacher
+                  Add
                 </button>
                 <button
                   onClick={() => setShowAddModal(false)}
-                  className="ml-4 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600"
+                  className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400"
                 >
                   Cancel
                 </button>
@@ -278,80 +325,90 @@ const AdTeacher = () => {
           </div>
         )}
 
-        {/* Edit Teacher Modal */}
+        {/* Edit Modal */}
         {showEditModal && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-semibold mb-4">Edit Teacher</h2>
-              {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white p-6 rounded-lg shadow-2xl max-w-lg w-full">
+              <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Edit Teacher</h2>
+              <div className="space-y-4">
                 <input
                   type="text"
                   placeholder="First Name"
                   value={editTeacher.first_name}
-                  onChange={(e) =>
-                    setEditTeacher({
-                      ...editTeacher,
-                      first_name: e.target.value,
-                    })
-                  }
-                  className="p-2 border rounded-lg"
+                  onChange={(e) => setEditTeacher({ ...editTeacher, first_name: e.target.value })}
+                  className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   value={editTeacher.last_name}
-                  onChange={(e) =>
-                    setEditTeacher({
-                      ...editTeacher,
-                      last_name: e.target.value,
-                    })
-                  }
-                  className="p-2 border rounded-lg"
+                  onChange={(e) => setEditTeacher({ ...editTeacher, last_name: e.target.value })}
+                  className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={editTeacher.email}
-                  onChange={(e) =>
-                    setEditTeacher({ ...editTeacher, email: e.target.value })
-                  }
-                  className="p-2 border rounded-lg"
+                  onChange={(e) => setEditTeacher({ ...editTeacher, email: e.target.value })}
+                  className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
-                <select
-                  value={editTeacher.subject_id}
-                  onChange={(e) =>
-                    setEditTeacher({
-                      ...editTeacher,
-                      subject_id: e.target.value,
-                    })
-                  }
-                  className="p-2 border rounded-lg"
-                >
-                  <option value="">Select Subject</option>
-                  {subjects.map((subject) => (
-                    <option key={subject.id} value={subject.id}>
-                      {subject.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-              type="file"
-              onChange={(e) => setEditTeacher({ ...editTeacher, photo: e.target.files[0] })}
-              className="p-2 border rounded-lg"
-            />
+              <select
+  value={editTeacher.subject} // Use editTeacher instead of newTeacher
+  onChange={(e) =>
+    setEditTeacher({ ...editTeacher, subject: e.target.value }) // Update editTeacher state
+  }
+  className="p-2 border rounded-lg"
+>
+  <option value="">Select Subject</option>
+  {subjects.map((subject) => (
+    <option key={subject.id} value={subject.id}>
+      {subject.name}
+    </option>
+  ))}
+</select>
 
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setEditTeacher({ ...editTeacher, photo: e.target.files[0] })}
+                  className="p-2 border rounded-lg w-full"
+                />
               </div>
-              <div className="mt-4">
+              <div className="mt-6 flex justify-end space-x-4">
                 <button
-                  onClick={updateTeacher}
-                  className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+                  onClick={editTeacherDetails}
+                  className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
                 >
-                  Save Changes
+                  Update
                 </button>
                 <button
                   onClick={() => setShowEditModal(false)}
-                  className="ml-4 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600"
+                  className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Confirm Modal */}
+        {showConfirmModal && (
+          <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg shadow-2xl max-w-lg w-full">
+              <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">Confirm Deletion</h2>
+              <p className="text-center">Are you sure you want to delete {selectedTeacher?.first_name}?</p>
+              <div className="mt-6 flex justify-end space-x-4">
+                <button
+                  onClick={deleteTeacher}
+                  className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => setShowConfirmModal(false)}
+                  className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400"
                 >
                   Cancel
                 </button>
