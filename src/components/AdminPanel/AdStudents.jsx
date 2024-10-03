@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import Admin from "../Admin/Admin";
+import ConfirmModal from './ConfirmModal'; // Import the ConfirmModal component
 
 const API_BASE_URL = 'https://school-management-five-iota.vercel.app/academics';
 const imgBBAPIKey = 'ea67728858ffc5a28d530570bfc45b40';
@@ -20,8 +21,10 @@ const AdStudents = () => {
     class_name: '',
   });
   const [editingStudent, setEditingStudent] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(''); // Success message state
-  const [errorMessage, setErrorMessage] = useState(''); // Error message state
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [studentToDelete, setStudentToDelete] = useState(null); // Store the student ID to delete
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -159,8 +162,8 @@ const AdStudents = () => {
       photo: null,
       class_name: '',
     });
-    setSuccessMessage(''); // Reset success message
-    setErrorMessage(''); // Reset error message
+    setSuccessMessage('');
+    setErrorMessage('');
   };
 
   const handleEdit = (student) => {
@@ -175,19 +178,25 @@ const AdStudents = () => {
       photo: null,
       class_name: student.class_name,
     });
-    setSuccessMessage(''); // Reset success message when editing
-    setErrorMessage(''); // Reset error message when editing
+    setSuccessMessage('');
+    setErrorMessage('');
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this student?")) {
-      try {
-        await axios.delete(`${API_BASE_URL}/students/${id}/`);
-        setSuccessMessage('Student deleted successfully!');
-        fetchStudents();
-      } catch (error) {
-        setErrorMessage('Error deleting student: ' + (error.response ? error.response.data : error.message));
-      }
+  const handleDelete = (id) => {
+    setStudentToDelete(id); 
+    setIsModalOpen(true); 
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`${API_BASE_URL}/students/${studentToDelete}/`);
+      setSuccessMessage('Student deleted successfully!');
+      fetchStudents();
+    } catch (error) {
+      setErrorMessage('Error deleting student: ' + (error.response ? error.response.data : error.message));
+    } finally {
+      setIsModalOpen(false); 
+      setStudentToDelete(null); 
     }
   };
 
@@ -196,12 +205,9 @@ const AdStudents = () => {
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Students and Classes</h1>
 
-        {/* Display success message */}
         {successMessage && <div className="mb-4 p-2 bg-green-200 text-green-800 rounded">{successMessage}</div>}
-        {/* Display error message */}
         {errorMessage && <div className="mb-4 p-2 bg-red-200 text-red-800 rounded">{errorMessage}</div>}
 
-        {/* Student Form */}
         <form onSubmit={handleSubmit} className="mb-8 bg-white p-4 rounded shadow-md">
           <h2 className="text-xl font-semibold mb-4">{editingStudent ? 'Edit Student' : 'Add New Student'}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -257,13 +263,7 @@ const AdStudents = () => {
               onChange={handleInputChange}
               className="p-2 border rounded"
             />
-            <input
-              type="file"
-              name="photo"
-              onChange={handleFileChange}
-              className="p-2 border rounded"
-            />
-            <select
+              <select
               name="class_name"
               value={studentForm.class_name}
               onChange={handleInputChange}
@@ -277,6 +277,12 @@ const AdStudents = () => {
                 </option>
               ))}
             </select>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="p-2 border rounded"
+            />
           </div>
           <button
             type="submit"
@@ -286,35 +292,36 @@ const AdStudents = () => {
           </button>
         </form>
 
-        {/* Student List */}
-        <h2 className="text-xl font-semibold mb-4">Student List</h2>
-        <table className="min-w-full bg-white border rounded shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Students List</h2>
+        <table className="min-w-full border-collapse border border-gray-300">
           <thead>
             <tr>
-              <th className="p-2 border">Username</th>
-              <th className="p-2 border">Name</th>
-              <th className="p-2 border">Email</th>
-              <th className="p-2 border">Class</th>
-              <th className="p-2 border">Actions</th>
+              <th className="border border-gray-300 p-2">Username</th>
+              <th className="border border-gray-300 p-2">First Name</th>
+              <th className="border border-gray-300 p-2">Last Name</th>
+              <th className="border border-gray-300 p-2">Email</th>
+              <th className="border border-gray-300 p-2">Phone</th>
+              <th className="border border-gray-300 p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
             {students.map((student) => (
               <tr key={student.id}>
-                <td className="p-2 border">{student.username}</td>
-                <td className="p-2 border">{`${student.first_name} ${student.last_name}`}</td>
-                <td className="p-2 border">{student.email}</td>
-                <td className="p-2 border">{student.class_name}</td>
-                <td className="p-2 border">
+                <td className="border border-gray-300 p-2">{student.username}</td>
+                <td className="border border-gray-300 p-2">{student.first_name}</td>
+                <td className="border border-gray-300 p-2">{student.last_name}</td>
+                <td className="border border-gray-300 p-2">{student.email}</td>
+                <td className="border border-gray-300 p-2">{student.phone_number}</td>
+                <td className="border border-gray-300 p-2">
                   <button
                     onClick={() => handleEdit(student)}
-                    className="p-2 bg-yellow-300 rounded hover:bg-yellow-400 mr-2"
+                    className="mr-2 p-1 bg-yellow-400 rounded hover:bg-yellow-500"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(student.id)}
-                    className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    onClick={() => handleDelete(student.id)} // Update to trigger modal
+                    className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
                   >
                     Delete
                   </button>
@@ -323,6 +330,13 @@ const AdStudents = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Confirmation Modal */}
+        <ConfirmModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={confirmDelete}
+        />
       </div>
     </Admin>
   );

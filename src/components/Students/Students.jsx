@@ -9,7 +9,7 @@ const Students = () => {
     // Initialize AOS
     AOS.init({ duration: 1000 });
 
-    fetch('https://school-management-five-iota.vercel.app/academics/students-list/')
+    fetch('https://school-management-five-iota.vercel.app/academics/students/')
       .then(response => response.json())
       .then(data => setStudents(data))
       .catch(error => console.error('Error fetching data:', error));
