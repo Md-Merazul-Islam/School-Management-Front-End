@@ -4,6 +4,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import Admin from "../Admin/Admin";
 
 const API_BASE_URL = 'https://school-management-five-iota.vercel.app/academics';
+const imgBBAPIKey = 'ea67728858ffc5a28d530570bfc45b40';
 
 const AdStudents = () => {
   const [students, setStudents] = useState([]);
@@ -27,7 +28,6 @@ const AdStudents = () => {
   useEffect(() => {
     fetchStudents();
     fetchClasses();
-
     if (id) {
       fetchStudent(id);
     }
@@ -87,9 +87,40 @@ const AdStudents = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (studentForm.photo) {
+      const formDataImage = new FormData();
+      formDataImage.append('image', studentForm.photo);
+      try {
+        const imgBBResponse = await axios.post(
+          `https://api.imgbb.com/1/upload?key=${imgBBAPIKey}`,
+          formDataImage
+        );
+        const imageUrl = imgBBResponse.data.data.url;
+
+        setStudentForm((prevForm) => ({
+          ...prevForm,
+          photo: imageUrl,
+        }));
+
+        await saveStudent(imageUrl);
+      } catch (e) {
+        setErrorMessage('Error uploading photo: ' + e.message);
+      }
+    } else {
+      await saveStudent();
+    }
+  };
+
+  const saveStudent = async (imageUrl = null) => {
     const formData = new FormData();
-    Object.keys(studentForm).forEach((key) => {
-      formData.append(key, studentForm[key]);
+    const updatedForm = {
+      ...studentForm,
+      photo: imageUrl || studentForm.photo,
+    };
+
+    Object.keys(updatedForm).forEach((key) => {
+      formData.append(key, updatedForm[key]);
     });
 
     try {
@@ -255,39 +286,43 @@ const AdStudents = () => {
           </button>
         </form>
 
-        {/* Students List */}
-        <div className="bg-white p-4 rounded shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Students List</h2>
-          <table className="w-full table-auto border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-2">Username</th>
-                <th className="border p-2">Name</th>
-                <th className="border p-2">Email</th>
-                <th className="border p-2">Phone</th>
-                <th className="border p-2">Class</th>
-                <th className="border p-2">Actions</th>
+        {/* Student List */}
+        <h2 className="text-xl font-semibold mb-4">Student List</h2>
+        <table className="min-w-full bg-white border rounded shadow-md">
+          <thead>
+            <tr>
+              <th className="p-2 border">Username</th>
+              <th className="p-2 border">Name</th>
+              <th className="p-2 border">Email</th>
+              <th className="p-2 border">Class</th>
+              <th className="p-2 border">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.map((student) => (
+              <tr key={student.id}>
+                <td className="p-2 border">{student.username}</td>
+                <td className="p-2 border">{`${student.first_name} ${student.last_name}`}</td>
+                <td className="p-2 border">{student.email}</td>
+                <td className="p-2 border">{student.class_name}</td>
+                <td className="p-2 border">
+                  <button
+                    onClick={() => handleEdit(student)}
+                    className="p-2 bg-yellow-300 rounded hover:bg-yellow-400 mr-2"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(student.id)}
+                    className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {students.map((student) => (
-                <tr key={student.id}>
-                  <td className="border p-2">{student.username}</td>
-                  <td className="border p-2">{`${student.first_name} ${student.last_name}`}</td>
-                  <td className="border p-2">{student.email}</td>
-                  <td className="border p-2">{student.phone_number}</td>
-                  <td className="border p-2">{student.class_name}</td>
-                  <td className="border p-2">
-                  <Link to={`/admin/students/edit/${student.id}`} className="text-blue-500 hover:underline" onClick={() => handleEdit(student)}>
-                      Edit
-                    </Link>
-                    <button onClick={() => handleDelete(student.id)} className="text-red-500 ml-2">Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </Admin>
   );
