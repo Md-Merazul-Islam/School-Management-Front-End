@@ -66,7 +66,7 @@ const Subjects = () => {
    
 
       <section className="px-4 lg:px-16 mb-24 min-h-screen z-10 relative">
-        <div className="container mx-auto px-[12px] md:px-24 xl:px-12 max-w-[1300px]">
+        <div className="container mx-auto px-[12px] md:px-24 xl:px-12 max-w-[1536px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-28 lg:gap-y-16">
             {/* Dynamically render the subjects */}
             {subjects.map((subject, index) => (
