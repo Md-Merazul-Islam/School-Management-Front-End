@@ -2,13 +2,32 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import axios from "axios";
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css"; // Import Slick Carousel CSS
+import "slick-carousel/slick/slick-theme.css";
 
 const API_BASE_URL = "https://school-management-five-iota.vercel.app";
 
 const AllReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [users, setUsers] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newReview, setNewReview] = useState({
+    body: "",
+    author: "",
+    avatar: "",
+    position: "",
+  });
+  const [errorMessage, setErrorMessage] = useState(""); 
+  const [isAuthorized, setIsAuthorized] = useState(false); 
+
+  const handleOpenModal = () => {
+    if (isAuthorized) {
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -31,6 +50,10 @@ const AllReviews = () => {
 
     fetchUsers();
     fetchReviews();
+
+
+    const token = localStorage.getItem("token"); 
+    setIsAuthorized(!!token); 
   }, []);
 
   const getUsernameById = (id) => {
@@ -46,8 +69,24 @@ const AllReviews = () => {
     slidesToScroll: 1,
   };
 
+  const handleAddReview = async () => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/academics/reviews/`, {
+        ...newReview,
+        avatar: newReview.avatar || "https://i.ibb.co/Gk3Y0W0/3237472.png", 
+      });
+
+      setReviews([...reviews, response.data]);
+      setNewReview({ body: '', author: '', avatar: '', position: '' });
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error adding review:", error);
+      setErrorMessage("Failed to add review. Please try again."); 
+    }
+  };
+
   return (
-    <section className="py-12 bg-gray-50 sm:py-16 lg:py-20 h-screen" >
+    <section className="py-12 bg-gray-50 sm:py-16 lg:py-20 h-screen">
       <div className="px-4 mx-auto w-[1580px] sm:px-6 lg:px-8">
         <div className="flex flex-col items-center">
           <div className="text-center">
@@ -57,11 +96,62 @@ const AllReviews = () => {
             <h2 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl font-pj">
               What Our Students Say
             </h2>
+            {isAuthorized && ( 
+              <button
+                onClick={handleOpenModal}
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
+              >
+                Add Review
+              </button>
+            )}
+            {!isAuthorized && (
+              <p className="mt-2 text-red-600">You must be logged in to add a review.</p>
+            )}
+            {errorMessage && <p className="mt-2 text-red-600">{errorMessage}</p>} 
           </div>
-
-         
         </div>
       </div>
+
+      {/* Modal for Adding Review */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-1/3">
+            <h3 className="text-xl font-semibold mb-4">Add Your Review</h3>
+            <textarea
+              className="w-full h-24 border border-gray-300 rounded-md p-2"
+              placeholder="Write your review..."
+              value={newReview.body}
+              onChange={(e) => setNewReview({ ...newReview, body: e.target.value })}
+            />
+            <input
+              className="w-full border border-gray-300 rounded-md p-2 mt-2"
+              type="text"
+              placeholder="Your Name"
+              value={newReview.author}
+              onChange={(e) => setNewReview({ ...newReview, author: e.target.value })}
+            />
+            <input
+              className="w-full border border-gray-300 rounded-md p-2 mt-2"
+              type="text"
+              placeholder="Your Position (optional)"
+              value={newReview.position}
+              onChange={(e) => setNewReview({ ...newReview, position: e.target.value })}
+            />
+            <button
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
+              onClick={handleAddReview}
+            >
+              Submit Review
+            </button>
+            <button
+              className="mt-2 px-4 py-2 bg-gray-300 rounded-md"
+              onClick={handleCloseModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="slider-container py-12 max-w-[1588px] mx-auto">
         <Slider {...settings}>
@@ -86,28 +176,22 @@ const AllReviews = () => {
                   </div>
                   <blockquote className="flex-1 mt-8">
                     <p className="text-lg leading-relaxed text-gray-900 font-pj">
-                      “
-                      { review.body}
-                      ”
+                      “{review.body}”
                     </p>
                   </blockquote>
 
                   <div className="flex items-center mt-8">
                     <img
                       className="flex-shrink-0 object-cover rounded-full w-11 h-11"
-                      src={
-                        review.avatar || "https://i.ibb.co/Gk3Y0W0/3237472.png"
-                      }
+                      src={review.avatar || "https://i.ibb.co/Gk3Y0W0/3237472.png"}
                       alt={review.name || "Student"}
                     />
                     <div className="ml-4">
                       <p className="text-base font-bold text-gray-900 font-pj">
-                        {getUsernameById(review.author)}{" "}
-                        {/* Updated to use review name */}
+                        {getUsernameById(review.author)}
                       </p>
                       <p className="mt-0.5 text-sm font-pj text-gray-600">
-                        {review.position || "Student"}{" "}
-                        {/* Optional: Add a position field if available */}
+                        {review.position || "Student"}
                       </p>
                     </div>
                   </div>
