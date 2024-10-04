@@ -19,7 +19,7 @@ import Admin from "./components/Admin/Admin";
 import AdTeacher from "./components/AdminPanel/AdTeacher";
 import AdStudents from "./components/AdminPanel/AdStudents";
 import AdNotices from "./components/AdminPanel/AdNotices";
-import { AdCourse } from "./components/AdminPanel/AdCourse";
+import AdCourse from "./components/AdminPanel/AdCourse";
 import AdResult from "./components/AdminPanel/AdResult";
 import AdUser from "./components/AdminPanel/AdUser";
 import AdNotification from "./components/AdminPanel/AdNotification";

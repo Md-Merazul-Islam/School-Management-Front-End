@@ -17,57 +17,18 @@ const AdTeacher = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const API_URL = "https://school-management-five-iota.vercel.app/academics/teachers/";
-  const API_URL_subject = "https://school-management-five-iota.vercel.app/academics/subjects/";
+  const API_URL =
+    "https://school-management-five-iota.vercel.app/academics/teachers/";
+  const API_URL_subject =
+    "https://school-management-five-iota.vercel.app/academics/subjects/";
 
-  const imgBBAPIKey = 'ea67728858ffc5a28d530570bfc45b40';
-  const token = localStorage.getItem('token');
-
-  // Fetch all subjects
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      setLoading(true); 
-      try {
-        const response = await axios.get(API_URL_subject);
-        setSubjects(response.data);
-      } catch (error) {
-        console.error("Error fetching subject:", error);
-        setError("Error fetching subject:", error);
-      } finally {
-        setLoading(false); 
-      }
-    };
-
-    fetchSubjects();
-  }, []);
-
-  // Fetch Teachers
-  useEffect(() => {
-    const fetchTeachers = async () => {
-      setLoading(true); 
-      try {
-        const response = await axios.get(API_URL);
-        setTeachers(response.data);
-      } catch (error) {
-        console.error("Error fetching teachers:", error);
-      } finally {
-        setLoading(false); 
-      }
-    };
-
-    fetchTeachers();
-  }, []);
-
- 
-  if (error) {
-    return <p>{error}</p>;
-  }
-
+  const imgBBAPIKey = "ea67728858ffc5a28d530570bfc45b40";
+  const token = localStorage.getItem("token");
   // Upload Image to ImgBB
   const uploadImageToImgBB = async (imageFile) => {
     const formDataImage = new FormData();
@@ -81,66 +42,106 @@ const AdTeacher = () => {
       return imgBBResponse.data.data.url;
     } catch (error) {
       console.error("Error uploading image to ImgBB:", error);
-      return null; 
+      return null;
     }
   };
 
-// Add Teacher
-const addTeacher = async () => {
-  const photoUrl = newTeacher.photo ? await uploadImageToImgBB(newTeacher.photo) : null;
+  // Fetch all subjects
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(API_URL_subject);
+        setSubjects(response.data);
+      } catch (error) {
+        console.error("Error fetching subject:", error);
+        setError("Error fetching subject:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const formData = new FormData();
-  formData.append("first_name", newTeacher.first_name);
-  formData.append("last_name", newTeacher.last_name);
-  formData.append("email", newTeacher.email);
-  formData.append("subject", newTeacher.subject); 
+    fetchSubjects();
+  }, []);
 
-  if (photoUrl) {
-    formData.append("photo", photoUrl); 
+  // Fetch Teachers
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(API_URL);
+        setTeachers(response.data);
+      } catch (error) {
+        console.error("Error fetching teachers:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
+
+  if (error) {
+    return <p>{error}</p>;
   }
 
-  try {
-    await axios.post(API_URL, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-    setShowAddModal(false);
-    setSuccessMessage("Teacher added successfully!");
-    fetchTeachers();
-  
-    // Reset the form after adding
-    setNewTeacher({
-      first_name: "",
-      last_name: "",
-      email: "",
-      subject: "",
-      photo: null,
-    });
-  } catch (error) {
-   console.log("error data : ", error);
-  
-    setShowAddModal(false);
-    setSuccessMessage("Error adding teacher, Please try again!");
-    fetchTeachers();
-  
-  
-  }
-};
+  // Add Teacher
+  const addTeacher = async () => {
+    const photoUrl = newTeacher.photo
+      ? await uploadImageToImgBB(newTeacher.photo)
+      : null;
 
+    const formData = new FormData();
+    formData.append("first_name", newTeacher.first_name);
+    formData.append("last_name", newTeacher.last_name);
+    formData.append("email", newTeacher.email);
+    formData.append("subject", newTeacher.subject);
+
+    if (photoUrl) {
+      formData.append("photo", photoUrl);
+    }
+
+    try {
+      await axios.post(API_URL, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setShowAddModal(false);
+      setSuccessMessage("Teacher added successfully!");
+      fetchTeachers();
+
+      // Reset the form after adding
+      setNewTeacher({
+        first_name: "",
+        last_name: "",
+        email: "",
+        subject: "",
+        photo: null,
+      });
+    } catch (error) {
+      console.log("error data : ", error);
+
+      setShowAddModal(false);
+      setSuccessMessage("Error adding teacher, Please try again!");
+      fetchTeachers();
+    }
+  };
 
   // Edit Teacher
   const editTeacherDetails = async () => {
-    const photoUrl = editTeacher.photo ? await uploadImageToImgBB(editTeacher.photo) : null;
-  
+    const photoUrl = editTeacher.photo
+      ? await uploadImageToImgBB(editTeacher.photo)
+      : null;
+
     const formData = new FormData();
     formData.append("first_name", editTeacher.first_name);
     formData.append("last_name", editTeacher.last_name);
     formData.append("email", editTeacher.email);
-    formData.append("subject", editTeacher.subject); 
-    
+    formData.append("subject", editTeacher.subject);
+
     if (photoUrl) {
       formData.append("photo", photoUrl);
     }
-  
+
     try {
       await axios.put(`${API_URL}${editTeacher.id}/`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -150,15 +151,12 @@ const addTeacher = async () => {
       fetchTeachers();
     } catch (error) {
       if (error.response && error.response.data) {
-      
-        console.error("Error updating teacher:", error.response.data); 
+        console.error("Error updating teacher:", error.response.data);
       } else {
-
-        console.error("Error updating teacher:", error.message); 
+        console.error("Error updating teacher:", error.message);
       }
     }
   };
-  
 
   // Delete Teacher
   const deleteTeacher = async () => {
@@ -168,12 +166,11 @@ const addTeacher = async () => {
       setShowConfirmModal(false);
       fetchTeachers();
     } catch (error) {
-
       console.error("Error deleting teacher:", error);
     }
   };
 
- // Modal to display success or error messages
+  // Modal to display success or error messages
   const MessageModal = ({ message, onClose }) => (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-2xl max-w-lg w-full">
@@ -194,9 +191,19 @@ const addTeacher = async () => {
 
   return (
     <Admin>
-       {/* Render the message modals */}
-       {successMessage && <MessageModal message={successMessage} onClose={() => setSuccessMessage("")} />}
-      {errorMessage && <MessageModal message={errorMessage} onClose={() => setErrorMessage("")} />}
+      {/* Render the message modals */}
+      {successMessage && (
+        <MessageModal
+          message={successMessage}
+          onClose={() => setSuccessMessage("")}
+        />
+      )}
+      {errorMessage && (
+        <MessageModal
+          message={errorMessage}
+          onClose={() => setErrorMessage("")}
+        />
+      )}
       {/* Main page content */}
       <div className="container mx-auto py-8">
         <h1 className="text-3xl font-bold mb-6">Teachers List</h1>
@@ -230,18 +237,22 @@ const addTeacher = async () => {
                 <td className="border px-4 py-2">{teacher.email}</td>
                 <td className="border px-4 py-2">{teacher.subject_name}</td>
                 <td className="border px-4 py-2">
-                  <img src={teacher.photo} alt="Teacher" className="w-16 h-16 rounded-full" />
+                  <img
+                    src={teacher.photo}
+                    alt="Teacher"
+                    className="w-16 h-16 rounded-full"
+                  />
                 </td>
                 <td className="border px-4 py-2">
-                <button
-                  onClick={() => {
-                    setEditTeacher(teacher); 
-                    setShowEditModal(true);
-                  }}
-                  className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 mr-2"
-                >
-                  Edit
-                </button>
+                  <button
+                    onClick={() => {
+                      setEditTeacher(teacher);
+                      setShowEditModal(true);
+                    }}
+                    className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 mr-2"
+                  >
+                    Edit
+                  </button>
 
                   <button
                     onClick={() => {
@@ -262,33 +273,41 @@ const addTeacher = async () => {
         {showAddModal && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-lg shadow-2xl max-w-lg w-full">
-              <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Add Teacher</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">
+                Add Teacher
+              </h2>
               <div className="space-y-4">
                 <input
                   type="text"
                   placeholder="First Name"
                   value={newTeacher.first_name}
-                  onChange={(e) => setNewTeacher({ ...newTeacher, first_name: e.target.value })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, first_name: e.target.value })
+                  }
                   className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   value={newTeacher.last_name}
-                  onChange={(e) => setNewTeacher({ ...newTeacher, last_name: e.target.value })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, last_name: e.target.value })
+                  }
                   className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={newTeacher.email}
-                  onChange={(e) => setNewTeacher({ ...newTeacher, email: e.target.value })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, email: e.target.value })
+                  }
                   className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
-              <select
+                <select
                   value={newTeacher.subject}
                   onChange={(e) =>
-                    setNewTeacher({ ...newTeacher, subject: e.target.value }) 
+                    setNewTeacher({ ...newTeacher, subject: e.target.value })
                   }
                   className="p-2 border rounded-lg"
                 >
@@ -303,7 +322,9 @@ const addTeacher = async () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setNewTeacher({ ...newTeacher, photo: e.target.files[0] })}
+                  onChange={(e) =>
+                    setNewTeacher({ ...newTeacher, photo: e.target.files[0] })
+                  }
                   className="p-2 border rounded-lg w-full"
                 />
               </div>
@@ -329,49 +350,68 @@ const addTeacher = async () => {
         {showEditModal && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-lg shadow-2xl max-w-lg w-full">
-              <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Edit Teacher</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">
+                Edit Teacher
+              </h2>
               <div className="space-y-4">
                 <input
                   type="text"
                   placeholder="First Name"
                   value={editTeacher.first_name}
-                  onChange={(e) => setEditTeacher({ ...editTeacher, first_name: e.target.value })}
+                  onChange={(e) =>
+                    setEditTeacher({
+                      ...editTeacher,
+                      first_name: e.target.value,
+                    })
+                  }
                   className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   value={editTeacher.last_name}
-                  onChange={(e) => setEditTeacher({ ...editTeacher, last_name: e.target.value })}
+                  onChange={(e) =>
+                    setEditTeacher({
+                      ...editTeacher,
+                      last_name: e.target.value,
+                    })
+                  }
                   className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={editTeacher.email}
-                  onChange={(e) => setEditTeacher({ ...editTeacher, email: e.target.value })}
+                  onChange={(e) =>
+                    setEditTeacher({ ...editTeacher, email: e.target.value })
+                  }
                   className="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
-              <select
-  value={editTeacher.subject} // Use editTeacher instead of newTeacher
-  onChange={(e) =>
-    setEditTeacher({ ...editTeacher, subject: e.target.value }) // Update editTeacher state
-  }
-  className="p-2 border rounded-lg"
->
-  <option value="">Select Subject</option>
-  {subjects.map((subject) => (
-    <option key={subject.id} value={subject.id}>
-      {subject.name}
-    </option>
-  ))}
-</select>
-
+                <select
+                  value={editTeacher.subject} // Use editTeacher instead of newTeacher
+                  onChange={
+                    (e) =>
+                      setEditTeacher({
+                        ...editTeacher,
+                        subject: e.target.value,
+                      }) // Update editTeacher state
+                  }
+                  className="p-2 border rounded-lg"
+                >
+                  <option value="">Select Subject</option>
+                  {subjects.map((subject) => (
+                    <option key={subject.id} value={subject.id}>
+                      {subject.name}
+                    </option>
+                  ))}
+                </select>
 
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setEditTeacher({ ...editTeacher, photo: e.target.files[0] })}
+                  onChange={(e) =>
+                    setEditTeacher({ ...editTeacher, photo: e.target.files[0] })
+                  }
                   className="p-2 border rounded-lg w-full"
                 />
               </div>
@@ -397,8 +437,12 @@ const addTeacher = async () => {
         {showConfirmModal && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-lg shadow-2xl max-w-lg w-full">
-              <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">Confirm Deletion</h2>
-              <p className="text-center">Are you sure you want to delete {selectedTeacher?.first_name}?</p>
+              <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">
+                Confirm Deletion
+              </h2>
+              <p className="text-center">
+                Are you sure you want to delete {selectedTeacher?.first_name}?
+              </p>
               <div className="mt-6 flex justify-end space-x-4">
                 <button
                   onClick={deleteTeacher}
