@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import axios from "axios";
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css"; 
-import { Link } from "react-router-dom";
+import "slick-carousel/slick/slick-theme.css"; // Import Slick Carousel CSS
 
 const API_BASE_URL = "https://school-management-five-iota.vercel.app";
 
-const TestimonialCarousel = () => {
+const AllReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [users, setUsers] = useState([]);
 
@@ -42,16 +41,14 @@ const TestimonialCarousel = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: true,
-  autoplaySpeed: 1500,
   };
 
   return (
-    <section className="py-12 bg-gray-50 sm:py-16 lg:py-20">
-      <div className="px-4 mx-auto  sm:px-6 lg:px-8">
+    <section className="py-12 bg-gray-50 sm:py-16 lg:py-20 h-screen" >
+      <div className="px-4 mx-auto w-[1580px] sm:px-6 lg:px-8">
         <div className="flex flex-col items-center">
           <div className="text-center">
             <p className="text-lg font-medium text-gray-600 font-pj">
@@ -61,22 +58,12 @@ const TestimonialCarousel = () => {
               What Our Students Say
             </h2>
           </div>
+
+         
         </div>
       </div>
 
-      {/* slider start  */}
-      <div className="relative mt-10 md:mt-24 md:order-2 z-20">
-      <div className="absolute -inset-x-1 inset-y-16 md:-inset-x-2 md:-inset-y-6">
-        <div
-       className="w-full h-full max-w-[1588px] mx-auto rounded-3xl opacity-20 blur-lg filter"
-       style={{
-            background:
-              "linear-gradient(90deg, #44ff9a -0.55%, #44b0ff 22.86%, #8b44ff 48.36%, #ff6644 73.33%, #ebff70 99.34%)",
-          }}
-        ></div>
-      </div>
-
-      <div className="slider-container py-12 max-w-[1580px] mx-auto">
+      <div className="slider-container py-12 max-w-[1588px] mx-auto">
         <Slider {...settings}>
           {reviews.map((review, index) => (
             <div key={index} className="p-4">
@@ -100,9 +87,7 @@ const TestimonialCarousel = () => {
                   <blockquote className="flex-1 mt-8">
                     <p className="text-lg leading-relaxed text-gray-900 font-pj">
                       “
-                      {review.body.length > 100
-                        ? `${review.body.slice(0, 150)}...`
-                        : review.body}
+                      { review.body}
                       ”
                     </p>
                   </blockquote>
@@ -132,21 +117,8 @@ const TestimonialCarousel = () => {
           ))}
         </Slider>
       </div>
-      </div>
-
-      {/* slider end  */}
-
-      <div className="mt-8 text-center md:mt-16 md:order-3">
-        <Link to={"allReviews/"}
-          href="#"
-          title=""
-          className="pb-2 text-base font-bold leading-7 text-gray-900 transition-all duration-200 border-b-2 border-gray-900 hover:border-gray-600 font-pj focus:outline-none focus:ring-1 focus:ring-gray-900 focus:ring-offset-2 hover:text-gray-600"
-        >
-          Check all {reviews.length} reviews
-        </Link>
-      </div>
     </section>
   );
 };
 
-export default TestimonialCarousel;
+export default AllReviews;
