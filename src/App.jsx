@@ -63,15 +63,19 @@ function App() {
             {/* Admin Sub-Routes */}
             <Route path="admin/" element={<Admin />} />
             <Route path="/admin/teachers/" element={<AdTeacher />} />
+            <Route path="/admin/teachers/edit/:id" element={<AdTeacher/>}/>
             <Route path="/admin/students/" element={<AdStudents />} />
+            <Route path="/admin/students/edit/:id" element={<AdStudents />}/>
             <Route path="/admin/notices/" element={<AdNotices />} />
+            <Route path="/admin/notices/edit/:id" element={<AdNotices />} />
             <Route path="/admin/course/" element={<AdCourse />} />
+            <Route path="/admin/course/edit/:id" element={<AdCourse />} />
             <Route path="/admin/notification/" element={<AdNotification />} />
             <Route path="/admin/result/" element={<AdResult />} />
+            <Route path="/admin/result/edit/:id" element={<AdResult />} />
             <Route path="/admin/users/" element={<AdUser />} />
             <Route path="/admin/attendance/" element={<AdAttendance />} />
-            <Route path="/admin/students/edit/:id" element={<AdStudents />}/>
-            <Route path="/admin/teachers/edit/:id" element={<AdStudents />}/>
+            <Route path="/admin/attendance/edit/:id" element={<AdAttendance />} />
 
             
             

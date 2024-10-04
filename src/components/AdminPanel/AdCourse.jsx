@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Admin from "../Admin/Admin";
+import { Link } from "react-router-dom";
 
 const AdCourse = () => {
   const [subjects, setSubjects] = useState([]);
@@ -152,12 +153,12 @@ const AdCourse = () => {
                   </td>
                   <td className="border px-4 py-2">
                   <div className="flex space-x-2"> 
-                    <button
+                    <Link to={`/admin/course/edit/${subject.id}`}
                       className="px-4 py-2 bg-blue-500 text-white rounded"
                       onClick={() => openEditMode(subject)}
                     >
                       Edit
-                    </button>
+                    </Link>
                     <button
                       className="px-4 py-2 bg-red-500 text-white rounded"
                       onClick={() => deleteSubject(subject.id)}

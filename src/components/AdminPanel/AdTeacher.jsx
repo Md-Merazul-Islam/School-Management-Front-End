@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Admin from "../Admin/Admin";
+import { Link } from "react-router-dom";
 
 const AdTeacher = () => {
   const [teachers, setTeachers] = useState([]);
@@ -244,7 +245,7 @@ const AdTeacher = () => {
                   />
                 </td>
                 <td className="border px-4 py-2">
-                  <button
+                  <Link to={`/admin/teachers/edit/${teacher.id}`}
                     onClick={() => {
                       setEditTeacher(teacher);
                       setShowEditModal(true);
@@ -252,7 +253,7 @@ const AdTeacher = () => {
                     className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 mr-2"
                   >
                     Edit
-                  </button>
+                  </Link>
 
                   <button
                     onClick={() => {

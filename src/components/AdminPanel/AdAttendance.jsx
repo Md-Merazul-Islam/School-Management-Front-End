@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Include Axios directly
 import Admin from '../Admin/Admin'
+import { Link } from "react-router-dom";
 
 const AdAttendance = () => {
   const [attendance, setAttendance] = useState([]);
@@ -221,12 +222,14 @@ const AdAttendance = () => {
               onChange={handleFilterChange}
               placeholder="Filter by Date"
               className="px-4 py-2 border border-gray-300 rounded-md"
+              required
             />
             <select
               name="status"
               value={filters.status}
               onChange={handleFilterChange}
               className="px-4 py-2 border border-gray-300 rounded-md"
+              required
             >
               <option value="">All Statuses</option>
               <option value="Present">Present</option>
@@ -259,12 +262,12 @@ const AdAttendance = () => {
                   <td className="px-6 py-4">{getStudentName(item.roll_no)}</td>
                   <td className="px-6 py-4">{item.status}</td>
                   <td className="px-6 py-4">
-                    <button
+                    <Link to={`/admin/attendance/edit/${item.id}`} 
                       onClick={() => handleEdit(item)}
                       className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 mr-2"
                     >
                       Edit
-                    </button>
+                    </Link>
                     <button
                       onClick={() => handleDelete(item.id)}
                       className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"

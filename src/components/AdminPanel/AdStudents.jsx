@@ -313,12 +313,12 @@ const AdStudents = () => {
                 <td className="border border-gray-300 p-2">{student.email}</td>
                 <td className="border border-gray-300 p-2">{student.phone_number}</td>
                 <td className="border border-gray-300 p-2">
-                  <button
+                  <Link to={`/admin/students/edit/${student.id}`}
                     onClick={() => handleEdit(student)}
                     className="mr-2 p-1 bg-yellow-400 rounded hover:bg-yellow-500"
                   >
                     Edit
-                  </button>
+                  </Link>
                   <button
                     onClick={() => handleDelete(student.id)} // Update to trigger modal
                     className="p-1 bg-red-500 text-white rounded hover:bg-red-600"

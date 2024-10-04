@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Admin from "../Admin/Admin";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const AdResult = () => {
   // State for Marks, Students, and Subjects
@@ -121,6 +122,7 @@ const AdResult = () => {
               value={editingMark ? editingMark.student : newMark.student}
               onChange={handleInputChange}
               className="p-2 border rounded"
+              required
             >
               <option value="">Select Student</option>
               {students.map((student) => (
@@ -135,6 +137,7 @@ const AdResult = () => {
               value={editingMark ? editingMark.subject : newMark.subject}
               onChange={handleInputChange}
               className="p-2 border rounded"
+              required
             >
               <option value="">Select Subject</option>
               {subjects.map((subject) => (
@@ -151,6 +154,7 @@ const AdResult = () => {
               onChange={handleInputChange}
               className="p-2 border rounded"
               placeholder="Marks"
+              required
             />
           </div>
 
@@ -194,12 +198,12 @@ const AdResult = () => {
                 <td className="px-4 py-2 border">{mark.marks}</td>
                 <td className="px-4 py-2 border">{mark.grade}</td>
                 <td className="px-4 py-2 border">
-                  <button
+                  <Link to={`/admin/result/edit/${mark.id}`}
                     onClick={() => editMark(mark)}
                     className="bg-yellow-500 text-white py-1 px-2 rounded mr-2"
                   >
                     Edit
-                  </button>
+                  </Link>
                   <button
                     onClick={() => deleteMark(mark.id)}
                     className="bg-red-500 text-white py-1 px-2 rounded"

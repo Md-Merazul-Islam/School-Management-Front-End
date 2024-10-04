@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Admin from '../Admin/Admin';
+import { Link } from 'react-router-dom';
 
 // Set up base URL for axios
 const API_BASE_URL = 'https://school-management-five-iota.vercel.app/academics';
@@ -165,12 +166,12 @@ const AdNotices = () => {
                   <td className="border p-2">{new Date(notice.created_at).toLocaleDateString()}</td>
                   <td className="border p-2">
                     <div className="flex justify-center space-x-2">
-                      <button
+                      <Link to={`/admin/notices/edit/${notice.id}`}
                         onClick={() => handleEdit(notice)}
                         className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
                       >
                         Edit
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleDelete(notice.id)}
                         className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
