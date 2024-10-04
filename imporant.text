@@ -19,8 +19,8 @@ https://school-management-five-iota.vercel.app/accounts/logout/
 }
 
 {
-    "users": "http://amader-school.up.railway.app/accounts/users/",
-    "profiles": "http://amader-school.up.railway.app/accounts/profiles/"
+    "users": "https://school-management-five-iota.vercel.app/accounts/users/",
+    "profiles": "https://school-management-five-iota.vercel.app/accounts/profiles/"
 }
 
 https://school-management-five-iota.vercel.app/academics/
@@ -28,16 +28,16 @@ https://school-management-five-iota.vercel.app/academics/
 
 
 
- add:   "students": "http://amader-school.up.railway.app/academics/students/",
+ add:   "students": "https://school-management-five-iota.vercel.app/academics/students/",
 
- add:   "students": "http://amader-school.up.railway.app/academics/teachers/",
+ add:   "students": "https://school-management-five-iota.vercel.app/academics/teachers/",
 {
 
-    "students": "http://amader-school.up.railway.app/academics/students-list/",
-    "teachers": "http://amader-school.up.railway.app/academics/teachers-list/",
-    "classes": "http://amader-school.up.railway.app/academics/classes/",
-    "subjects": "http://amader-school.up.railway.app/academics/subjects/"
-    "notices": "http://amader-school.up.railway.app/academics/notices/"
+    "students": "https://school-management-five-iota.vercel.app/academics/students-list/",
+    "teachers": "https://school-management-five-iota.vercel.app/academics/teachers-list/",
+    "classes": "https://school-management-five-iota.vercel.app/academics/classes/",
+    "subjects": "https://school-management-five-iota.vercel.app/academics/subjects/"
+    "notices": "https://school-management-five-iota.vercel.app/academics/notices/"
 }
 
 
@@ -46,7 +46,7 @@ https://school-management-five-iota.vercel.app/classes/
 
 {
     "attendance": " ",
-    "marks": "http://amader-school.up.railway.app/classes/marks/"
+    "marks": "https://school-management-five-iota.vercel.app/classes/marks/"
 }
 
 Attendance List Create for post - https://school-management-five-iota.vercel.app/classes/attendance-check/
