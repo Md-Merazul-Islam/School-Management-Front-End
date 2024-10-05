@@ -13,21 +13,22 @@ const AllReviews = () => {
   const [newReview, setNewReview] = useState({
     body: "",
     author: "",
-    avatar: "",
-    position: "",
   });
-  const [errorMessage, setErrorMessage] = useState(""); 
-  const [isAuthorized, setIsAuthorized] = useState(false); 
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const handleOpenModal = () => {
     if (isAuthorized) {
       setIsModalOpen(true);
+    } else {
+      window.location.replace("/login");
     }
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+ 
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -51,9 +52,10 @@ const AllReviews = () => {
     fetchUsers();
     fetchReviews();
 
+    const token = localStorage.getItem("token");
 
-    const token = localStorage.getItem("token"); 
-    setIsAuthorized(!!token); 
+
+    setIsAuthorized(!!token);
   }, []);
 
   const getUsernameById = (id) => {
@@ -67,140 +69,171 @@ const AllReviews = () => {
     speed: 1000,
     slidesToShow: 3,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   const handleAddReview = async () => {
+    const token = localStorage.getItem("token"); // Get the token from localStorage
+    let author_id = localStorage.getItem("user_id"); // Get user ID from localStorage
+  
+    // Convert author_id to an integer
+    author_id = parseInt(author_id, 10); 
+  
+    if (!token) {
+      setErrorMessage("You must be logged in to add a review.");
+      return;
+    }
+  
+    // Log the request body to ensure correct data format
+    console.log("Sending review data:", {
+      body: newReview.body,
+      author: author_id,
+      avatar: newReview.avatar || "https://i.ibb.co/Gk3Y0W0/3237472.png",
+    });
+  
     try {
-      const response = await axios.post(`${API_BASE_URL}/academics/reviews/`, {
-        ...newReview,
-        avatar: newReview.avatar || "https://i.ibb.co/Gk3Y0W0/3237472.png", 
-      });
-
+      const response = await axios.post(
+        `${API_BASE_URL}/academics/reviews/`,
+        {
+          body: newReview.body,
+          author: author_id, // This is now an integer
+          avatar: newReview.avatar || "https://i.ibb.co/Gk3Y0W0/3237472.png",
+        },
+        {
+          headers: {
+            Authorization: `Token ${token}`, // Add token to Authorization header
+          },
+        }
+      );
+  
+      // Log the response data
+      console.log("Review added successfully:", response.data);
+  
+      // Update the review list
       setReviews([...reviews, response.data]);
-      setNewReview({ body: '', author: '', avatar: '', position: '' });
+  
+      // Clear the newReview input
+      setNewReview({ body: "", author: "" });
+  
+      // Close the modal
       handleCloseModal();
     } catch (error) {
-      console.error("Error adding review:", error);
-      setErrorMessage("Failed to add review. Please try again."); 
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+      } else {
+        console.error("Error:", error);
+      }
+      setErrorMessage("Failed to add review. Please try again.");
     }
   };
+  
+  
 
   return (
-    <section className="py-12 bg-gray-50 sm:py-16 lg:py-20 h-screen">
-      <div className="px-4 mx-auto w-[1580px] sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center">
-          <div className="text-center">
-            <p className="text-lg font-medium text-gray-600 font-pj">
-              {reviews.length} people have said how good Rareblocks
+    <section className="py-12 bg-gray-50 sm:py-16 lg:py-20 ">
+      <div className="px-4 mx-auto w-full max-w-[1580px] sm:px-6 lg:px-8 my-8">
+        <div className="text-center">
+          <p className="text-lg font-medium text-gray-600 font-pj">
+            {reviews.length} people have said how good Rareblocks
+          </p>
+          <h2 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl font-pj">
+            What Our Students Say
+          </h2>
+          
+          {!isAuthorized && (
+            <p className="mt-2 text-red-600">
+              You must be logged in to add a review.
             </p>
-            <h2 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl font-pj">
-              What Our Students Say
-            </h2>
-            {isAuthorized && ( 
-              <button
-                onClick={handleOpenModal}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
-              >
-                Add Review
-              </button>
-            )}
-            {!isAuthorized && (
-              <p className="mt-2 text-red-600">You must be logged in to add a review.</p>
-            )}
-            {errorMessage && <p className="mt-2 text-red-600">{errorMessage}</p>} 
-          </div>
+          )}
+          {errorMessage && <p className="mt-2 text-red-600">{errorMessage}</p>}
         </div>
       </div>
-
-      {/* Modal for Adding Review */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-1/3">
+        <div className="modal-overlay fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="modal-content bg-white p-6 rounded-md shadow-md w-full max-w-lg mx-4 sm:mx-6">
             <h3 className="text-xl font-semibold mb-4">Add Your Review</h3>
+              {/* Success or error messages */}
+              {errorMessage && (
+                      <p className="text-red-600 mb-4">{errorMessage}</p>
+                    )}
+                    {newReview.successMessage && (
+                      <p className="text-green-600 mb-4">{newReview.successMessage}</p>
+                    )}
+
+
             <textarea
               className="w-full h-24 border border-gray-300 rounded-md p-2"
               placeholder="Write your review..."
               value={newReview.body}
               onChange={(e) => setNewReview({ ...newReview, body: e.target.value })}
             />
-            <input
-              className="w-full border border-gray-300 rounded-md p-2 mt-2"
-              type="text"
-              placeholder="Your Name"
-              value={newReview.author}
-              onChange={(e) => setNewReview({ ...newReview, author: e.target.value })}
-            />
-            <input
-              className="w-full border border-gray-300 rounded-md p-2 mt-2"
-              type="text"
-              placeholder="Your Position (optional)"
-              value={newReview.position}
-              onChange={(e) => setNewReview({ ...newReview, position: e.target.value })}
-            />
-            <button
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
-              onClick={handleAddReview}
-            >
-              Submit Review
-            </button>
-            <button
-              className="mt-2 px-4 py-2 bg-gray-300 rounded-md"
-              onClick={handleCloseModal}
-            >
-              Close
-            </button>
+            <div className="mt-4 flex justify-end space-x-4">
+              <button
+                className="px-4 py-2 bg-green-600 text-white rounded-md"
+                onClick={handleAddReview}
+              >
+                Submit Review
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded-md"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      <div className="slider-container py-12 max-w-[1588px] mx-auto">
-        <Slider {...settings}>
-          {reviews.map((review, index) => (
-            <div key={index} className="p-4">
-              <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-                <div className="p-6">
-                  <div className="flex items-center">
-                    {Array(5)
-                      .fill(null)
-                      .map((_, starIndex) => (
-                        <svg
-                          key={starIndex}
-                          className="w-5 h-5 text-[#FDB241]"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                  </div>
-                  <blockquote className="flex-1 mt-8">
-                    <p className="text-lg leading-relaxed text-gray-900 font-pj">
-                      “{review.body}”
-                    </p>
-                  </blockquote>
 
-                  <div className="flex items-center mt-8">
-                    <img
-                      className="flex-shrink-0 object-cover rounded-full w-11 h-11"
-                      src={review.avatar || "https://i.ibb.co/Gk3Y0W0/3237472.png"}
-                      alt={review.name || "Student"}
-                    />
-                    <div className="ml-4">
-                      <p className="text-base font-bold text-gray-900 font-pj">
-                        {getUsernameById(review.author)}
-                      </p>
-                      <p className="mt-0.5 text-sm font-pj text-gray-600">
-                        {review.position || "Student"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+      <div className="px-4 mx-auto w-full max-w-[1580px] sm:px-6 lg:px-8">
+        <Slider {...settings}>
+          {reviews.map((review) => (
+            <div key={review.id} className="px-4">
+              <div className="relative flex flex-col items-center justify-center p-8 transition-all bg-white rounded-md shadow-md hover:shadow-xl">
+                <img
+                  className="object-cover w-24 h-24 mb-4 rounded-full"
+                  src={review.avatar || "https://i.ibb.co/Gk3Y0W0/3237472.png"}
+                  alt="User Avatar"
+                />
+                <p className="text-lg font-medium text-gray-600 font-pj">
+                  “ {review.body} ”
+                </p>
+                <p className="text-sm font-medium text-gray-900 font-pj mt-2">
+                  - {getUsernameById(review.author)}
+                </p>
               </div>
             </div>
           ))}
         </Slider>
       </div>
+
+
+    <div className="flex justify-center  mt-20 " >
+    {isAuthorized && (
+            <button
+              onClick={handleOpenModal}
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md "
+            >
+              Add Review
+            </button>
+          )}
+    </div>
     </section>
   );
 };
