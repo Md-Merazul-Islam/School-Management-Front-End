@@ -189,6 +189,12 @@ const Navbar = () => {
                   >
                     Result
                   </Link>
+                  <Link
+                    to="/payment"
+                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >
+                    Fees Pay
+                  </Link>
                 </div>
               )}
             </div>
@@ -326,6 +332,13 @@ const Navbar = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Result
+              </Link>
+              <Link
+                to="/payment"
+                className="nav-box hover:bg-gray-200 p-2 rounded"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Fees Pay
               </Link>
               <button
                 onClick={handleLogout}
