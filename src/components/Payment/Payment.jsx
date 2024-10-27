@@ -14,7 +14,6 @@ const Payment = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("user_id");
 
-
   const MONTH_CHOICES = [
     { value: "JAN", label: "January" },
     { value: "FEB", label: "February" },
@@ -75,7 +74,7 @@ const Payment = () => {
   }, [paymentResponse]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Make a Payment</h2>
         <form onSubmit={handleSubmit}>
