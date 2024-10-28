@@ -3,7 +3,6 @@ import axios from "axios";
 
 const API_URL = "https://school-management-five-iota.vercel.app/accounts/";
 
-// Update profile information
 export const updateProfile = async (token, profileData) => {
   try {
     const response = await axios.put(
@@ -11,7 +10,7 @@ export const updateProfile = async (token, profileData) => {
       profileData,
       {
         headers: {
-          "Content-Type": "multipart/form-data", // Handle file uploads
+          "Content-Type": "multipart/form-data",
           Authorization: `Token ${token}`,
         },
       }
@@ -82,9 +81,8 @@ const Profile = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  const imgBBAPIKey = "ea67728858ffc5a28d530570bfc45b40"; // Replace with your actual API key
+  const imgBBAPIKey = "ea67728858ffc5a28d530570bfc45b40";
 
-  // Upload Image to ImgBB
   const uploadImageToImgBB = async (imageFile) => {
     const formDataImage = new FormData();
     formDataImage.append("image", imageFile);
@@ -103,11 +101,10 @@ const Profile = () => {
 
   const handleSaveChanges = async () => {
     const token = localStorage.getItem("token");
-    const photoUrl = profile.photo
-      ? await uploadImageToImgBB(profile.photo)
+    const photoUrl = profileImage
+      ? await uploadImageToImgBB(profileImage)
       : null;
 
-    // Create formData for profile update
     const formData = new FormData();
     formData.append("username", profile.username);
     formData.append("phone_number", profile.phone_number || "");
@@ -118,7 +115,6 @@ const Profile = () => {
       formData.append("photo", photoUrl);
     }
 
-    // Proceed to update the profile
     if (token) {
       try {
         const updatedProfile = await updateProfile(token, formData);
@@ -140,6 +136,7 @@ const Profile = () => {
       </div>
     );
   }
+
   if (!profile) {
     return (
       <div className="text-center mt-5 min-h-screen flex flex-col items-center justify-center">
@@ -151,7 +148,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 via-white to-blue-50 flex items-center justify-center py-24">
-      <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-4xl mx-auto">
+      <div className="  w-full max-w-4xl mx-auto">
         <h2 className="text-4xl font-extrabold mb-8 text-center text-blue-700">
           User Profile
         </h2>
@@ -171,82 +168,129 @@ const Profile = () => {
         </div>
 
         {editMode ? (
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">
-                Profile Image:
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="mt-2 block w-full text-sm text-gray-500 file:bg-blue-100 file:border-none file:rounded-md file:py-2 file:px-4"
-              />
-            </div>
-            {[
-              "username",
-              "phone_number",
-              "address",
-              "date_of_birth",
-              "department",
-            ].map((field) => (
-              <div key={field}>
-                <label className="block text-sm font-semibold text-gray-700 capitalize">
-                  {field.replace(/_/g, " ")}:
-                </label>
+          <div className="fixed  inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl mx-3 ">
+              <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+              <div className="grid grid-cols-2 gap-4 mb-4">
                 <input
-                  type={field === "date_of_birth" ? "date" : "text"}
-                  name={field}
-                  value={profile[field] || ""}
+                  type="text"
+                  name="username"
+                  value={profile.username}
                   onChange={handleInputChange}
-                  className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
+                  className="border border-gray-300 p-2 rounded w-full"
+                  placeholder="Username"
+                />
+                <input
+                  type="text"
+                  name="phone_number"
+                  value={profile.phone_number}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 p-2 rounded w-full"
+                  placeholder="Phone Number"
+                />
+                <input
+                  type="text"
+                  name="address"
+                  value={profile.address}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 p-2 rounded w-full"
+                  placeholder="Address"
+                />
+                <input
+                  type="date"
+                  name="date_of_birth"
+                  value={profile.date_of_birth}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 p-2 rounded w-full"
+                />
+                <input
+                  type="text"
+                  name="department"
+                  value={profile.department}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 p-2 rounded w-full"
+                  placeholder="Department"
+                />
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  className="border border-gray-300 p-2 rounded w-full"
                 />
               </div>
-            ))}
-            <div className="flex space-x-4 mt-6">
-              <button
-                onClick={handleSaveChanges}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                Save Changes
-              </button>
-              <button
-                onClick={() => setEditMode(false)}
-                className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-gray-300"
-              >
-                Cancel
-              </button>
+              <div className="flex justify-between">
+                <button
+                  onClick={handleSaveChanges}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => setEditMode(false)}
+                  className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-lg"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         ) : (
-          <div className="space-y-6">
-            {[
-              "username",
-              "phone_number",
-              "address",
-              "date_of_birth",
-              "department",
-            ].map((field) => (
-              <div key={field}>
-                <p className="text-sm font-semibold text-gray-700 capitalize">
-                  {field.replace(/_/g, " ")}:
-                </p>
-                <p className="text-lg font-bold text-gray-900">
-                  {profile[field]}
-                </p>
-              </div>
-            ))}
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => setEditMode(true)}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                Edit Profile
-              </button>
-            </div>
-          </div>
+          <ProfileView profile={profile} setEditMode={setEditMode} />
         )}
       </div>
+    </div>
+  );
+};
+
+const ProfileView = ({ profile, setEditMode }) => {
+  return (
+    <div className="mb-8">
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <input
+          type="text"
+          name="username"
+          value={profile.username}
+          className="border border-gray-300 p-2 rounded w-full"
+          placeholder="Username"
+          disabled
+        />
+        <input
+          type="text"
+          name="phone_number"
+          value={profile.phone_number}
+          className="border border-gray-300 p-2 rounded w-full"
+          placeholder="Phone Number"
+          disabled
+        />
+        <input
+          type="text"
+          name="address"
+          value={profile.address}
+          className="border border-gray-300 p-2 rounded w-full"
+          placeholder="Address"
+          disabled
+        />
+        <input
+          type="date"
+          name="date_of_birth"
+          value={profile.date_of_birth}
+          className="border border-gray-300 p-2 rounded w-full"
+          disabled
+        />
+        <input
+          type="text"
+          name="department"
+          value={profile.department}
+          className="border border-gray-300 p-2 rounded w-full"
+          placeholder="Department"
+          disabled
+        />
+      </div>
+      <button
+        onClick={() => setEditMode(true)}
+        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mt-4"
+      >
+        Edit Profile
+      </button>
     </div>
   );
 };
