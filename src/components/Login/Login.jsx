@@ -29,11 +29,10 @@ const Login = () => {
       setUserId(user_id);
       localStorage.setItem("isStaff", is_staff);
       if (is_staff) {
-        window.location.replace("/admin"); 
+        window.location.replace("/admin");
       } else {
-        window.location.replace("/home"); 
+        window.location.replace("/home");
       }
-      
     } catch (error) {
       setMessage("Login failed. Please try again.");
     } finally {
@@ -48,7 +47,7 @@ const Login = () => {
     } else {
       window.location.replace("/home");
     }
-    setIsModalOpen(false); 
+    setIsModalOpen(false);
   };
 
   const closeModal = () => {
@@ -64,7 +63,7 @@ const Login = () => {
               Login Your Account
             </h1>
             <div className="w-full flex-1 mt-8">
-              <div className="flex flex-col items-center">
+              {/* <div className="flex flex-col items-center">
                 <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                   <div className="bg-white p-2 rounded-full">
                     <svg className="w-4" viewBox="0 0 533.5 544.3">
@@ -106,7 +105,7 @@ const Login = () => {
                 <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
                   Or Login up with e-mail
                 </div>
-              </div>
+              </div> */}
 
               <div className="mx-auto max-w-xs">
                 <form onSubmit={handleSubmit}>
@@ -195,6 +194,19 @@ const Login = () => {
                   .
                 </p>
               </div>
+              <div className="flex flex-col sm:flex-row gap-4 p-6 justify-center items-center">
+  <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-md w-56">
+    <p className="text-lg font-semibold text-gray-800 mb-2">Admin User</p>
+    <span className="block text-sm text-gray-600">Username: <strong className="text-gray-800">meraz</strong></span>
+    <span className="block text-sm text-gray-600">Password: <strong className="text-gray-800">meraz2004</strong></span>
+  </div>
+  <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-md w-56">
+    <p className="text-lg font-semibold text-gray-800 mb-2">Normal User</p>
+    <span className="block text-sm text-gray-600">Username: <strong className="text-gray-800">merazul</strong></span>
+    <span className="block text-sm text-gray-600">Password: <strong className="text-gray-800">meraz2004</strong></span>
+  </div>
+</div>
+
             </div>
           </div>
         </div>

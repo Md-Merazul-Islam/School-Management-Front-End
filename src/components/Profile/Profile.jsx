@@ -101,7 +101,6 @@ const Profile = () => {
     }
   };
 
-
   const handleSaveChanges = async () => {
     const token = localStorage.getItem("token");
     const photoUrl = profile.photo
@@ -151,9 +150,9 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen py-24 bg-gradient-to-r from-blue-100 via-white to-blue-50">
-      <div className="max-w-lg mx-auto bg-white p-6 rounded-xl shadow-2xl transform transition duration-500 hover:scale-105 mt-10">
-        <h2 className="text-4xl font-extrabold mb-6 text-center text-blue-700">
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-white to-blue-50 flex items-center justify-center py-24">
+      <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-4xl mx-auto">
+        <h2 className="text-4xl font-extrabold mb-8 text-center text-blue-700">
           User Profile
         </h2>
 
@@ -163,11 +162,11 @@ const Profile = () => {
           </div>
         )}
 
-        <div className="flex items-center justify-center mb-6">
+        <div className="flex flex-col items-center mb-8">
           <img
             src={imagePreview}
             alt="Profile"
-            className="w-32 h-32 rounded-full object-cover shadow-lg border-4 border-blue-300"
+            className="w-36 h-36 rounded-full object-cover shadow-lg border-4 border-blue-300 mb-4"
           />
         </div>
 
@@ -184,67 +183,26 @@ const Profile = () => {
                 className="mt-2 block w-full text-sm text-gray-500 file:bg-blue-100 file:border-none file:rounded-md file:py-2 file:px-4"
               />
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">
-                Username:
-              </label>
-              <input
-                type="text"
-                name="username"
-                value={profile.username || ""}
-                onChange={handleInputChange}
-                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">
-                Phone Number:
-              </label>
-              <input
-                type="text"
-                name="phone_number"
-                value={profile.phone_number || ""}
-                onChange={handleInputChange}
-                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">
-                Address:
-              </label>
-              <input
-                type="text"
-                name="address"
-                value={profile.address || ""}
-                onChange={handleInputChange}
-                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">
-                Date of Birth:
-              </label>
-              <input
-                type="date"
-                name="date_of_birth"
-                value={profile.date_of_birth || ""}
-                onChange={handleInputChange}
-                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">
-                Department:
-              </label>
-              <input
-                type="text"
-                name="department"
-                value={profile.department || ""}
-                onChange={handleInputChange}
-                className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-
+            {[
+              "username",
+              "phone_number",
+              "address",
+              "date_of_birth",
+              "department",
+            ].map((field) => (
+              <div key={field}>
+                <label className="block text-sm font-semibold text-gray-700 capitalize">
+                  {field.replace(/_/g, " ")}:
+                </label>
+                <input
+                  type={field === "date_of_birth" ? "date" : "text"}
+                  name={field}
+                  value={profile[field] || ""}
+                  onChange={handleInputChange}
+                  className="mt-2 block w-full border-2 border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
+            ))}
             <div className="flex space-x-4 mt-6">
               <button
                 onClick={handleSaveChanges}
@@ -261,42 +219,23 @@ const Profile = () => {
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Username:</p>
-              <p className="text-lg font-bold text-gray-900">
-                {profile.username}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-700">
-                Phone Number:
-              </p>
-              <p className="text-lg font-bold text-gray-900">
-                {profile.phone_number}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Address:</p>
-              <p className="text-lg font-bold text-gray-900">
-                {profile.address}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-700">
-                Date of Birth:
-              </p>
-              <p className="text-lg font-bold text-gray-900">
-                {profile.date_of_birth}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Department:</p>
-              <p className="text-lg font-bold text-gray-900">
-                {profile.department}
-              </p>
-            </div>
-
+          <div className="space-y-6">
+            {[
+              "username",
+              "phone_number",
+              "address",
+              "date_of_birth",
+              "department",
+            ].map((field) => (
+              <div key={field}>
+                <p className="text-sm font-semibold text-gray-700 capitalize">
+                  {field.replace(/_/g, " ")}:
+                </p>
+                <p className="text-lg font-bold text-gray-900">
+                  {profile[field]}
+                </p>
+              </div>
+            ))}
             <div className="mt-6 text-center">
               <button
                 onClick={() => setEditMode(true)}

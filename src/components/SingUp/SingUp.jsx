@@ -13,7 +13,7 @@ const Signup = () => {
   const [isPassword1Visible, setIsPassword1Visible] = useState(false);
   const [isPassword2Visible, setIsPassword2Visible] = useState(false);
   const navigate = useNavigate();
-  const API_LINK = "https://school-management-five-iota.vercel.app/"
+  const API_LINK = "https://school-management-five-iota.vercel.app/";
 
   const handleInputChange = (e) => {
     setFormData({
@@ -39,7 +39,12 @@ const Signup = () => {
     setErrorMessage("");
 
     // Client-side validation
-    if (!formData.username || !formData.email || !formData.password || !formData.confirm_password) {
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirm_password
+    ) {
       displayError("Please fill in all fields.");
       return;
     }
@@ -50,14 +55,20 @@ const Signup = () => {
     }
 
     try {
-      const usersResponse = await fetch("https://school-management-five-iota.vercel.app/accounts/users/");
+      const usersResponse = await fetch(
+        "https://school-management-five-iota.vercel.app/accounts/users/"
+      );
       if (!usersResponse.ok) {
         throw new Error("Failed to fetch existing users");
       }
       const usersData = await usersResponse.json();
 
-      const existingUsername = usersData.some(user => user.username === formData.username);
-      const existingEmail = usersData.some(user => user.email === formData.email);
+      const existingUsername = usersData.some(
+        (user) => user.username === formData.username
+      );
+      const existingEmail = usersData.some(
+        (user) => user.email === formData.email
+      );
       if (existingUsername) {
         displayError("Username already exists.");
         return;
@@ -68,13 +79,16 @@ const Signup = () => {
       }
 
       // Proceed with registration if no duplicates are found
-      const registrationResponse = await fetch('https://school-management-five-iota.vercel.app/accounts/register/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const registrationResponse = await fetch(
+        "https://school-management-five-iota.vercel.app/accounts/register/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!registrationResponse.ok) {
         const data = await registrationResponse.json();
@@ -86,7 +100,7 @@ const Signup = () => {
 
       setTimeout(() => {
         navigate("/login");
-      }, 3000); 
+      }, 3000);
     } catch (error) {
       displayError(error.message || "Something went wrong. Please try again.");
     }
@@ -98,9 +112,11 @@ const Signup = () => {
         <div className="m-0 sm:m-10 sm:rounded-lg flex justify-center flex-1">
           <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div>
-            <h1 className="text-2xl xl:text-3xl font-extrabold text-center">Login Your Account</h1>
-            <div className="w-full flex-1 mt-8">
-              <div className="flex flex-col items-center">
+              <h1 className="text-2xl xl:text-3xl font-extrabold text-center">
+                Login Your Account
+              </h1>
+              <div className="w-full flex-1 mt-8">
+                {/* <div className="flex flex-col items-center">
                 <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                   <div className="bg-white p-2 rounded-full">
                     <svg className="w-4" viewBox="0 0 533.5 544.3">
@@ -136,22 +152,23 @@ const Signup = () => {
                   </div>
                   <span className="ml-4">Login Up with GitHub</span>
                 </button>
-              </div>
+              </div> */}
 
-              <div className=" my-12 border-b text-center ">
+                {/* <div className=" my-12 border-b text-center ">
                 <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
                   Or Login up with e-mail
                 </div>
+              </div> */}
               </div>
-              </div>
-              
             </div>
             <div className="mt-12 flex flex-col items-center">
-              <h1 className="text-2xl xl:text-3xl font-extrabold">Sign Up</h1>
+              {/* <h1 className="text-2xl xl:text-3xl font-extrabold">Sign Up</h1> */}
               <div className="w-full flex-1 mt-8">
-              {errorMessage && (
-                    <p className="text-red-500 my-4 text-center">{errorMessage}</p>
-                  )}
+                {errorMessage && (
+                  <p className="text-red-500 my-4 text-center">
+                    {errorMessage}
+                  </p>
+                )}
                 <form className="mx-auto max-w-xs" onSubmit={handleSubmit}>
                   <input
                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
@@ -207,7 +224,7 @@ const Signup = () => {
                       {isPassword2Visible ? "🙈" : "👁️"}
                     </button>
                   </div>
-                
+
                   <button
                     type="submit"
                     className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
@@ -233,7 +250,9 @@ const Signup = () => {
                       <h2 className="text-2xl font-bold mb-4">
                         Registration Successful!
                       </h2>
-                      <p className="mb-6">Please check your email for confirmation.</p>
+                      <p className="mb-6">
+                        Please check your email for confirmation.
+                      </p>
                       <button
                         onClick={() => setIsModalOpen(false)}
                         className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition duration-200"
