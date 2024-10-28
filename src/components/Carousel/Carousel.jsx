@@ -8,9 +8,9 @@ import "./Carousel.css";
 const Carousel = () => {
   useEffect(() => {
     AOS.init({
-      duration: 600, // Animation duration (in ms)
-      easing: "ease-in-out", // Animation easing function
-      once: true, // Whether animation should happen only once
+      duration: 600, 
+      easing: "ease-in-out", 
+      once: true,
     });
   }, []);
 
@@ -61,7 +61,7 @@ const Carousel = () => {
                   </a>
                 </div>
               </div>
-              {/* Image Section */}
+
               {/* Image Section */}
               <div
                 data-aos="fade-left"
