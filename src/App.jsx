@@ -27,6 +27,7 @@ import AdAttendance from "./components/AdminPanel/AdAttendance";
 import TestimonialCarousel from "./components/TestimonialCarousel/TestimonialCarousel";
 import AllReviews from "./components/AllReviews/AllReviews";
 import Payment from "./components/Payment/Payment";
+import PaySuccess from "./components/PaySuccess/PaySuccess";
 
 
 
@@ -62,6 +63,8 @@ function App() {
             <Route path="allReviews/" element={<AllReviews />} />
             <Route path="/reviews/edit/:id" element={<TestimonialCarousel />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/payment-success" element={<PaySuccess />} />
+
 
 
             {/* Admin Sub-Routes */}
