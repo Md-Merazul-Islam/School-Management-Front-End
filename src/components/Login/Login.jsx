@@ -195,17 +195,17 @@ const Login = () => {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 p-6 justify-center items-center">
-  <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-md w-56">
-    <p className="text-lg font-semibold text-gray-800 mb-2">Admin User</p>
-    <span className="block text-sm text-gray-600">Username: <strong className="text-gray-800">meraz</strong></span>
-    <span className="block text-sm text-gray-600">Password: <strong className="text-gray-800">meraz2004</strong></span>
-  </div>
-  <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-md w-56">
-    <p className="text-lg font-semibold text-gray-800 mb-2">Normal User</p>
-    <span className="block text-sm text-gray-600">Username: <strong className="text-gray-800">merazul</strong></span>
-    <span className="block text-sm text-gray-600">Password: <strong className="text-gray-800">meraz2004</strong></span>
-  </div>
-</div>
+              <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-md w-56">
+                <p className="text-lg font-semibold text-gray-800 mb-2">Admin User</p>
+                <span className="block text-sm text-gray-600">Username: <strong className="text-gray-800">meraz</strong></span>
+                <span className="block text-sm text-gray-600">Password: <strong className="text-gray-800">meraz2004</strong></span>
+              </div>
+              <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-md w-56">
+                <p className="text-lg font-semibold text-gray-800 mb-2">Normal User</p>
+                <span className="block text-sm text-gray-600">Username: <strong className="text-gray-800">merazul</strong></span>
+                <span className="block text-sm text-gray-600">Password: <strong className="text-gray-800">meraz2004</strong></span>
+              </div>
+            </div>
 
             </div>
           </div>

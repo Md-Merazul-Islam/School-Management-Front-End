@@ -24,9 +24,9 @@ const AdTeacher = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const API_URL =
-    "https://school-management-five-iota.vercel.app/academics/teachers/";
+    "https://school-management-dusky.vercel.app/academics/teachers/";
   const API_URL_subject =
-    "https://school-management-five-iota.vercel.app/academics/subjects/";
+    "https://school-management-dusky.vercel.app/academics/subjects/";
 
   const imgBBAPIKey = "ea67728858ffc5a28d530570bfc45b40";
   const token = localStorage.getItem("token");
@@ -245,7 +245,8 @@ const AdTeacher = () => {
                   />
                 </td>
                 <td className="border px-4 py-2">
-                  <Link to={`/admin/teachers/edit/${teacher.id}`}
+                  <Link
+                    to={`/admin/teachers/edit/${teacher.id}`}
                     onClick={() => {
                       setEditTeacher(teacher);
                       setShowEditModal(true);

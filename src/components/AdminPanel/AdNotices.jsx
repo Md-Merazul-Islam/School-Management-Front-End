@@ -1,18 +1,16 @@
-
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Admin from '../Admin/Admin';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Admin from "../Admin/Admin";
+import { Link } from "react-router-dom";
 
 // Set up base URL for axios
-const API_BASE_URL = 'https://school-management-five-iota.vercel.app/academics';
+const API_BASE_URL = "https://school-management-dusky.vercel.app/academics";
 
 const AdNotices = () => {
   const [notices, setNotices] = useState([]);
   const [noticeForm, setNoticeForm] = useState({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     file: null,
   });
   const [editingNotice, setEditingNotice] = useState(null);
@@ -27,7 +25,10 @@ const AdNotices = () => {
       const response = await axios.get(`${API_BASE_URL}/notices/`);
       setNotices(response.data);
     } catch (error) {
-      console.error('Error fetching notices:', error.response ? error.response.data : error.message);
+      console.error(
+        "Error fetching notices:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -56,28 +57,35 @@ const AdNotices = () => {
     try {
       if (editingNotice) {
         // Update notice
-        await axios.put(`${API_BASE_URL}/notices/${editingNotice.id}/`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        await axios.put(
+          `${API_BASE_URL}/notices/${editingNotice.id}/`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         setEditingNotice(null);
       } else {
         // Create notice
         await axios.post(`${API_BASE_URL}/notices/`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         });
       }
       fetchNotices();
       setNoticeForm({
-        title: '',
-        description: '',
+        title: "",
+        description: "",
         file: null,
       });
     } catch (error) {
-      console.error('Error saving notice:', error.response ? error.response.data : error.message);
+      console.error(
+        "Error saving notice:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -95,7 +103,10 @@ const AdNotices = () => {
       await axios.delete(`${API_BASE_URL}/notices/${id}/`);
       fetchNotices();
     } catch (error) {
-      console.error('Error deleting notice:', error.response ? error.response.data : error.message);
+      console.error(
+        "Error deleting notice:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -105,8 +116,13 @@ const AdNotices = () => {
         <h1 className="text-2xl font-bold mb-4">Notices</h1>
 
         {/* Notice Form */}
-        <form onSubmit={handleSubmit} className="mb-8 bg-white p-4 rounded shadow-md">
-          <h2 className="text-xl font-semibold mb-4">{editingNotice ? 'Edit Notice' : 'Add New Notice'}</h2>
+        <form
+          onSubmit={handleSubmit}
+          className="mb-8 bg-white p-4 rounded shadow-md"
+        >
+          <h2 className="text-xl font-semibold mb-4">
+            {editingNotice ? "Edit Notice" : "Add New Notice"}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
@@ -131,13 +147,13 @@ const AdNotices = () => {
             />
           </div>
           <div className="flex space-x-4">
-         <button
-            type="submit"
-            className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            {editingNotice ? 'Update Notice' : 'Add Notice'}
-          </button>
-         </div>
+            <button
+              type="submit"
+              className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              {editingNotice ? "Update Notice" : "Add Notice"}
+            </button>
+          </div>
         </form>
 
         {/* Notices List */}
@@ -159,14 +175,21 @@ const AdNotices = () => {
                   <td className="border p-2">{notice.title}</td>
                   <td className="border p-2">{notice.description}</td>
                   <td className="border p-2">
-                    <a href={notice.file} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={notice.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       View File
                     </a>
                   </td>
-                  <td className="border p-2">{new Date(notice.created_at).toLocaleDateString()}</td>
+                  <td className="border p-2">
+                    {new Date(notice.created_at).toLocaleDateString()}
+                  </td>
                   <td className="border p-2">
                     <div className="flex justify-center space-x-2">
-                      <Link to={`/admin/notices/edit/${notice.id}`}
+                      <Link
+                        to={`/admin/notices/edit/${notice.id}`}
                         onClick={() => handleEdit(notice)}
                         className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
                       >
@@ -180,7 +203,6 @@ const AdNotices = () => {
                       </button>
                     </div>
                   </td>
-
                 </tr>
               ))}
             </tbody>

@@ -15,7 +15,7 @@ const AdCourse = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [imageFile, setImageFile] = useState(null);
 
-  const imgBBAPIKey = 'ea67728858ffc5a28d530570bfc45b40';
+  const imgBBAPIKey = "ea67728858ffc5a28d530570bfc45b40";
 
   // Fetch all subjects
   useEffect(() => {
@@ -24,7 +24,9 @@ const AdCourse = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("https://school-management-five-iota.vercel.app/academics/subjects/");
+      const response = await axios.get(
+        "https://school-management-dusky.vercel.app/academics/subjects/"
+      );
       setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -70,7 +72,7 @@ const AdCourse = () => {
       try {
         const newSubjectData = { ...newSubject, photo: imageUrl };
         const response = await axios.post(
-          "https://school-management-five-iota.vercel.app/academics/subjects/",
+          "https://school-management-dusky.vercel.app/academics/subjects/",
           newSubjectData
         );
         setSubjects([...subjects, response.data]);
@@ -94,7 +96,7 @@ const AdCourse = () => {
       try {
         const updatedSubjectData = { ...editSubject, photo: imageUrl };
         const response = await axios.put(
-          `https://school-management-five-iota.vercel.app/academics/subjects/${editSubject.id}/`,
+          `https://school-management-dusky.vercel.app/academics/subjects/${editSubject.id}/`,
           updatedSubjectData
         );
         const updatedSubjects = subjects.map((subject) =>
@@ -112,7 +114,9 @@ const AdCourse = () => {
 
   const deleteSubject = async (id) => {
     try {
-      await axios.delete(`https://school-management-five-iota.vercel.app/academics/subjects/${id}/`);
+      await axios.delete(
+        `https://school-management-dusky.vercel.app/academics/subjects/${id}/`
+      );
       setSubjects(subjects.filter((subject) => subject.id !== id));
     } catch (error) {
       console.error("Error deleting subject:", error);
@@ -149,25 +153,29 @@ const AdCourse = () => {
                   <td className="border px-4 py-2">{subject.code}</td>
                   <td className="border px-4 py-2">{subject.description}</td>
                   <td className="border px-4 py-2">
-                    <img src={subject.photo} alt={subject.name} className="h-20 w-20 object-cover" />
+                    <img
+                      src={subject.photo}
+                      alt={subject.name}
+                      className="h-20 w-20 object-cover"
+                    />
                   </td>
                   <td className="border px-4 py-2">
-                  <div className="flex space-x-2"> 
-                    <Link to={`/admin/course/edit/${subject.id}`}
-                      className="px-4 py-2 bg-blue-500 text-white rounded"
-                      onClick={() => openEditMode(subject)}
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      className="px-4 py-2 bg-red-500 text-white rounded"
-                      onClick={() => deleteSubject(subject.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-
+                    <div className="flex space-x-2">
+                      <Link
+                        to={`/admin/course/edit/${subject.id}`}
+                        className="px-4 py-2 bg-blue-500 text-white rounded"
+                        onClick={() => openEditMode(subject)}
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        className="px-4 py-2 bg-red-500 text-white rounded"
+                        onClick={() => deleteSubject(subject.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -183,7 +191,9 @@ const AdCourse = () => {
             </h2>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Name</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Name
+              </label>
               <input
                 type="text"
                 name="name"
@@ -195,7 +205,9 @@ const AdCourse = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Code</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Code
+              </label>
               <input
                 type="text"
                 name="code"
@@ -207,10 +219,14 @@ const AdCourse = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Description</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
               <textarea
                 name="description"
-                value={isEditMode ? editSubject.description : newSubject.description}
+                value={
+                  isEditMode ? editSubject.description : newSubject.description
+                }
                 onChange={handleInputChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 required
@@ -218,7 +234,9 @@ const AdCourse = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Photo</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Photo
+              </label>
               <input
                 type="file"
                 name="photo"

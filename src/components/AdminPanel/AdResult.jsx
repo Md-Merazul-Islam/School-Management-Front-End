@@ -11,7 +11,7 @@ const AdResult = () => {
   const [newMark, setNewMark] = useState({
     student: "",
     subject: "",
-    marks: ""
+    marks: "",
   });
   const [editingMark, setEditingMark] = useState(null);
 
@@ -24,7 +24,9 @@ const AdResult = () => {
 
   const fetchMarks = async () => {
     try {
-      const response = await axios.get("https://school-management-five-iota.vercel.app/classes/marks/");
+      const response = await axios.get(
+        "https://school-management-dusky.vercel.app/classes/marks/"
+      );
       setMarks(response.data);
     } catch (error) {
       console.error("Error fetching marks:", error);
@@ -33,7 +35,9 @@ const AdResult = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get("https://school-management-five-iota.vercel.app/academics/students-list/");
+      const response = await axios.get(
+        "https://school-management-dusky.vercel.app/academics/students-list/"
+      );
       setStudents(response.data);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -42,7 +46,9 @@ const AdResult = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("https://school-management-five-iota.vercel.app/academics/subjects/");
+      const response = await axios.get(
+        "https://school-management-dusky.vercel.app/academics/subjects/"
+      );
       setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -72,18 +78,27 @@ const AdResult = () => {
         subject: parseInt(newMark.subject, 10),
         marks: parseInt(newMark.marks, 10),
       };
-      await axios.post("https://school-management-five-iota.vercel.app/classes/marks/", dataToSend);
+      await axios.post(
+        "https://school-management-dusky.vercel.app/classes/marks/",
+        dataToSend
+      );
       fetchMarks(); // Refresh the mark list after adding
       setNewMark({ student: "", subject: "", marks: "" }); // Reset form
     } catch (error) {
-      console.error("Error adding mark:", error.response ? error.response.data : error.message);
+      console.error(
+        "Error adding mark:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
   // Update an existing mark
   const updateMark = async () => {
     try {
-      await axios.put(`https://school-management-five-iota.vercel.app/classes/marks/${editingMark.id}/`, editingMark);
+      await axios.put(
+        `https://school-management-dusky.vercel.app/classes/marks/${editingMark.id}/`,
+        editingMark
+      );
       fetchMarks();
       setEditingMark(null);
     } catch (error) {
@@ -94,7 +109,9 @@ const AdResult = () => {
   // Delete a mark
   const deleteMark = async (id) => {
     try {
-      await axios.delete(`https://school-management-five-iota.vercel.app/classes/marks/${id}/`);
+      await axios.delete(
+        `https://school-management-dusky.vercel.app/classes/marks/${id}/`
+      );
       fetchMarks();
     } catch (error) {
       console.error("Error deleting mark:", error);
@@ -127,7 +144,7 @@ const AdResult = () => {
               <option value="">Select Student</option>
               {students.map((student) => (
                 <option key={student.id} value={student.id}>
-                  {student.roll_no} 
+                  {student.roll_no}
                 </option>
               ))}
             </select>
@@ -193,12 +210,15 @@ const AdResult = () => {
             {marks.map((mark) => (
               <tr key={mark.id}>
                 <td className="px-4 py-2 border">{mark.id}</td>
-                <td className="px-4 py-2 border">{getStudentRollNo(mark.student)}</td>
+                <td className="px-4 py-2 border">
+                  {getStudentRollNo(mark.student)}
+                </td>
                 <td className="px-4 py-2 border">{mark.subject_name}</td>
                 <td className="px-4 py-2 border">{mark.marks}</td>
                 <td className="px-4 py-2 border">{mark.grade}</td>
                 <td className="px-4 py-2 border">
-                  <Link to={`/admin/result/edit/${mark.id}`}
+                  <Link
+                    to={`/admin/result/edit/${mark.id}`}
                     onClick={() => editMark(mark)}
                     className="bg-yellow-500 text-white py-1 px-2 rounded mr-2"
                   >

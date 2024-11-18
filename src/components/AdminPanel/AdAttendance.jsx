@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Include Axios directly
-import Admin from '../Admin/Admin'
+import Admin from "../Admin/Admin";
 import { Link } from "react-router-dom";
 
 const AdAttendance = () => {
@@ -19,7 +19,7 @@ const AdAttendance = () => {
 
   const token = localStorage.getItem("token");
 
-  const apiUrl = "https://school-management-five-iota.vercel.app/";
+  const apiUrl = "https://school-management-dusky.vercel.app/";
 
   useEffect(() => {
     fetchStudents();
@@ -159,130 +159,132 @@ const AdAttendance = () => {
 
   return (
     <Admin>
-    <div className="min-h-screen bg-gray-100 py-10">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">
-          Attendance Management
-        </h1>
+      <div className="min-h-screen bg-gray-100 py-10">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl font-bold mb-6 text-gray-800">
+            Attendance Management
+          </h1>
 
-        {errors && <p className="text-red-500 mb-4">{errors}</p>}
+          {errors && <p className="text-red-500 mb-4">{errors}</p>}
 
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <form className="flex flex-col gap-4 mb-4">
-            <select
-              name="roll_no"
-              value={formData.roll_no}
-              onChange={handleChange}
-              className="px-4 py-2 border border-gray-300 rounded-md"
-              required
-            >
-              <option value="" disabled>
-                Select Roll No
-              </option>
-              {students.map((student) => (
-                <option key={student.roll_no} value={student.roll_no}>
-                  {student.roll_no} - {student.first_name} {student.last_name}
+          <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+            <form className="flex flex-col gap-4 mb-4">
+              <select
+                name="roll_no"
+                value={formData.roll_no}
+                onChange={handleChange}
+                className="px-4 py-2 border border-gray-300 rounded-md"
+                required
+              >
+                <option value="" disabled>
+                  Select Roll No
                 </option>
-              ))}
-            </select>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="px-4 py-2 border border-gray-300 rounded-md"
-            >
-              <option value="Present">Present</option>
-              <option value="Absent">Absent</option>
-            </select>
-            {editId ? (
-              <button
-                type="button"
-                onClick={handleUpdate}
-                className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
+                {students.map((student) => (
+                  <option key={student.roll_no} value={student.roll_no}>
+                    {student.roll_no} - {student.first_name} {student.last_name}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="px-4 py-2 border border-gray-300 rounded-md"
               >
-                Update Attendance
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleCreate}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+              </select>
+              {editId ? (
+                <button
+                  type="button"
+                  onClick={handleUpdate}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
+                >
+                  Update Attendance
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleCreate}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                >
+                  Add Attendance
+                </button>
+              )}
+            </form>
+
+            {/* Filters */}
+            <div className="flex gap-4 mb-6">
+              <input
+                type="date"
+                name="date"
+                value={filters.date}
+                onChange={handleFilterChange}
+                placeholder="Filter by Date"
+                className="px-4 py-2 border border-gray-300 rounded-md"
+                required
+              />
+              <select
+                name="status"
+                value={filters.status}
+                onChange={handleFilterChange}
+                className="px-4 py-2 border border-gray-300 rounded-md"
+                required
               >
-                Add Attendance
-              </button>
-            )}
-          </form>
+                <option value="">All Statuses</option>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+              </select>
+            </div>
 
-          {/* Filters */}
-          <div className="flex gap-4 mb-6">
-            <input
-              type="date"
-              name="date"
-              value={filters.date}
-              onChange={handleFilterChange}
-              placeholder="Filter by Date"
-              className="px-4 py-2 border border-gray-300 rounded-md"
-              required
-            />
-            <select
-              name="status"
-              value={filters.status}
-              onChange={handleFilterChange}
-              className="px-4 py-2 border border-gray-300 rounded-md"
-              required
-            >
-              <option value="">All Statuses</option>
-              <option value="Present">Present</option>
-              <option value="Absent">Absent</option>
-            </select>
-          </div>
-
-          {/* Attendance List */}
-          <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-            <thead className="bg-gray-800 text-white">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Roll No
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {attendance.map((item) => (
-                <tr key={item.id} className="border-b border-gray-200">
-                  <td className="px-6 py-4">{item.roll_no}</td>
-                  <td className="px-6 py-4">{getStudentName(item.roll_no)}</td>
-                  <td className="px-6 py-4">{item.status}</td>
-                  <td className="px-6 py-4">
-                    <Link to={`/admin/attendance/edit/${item.id}`} 
-                      onClick={() => handleEdit(item)}
-                      className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 mr-2"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
-                  </td>
+            {/* Attendance List */}
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead className="bg-gray-800 text-white">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Roll No
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {attendance.map((item) => (
+                  <tr key={item.id} className="border-b border-gray-200">
+                    <td className="px-6 py-4">{item.roll_no}</td>
+                    <td className="px-6 py-4">
+                      {getStudentName(item.roll_no)}
+                    </td>
+                    <td className="px-6 py-4">{item.status}</td>
+                    <td className="px-6 py-4">
+                      <Link
+                        to={`/admin/attendance/edit/${item.id}`}
+                        onClick={() => handleEdit(item)}
+                        className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 mr-2"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-        
       </div>
-    </div>
     </Admin>
   );
 };

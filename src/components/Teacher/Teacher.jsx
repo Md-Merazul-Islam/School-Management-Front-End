@@ -4,7 +4,7 @@ import "@glidejs/glide/dist/css/glide.core.min.css";
 import "@glidejs/glide/dist/css/glide.theme.min.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import "./Teacher.css"; 
+import "./Teacher.css";
 import { TERipple } from "tw-elements-react";
 
 const Spinner = () => (
@@ -21,8 +21,12 @@ const Spinner = () => (
       }
 
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
     `}</style>
   </div>
@@ -30,19 +34,17 @@ const Spinner = () => (
 
 const Teacher = () => {
   const [teachers, setTeachers] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    
-    fetch("https://school-management-five-iota.vercel.app/academics/teachers/")
+    fetch("https://school-management-dusky.vercel.app/academics/teachers/")
       .then((res) => res.json())
       .then((data) => {
-
         if (Array.isArray(data)) {
           setTeachers(data);
         } else {
           console.error("Unexpected API response, expected array:", data);
-          setTeachers([]); 
+          setTeachers([]);
         }
       })
       .catch((error) => {
@@ -50,23 +52,21 @@ const Teacher = () => {
         setTeachers([]);
       })
       .finally(() => {
-        setLoading(false); 
+        setLoading(false);
       });
   }, []);
 
   useEffect(() => {
-  
     AOS.init({ duration: 1200 });
-
 
     if (teachers.length > 0) {
       const config = {
         type: "carousel",
         startAt: 0,
-        perView: 4, 
-        autoplay: 2000, 
+        perView: 4,
+        autoplay: 2000,
         gap: 32,
-        hoverpause: true, 
+        hoverpause: true,
         breakpoints: {
           1280: {
             perView: 4,
@@ -111,7 +111,7 @@ const Teacher = () => {
             </p>
           </div>
 
-          {loading ? ( 
+          {loading ? (
             <Spinner />
           ) : (
             <div className="glide__track" data-glide-el="track">

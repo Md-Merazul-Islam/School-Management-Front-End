@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import 'aos/dist/aos.css';
-import AOS from 'aos';
+import React, { useEffect, useState } from "react";
+import "aos/dist/aos.css";
+import AOS from "aos";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -12,11 +12,13 @@ const Students = () => {
 
     const fetchStudents = async () => {
       try {
-        const response = await fetch('https://school-management-five-iota.vercel.app/academics/students/');
+        const response = await fetch(
+          "https://school-management-dusky.vercel.app/academics/students/"
+        );
         const data = await response.json();
         setStudents(data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false); // Step 1: Set loading to false after fetch
       }
@@ -26,7 +28,7 @@ const Students = () => {
   }, []);
 
   return (
-    <div className='py-24 max-w-[1536px] mx-auto'>
+    <div className="py-24 max-w-[1536px] mx-auto">
       {/* Section Title with AOS Animation */}
       <div
         className="text-center mx-auto pb-12"
@@ -38,7 +40,10 @@ const Students = () => {
           Inspiring and Guiding the Next Generation
         </h1>
         <p className="mb-0 mx-1">
-          Our dedicated teachers are the cornerstone of our educational mission, fostering a nurturing and stimulating environment where students can excel. Learn more about the passionate educators who are committed to your academic and personal growth.
+          Our dedicated teachers are the cornerstone of our educational mission,
+          fostering a nurturing and stimulating environment where students can
+          excel. Learn more about the passionate educators who are committed to
+          your academic and personal growth.
         </p>
       </div>
 
@@ -50,7 +55,7 @@ const Students = () => {
       ) : (
         // Student Cards
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-4">
-          {students.map(student => (
+          {students.map((student) => (
             <div
               key={student.roll_no}
               className="w-full bg-white rounded-lg shadow-lg hover:shadow-blue-400 overflow-hidden"
@@ -87,7 +92,7 @@ const Students = () => {
           ))}
         </div>
       )}
-      
+
       {/* CSS for loader */}
       <style jsx>{`
         .loader {
@@ -100,8 +105,12 @@ const Students = () => {
         }
 
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </div>

@@ -10,7 +10,7 @@ const Payment = () => {
   const [message, setMessage] = useState("");
   const [paymentResponse, setPaymentResponse] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("user_id");
@@ -37,7 +37,6 @@ const Payment = () => {
       return;
     }
 
-
     const paymentData = {
       amount,
       cus_name: cusName,
@@ -49,7 +48,7 @@ const Payment = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://school-management-five-iota.vercel.app/payment/api/",
+        "https://school-management-dusky.vercel.app/payment/api/",
         paymentData,
         {
           headers: {
@@ -67,7 +66,7 @@ const Payment = () => {
       );
       setPaymentResponse(null);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 

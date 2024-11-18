@@ -5,11 +5,11 @@ npm install react-router-dom
     "password":"meraz2004"
 }
 
-https://school-management-five-iota.vercel.app/accounts/
+https://school-management-dusky.vercel.app/accounts/
 
-https://school-management-five-iota.vercel.app/accounts/register/
-https://school-management-five-iota.vercel.app/accounts/login/
-https://school-management-five-iota.vercel.app/accounts/logout/
+https://school-management-dusky.vercel.app/accounts/register/
+https://school-management-dusky.vercel.app/accounts/login/
+https://school-management-dusky.vercel.app/accounts/logout/
 
 {
     "message": "successfully login.\n",
@@ -19,37 +19,37 @@ https://school-management-five-iota.vercel.app/accounts/logout/
 }
 
 {
-    "users": "https://school-management-five-iota.vercel.app/accounts/users/",
-    "profiles": "https://school-management-five-iota.vercel.app/accounts/profiles/"
+    "users": "https://school-management-dusky.vercel.app/accounts/users/",
+    "profiles": "https://school-management-dusky.vercel.app/accounts/profiles/"
 }
 
-https://school-management-five-iota.vercel.app/academics/
+https://school-management-dusky.vercel.app/academics/
 
 
 
 
- add:   "students": "https://school-management-five-iota.vercel.app/academics/students/",
+ add:   "students": "https://school-management-dusky.vercel.app/academics/students/",
 
- add:   "students": "https://school-management-five-iota.vercel.app/academics/teachers/",
+ add:   "students": "https://school-management-dusky.vercel.app/academics/teachers/",
 {
 
-    "students": "https://school-management-five-iota.vercel.app/academics/students-list/",
-    "teachers": "https://school-management-five-iota.vercel.app/academics/teachers-list/",
-    "classes": "https://school-management-five-iota.vercel.app/academics/classes/",
-    "subjects": "https://school-management-five-iota.vercel.app/academics/subjects/"
-    "notices": "https://school-management-five-iota.vercel.app/academics/notices/"
+    "students": "https://school-management-dusky.vercel.app/academics/students-list/",
+    "teachers": "https://school-management-dusky.vercel.app/academics/teachers-list/",
+    "classes": "https://school-management-dusky.vercel.app/academics/classes/",
+    "subjects": "https://school-management-dusky.vercel.app/academics/subjects/"
+    "notices": "https://school-management-dusky.vercel.app/academics/notices/"
 }
 
 
-https://school-management-five-iota.vercel.app/classes/
+https://school-management-dusky.vercel.app/classes/
 
 
 {
     "attendance": " ",
-    "marks": "https://school-management-five-iota.vercel.app/classes/marks/"
+    "marks": "https://school-management-dusky.vercel.app/classes/marks/"
 }
 
-Attendance List Create for post - https://school-management-five-iota.vercel.app/classes/attendance-check/
+Attendance List Create for post - https://school-management-dusky.vercel.app/classes/attendance-check/
 
 
 

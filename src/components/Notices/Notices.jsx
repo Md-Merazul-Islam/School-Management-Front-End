@@ -27,7 +27,7 @@ const Notices = () => {
     AOS.init({ duration: 1000, once: true });
 
     axios
-      .get("https://school-management-five-iota.vercel.app/academics/notices/") // HTTPS
+      .get("https://school-management-dusky.vercel.app/academics/notices/") // HTTPS
       .then((response) => {
         setNotices(response.data);
         setLoading(false); // Set loading to false once data is fetched
@@ -67,10 +67,10 @@ const Notices = () => {
     const date = new Date(dateTime);
     const options = { year: "numeric", month: "long", day: "numeric" };
     const timeOptions = { hour: "2-digit", minute: "2-digit", hour12: true };
-    return `${date.toLocaleDateString(undefined, options)}, ${date.toLocaleTimeString(
+    return `${date.toLocaleDateString(
       undefined,
-      timeOptions
-    )}`;
+      options
+    )}, ${date.toLocaleTimeString(undefined, timeOptions)}`;
   };
 
   return (

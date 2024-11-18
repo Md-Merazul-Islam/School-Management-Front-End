@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = "https://school-management-five-iota.vercel.app/accounts/";
+const API_URL = "https://school-management-dusky.vercel.app/accounts/";
 
 export const updateProfile = async (token, profileData) => {
   try {

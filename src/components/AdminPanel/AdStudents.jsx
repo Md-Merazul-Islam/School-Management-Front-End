@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Admin from "../Admin/Admin";
-import ConfirmModal from './ConfirmModal'; // Import the ConfirmModal component
+import ConfirmModal from "./ConfirmModal"; // Import the ConfirmModal component
 
-const API_BASE_URL = 'https://school-management-five-iota.vercel.app/academics';
-const imgBBAPIKey = 'ea67728858ffc5a28d530570bfc45b40';
+const API_BASE_URL = "https://school-management-dusky.vercel.app/academics";
+const imgBBAPIKey = "ea67728858ffc5a28d530570bfc45b40";
 
 const AdStudents = () => {
   const [students, setStudents] = useState([]);
   const [classes, setClasses] = useState([]);
   const [studentForm, setStudentForm] = useState({
-    username: '',
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone_number: '',
-    address: '',
+    username: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    address: "",
     photo: null,
-    class_name: '',
+    class_name: "",
   });
   const [editingStudent, setEditingStudent] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const [studentToDelete, setStudentToDelete] = useState(null); // Store the student ID to delete
   const { id } = useParams();
@@ -41,7 +41,10 @@ const AdStudents = () => {
       const response = await axios.get(`${API_BASE_URL}/students/`);
       setStudents(response.data);
     } catch (error) {
-      setErrorMessage('Error fetching students: ' + (error.response ? error.response.data : error.message));
+      setErrorMessage(
+        "Error fetching students: " +
+          (error.response ? error.response.data : error.message)
+      );
     }
   };
 
@@ -50,13 +53,18 @@ const AdStudents = () => {
       const response = await axios.get(`${API_BASE_URL}/classes/`);
       setClasses(response.data);
     } catch (error) {
-      setErrorMessage('Error fetching classes: ' + (error.response ? error.response.data : error.message));
+      setErrorMessage(
+        "Error fetching classes: " +
+          (error.response ? error.response.data : error.message)
+      );
     }
   };
 
   const fetchStudent = async (studentId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/students/${studentId}/`);
+      const response = await axios.get(
+        `${API_BASE_URL}/students/${studentId}/`
+      );
       setEditingStudent(response.data);
       setStudentForm({
         username: response.data.username,
@@ -69,7 +77,10 @@ const AdStudents = () => {
         class_name: response.data.class_name,
       });
     } catch (error) {
-      setErrorMessage('Error fetching student for editing: ' + (error.response ? error.response.data : error.message));
+      setErrorMessage(
+        "Error fetching student for editing: " +
+          (error.response ? error.response.data : error.message)
+      );
     }
   };
 
@@ -93,7 +104,7 @@ const AdStudents = () => {
 
     if (studentForm.photo) {
       const formDataImage = new FormData();
-      formDataImage.append('image', studentForm.photo);
+      formDataImage.append("image", studentForm.photo);
       try {
         const imgBBResponse = await axios.post(
           `https://api.imgbb.com/1/upload?key=${imgBBAPIKey}`,
@@ -108,7 +119,7 @@ const AdStudents = () => {
 
         await saveStudent(imageUrl);
       } catch (e) {
-        setErrorMessage('Error uploading photo: ' + e.message);
+        setErrorMessage("Error uploading photo: " + e.message);
       }
     } else {
       await saveStudent();
@@ -128,42 +139,49 @@ const AdStudents = () => {
 
     try {
       if (editingStudent) {
-        await axios.put(`${API_BASE_URL}/students/${editingStudent.id}/`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        setSuccessMessage('Student updated successfully!');
+        await axios.put(
+          `${API_BASE_URL}/students/${editingStudent.id}/`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setSuccessMessage("Student updated successfully!");
         setEditingStudent(null);
       } else {
         await axios.post(`${API_BASE_URL}/students/`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         });
-        setSuccessMessage('Student added successfully!');
+        setSuccessMessage("Student added successfully!");
       }
       fetchStudents();
       resetForm();
-      navigate('/admin/students');
+      navigate("/admin/students");
     } catch (error) {
-      setErrorMessage('Error saving student: ' + (error.response ? error.response.data : error.message));
+      setErrorMessage(
+        "Error saving student: " +
+          (error.response ? error.response.data : error.message)
+      );
     }
   };
 
   const resetForm = () => {
     setStudentForm({
-      username: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-      phone_number: '',
-      address: '',
+      username: "",
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone_number: "",
+      address: "",
       photo: null,
-      class_name: '',
+      class_name: "",
     });
-    setSuccessMessage('');
-    setErrorMessage('');
+    setSuccessMessage("");
+    setErrorMessage("");
   };
 
   const handleEdit = (student) => {
@@ -178,25 +196,28 @@ const AdStudents = () => {
       photo: null,
       class_name: student.class_name,
     });
-    setSuccessMessage('');
-    setErrorMessage('');
+    setSuccessMessage("");
+    setErrorMessage("");
   };
 
   const handleDelete = (id) => {
-    setStudentToDelete(id); 
-    setIsModalOpen(true); 
+    setStudentToDelete(id);
+    setIsModalOpen(true);
   };
 
   const confirmDelete = async () => {
     try {
       await axios.delete(`${API_BASE_URL}/students/${studentToDelete}/`);
-      setSuccessMessage('Student deleted successfully!');
+      setSuccessMessage("Student deleted successfully!");
       fetchStudents();
     } catch (error) {
-      setErrorMessage('Error deleting student: ' + (error.response ? error.response.data : error.message));
+      setErrorMessage(
+        "Error deleting student: " +
+          (error.response ? error.response.data : error.message)
+      );
     } finally {
-      setIsModalOpen(false); 
-      setStudentToDelete(null); 
+      setIsModalOpen(false);
+      setStudentToDelete(null);
     }
   };
 
@@ -205,11 +226,24 @@ const AdStudents = () => {
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Students and Classes</h1>
 
-        {successMessage && <div className="mb-4 p-2 bg-green-200 text-green-800 rounded">{successMessage}</div>}
-        {errorMessage && <div className="mb-4 p-2 bg-red-200 text-red-800 rounded">{errorMessage}</div>}
+        {successMessage && (
+          <div className="mb-4 p-2 bg-green-200 text-green-800 rounded">
+            {successMessage}
+          </div>
+        )}
+        {errorMessage && (
+          <div className="mb-4 p-2 bg-red-200 text-red-800 rounded">
+            {errorMessage}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit} className="mb-8 bg-white p-4 rounded shadow-md">
-          <h2 className="text-xl font-semibold mb-4">{editingStudent ? 'Edit Student' : 'Add New Student'}</h2>
+        <form
+          onSubmit={handleSubmit}
+          className="mb-8 bg-white p-4 rounded shadow-md"
+        >
+          <h2 className="text-xl font-semibold mb-4">
+            {editingStudent ? "Edit Student" : "Add New Student"}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
@@ -263,7 +297,7 @@ const AdStudents = () => {
               onChange={handleInputChange}
               className="p-2 border rounded"
             />
-              <select
+            <select
               name="class_name"
               value={studentForm.class_name}
               onChange={handleInputChange}
@@ -288,7 +322,7 @@ const AdStudents = () => {
             type="submit"
             className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            {editingStudent ? 'Update Student' : 'Add Student'}
+            {editingStudent ? "Update Student" : "Add Student"}
           </button>
         </form>
 
@@ -307,13 +341,22 @@ const AdStudents = () => {
           <tbody>
             {students.map((student) => (
               <tr key={student.id}>
-                <td className="border border-gray-300 p-2">{student.username}</td>
-                <td className="border border-gray-300 p-2">{student.first_name}</td>
-                <td className="border border-gray-300 p-2">{student.last_name}</td>
-                <td className="border border-gray-300 p-2">{student.email}</td>
-                <td className="border border-gray-300 p-2">{student.phone_number}</td>
                 <td className="border border-gray-300 p-2">
-                  <Link to={`/admin/students/edit/${student.id}`}
+                  {student.username}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  {student.first_name}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  {student.last_name}
+                </td>
+                <td className="border border-gray-300 p-2">{student.email}</td>
+                <td className="border border-gray-300 p-2">
+                  {student.phone_number}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  <Link
+                    to={`/admin/students/edit/${student.id}`}
                     onClick={() => handleEdit(student)}
                     className="mr-2 p-1 bg-yellow-400 rounded hover:bg-yellow-500"
                   >
