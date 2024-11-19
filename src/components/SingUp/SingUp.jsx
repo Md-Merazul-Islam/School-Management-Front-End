@@ -113,7 +113,7 @@ const Signup = () => {
           <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div>
               <h1 className="text-2xl xl:text-3xl font-extrabold text-center">
-                Login Your Account
+                Register Your Account
               </h1>
               <div className="w-full flex-1 mt-8">
                 {/* <div className="flex flex-col items-center">

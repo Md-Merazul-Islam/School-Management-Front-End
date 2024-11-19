@@ -43,7 +43,7 @@ const Register = () => {
     try {
       // Fetch all users to check for existing username or email
       const usersResponse = await fetch(
-        "https://school-management-dusky.vercel.app/accounts/users/"
+        "https://school-management-dusky.vercel.app/accounts/accounts/users/"
       );
       if (!usersResponse.ok) {
         throw new Error("Failed to fetch existing users");
@@ -70,7 +70,7 @@ const Register = () => {
 
       // Proceed with registration if no duplicates are found
       const registrationResponse = await fetch(
-        "https://school-management-dusky.vercel.app/accounts/register/",
+        "https://school-management-dusky.vercel.app/accounts/accounts/register/",
         {
           method: "POST",
           headers: {

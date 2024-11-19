@@ -127,7 +127,7 @@ const Teacher = () => {
                       <div className="block rounded-lg bg-white shadow-lg dark:bg-gray-800 text-dark">
                         <a href="#!" onClick={(e) => e.preventDefault()}>
                           <img
-                            className="rounded-t-lg w-full h-64 object-cover"
+                            className="rounded-t-lg w-full h-70 object-cover"
                             src={teacher.photo} // Use the teacher's photo from the API
                             alt={`${teacher.first_name} ${teacher.last_name}`}
                           />
@@ -140,7 +140,7 @@ const Teacher = () => {
                             Employee ID: {teacher.employee_id}
                           </p>
                           <p className="mb-4 text-base text-gray-600 dark:text-gray-200">
-                            Subject: {teacher.subject_name}
+                            Subject: {teacher.subject_name.slice(0, 32)}
                           </p>
                           <p className="mb-4 text-base text-gray-600 dark:text-gray-200">
                             {teacher.email}
