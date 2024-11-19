@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import AOS from "aos";
-import "aos/dist/aos.css"; // Import AOS styles
+import "aos/dist/aos.css";
 
 // Helper function to check if the file is an image
 const isImageFile = (fileUrl) => {
@@ -21,6 +21,9 @@ const Notices = () => {
   const [notices, setNotices] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true); // Loading state
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
+
+  const imageModalRef = useRef(null);
 
   useEffect(() => {
     // Initialize AOS
@@ -38,28 +41,18 @@ const Notices = () => {
       });
   }, []);
 
-  // Fullscreen Modal Ref
-  const imageModalRef = useRef(null);
-
   // Handle opening the full-screen image
   const openFullScreen = (fileUrl) => {
     setSelectedImage(fileUrl);
-    imageModalRef.current.style.display = "flex";
+    setIsModalOpen(true);
   };
 
   // Handle closing the full-screen image
   const closeFullScreen = (e) => {
-    // If clicked outside the image, close the modal
     if (e.target === imageModalRef.current) {
-      imageModalRef.current.style.display = "none";
+      setIsModalOpen(false);
       setSelectedImage(null);
     }
-  };
-
-  // Close the modal when the close button is clicked
-  const handleClose = () => {
-    imageModalRef.current.style.display = "none";
-    setSelectedImage(null);
   };
 
   // Helper function to format date and time
@@ -97,26 +90,25 @@ const Notices = () => {
                   {notice.description}
                 </p>
 
-                {/* Check if the file is an image */}
-                {notice.file ? (
-                  isImageFile(notice.file) ? (
-                    <img
-                      src={notice.file}
-                      alt={notice.title}
-                      className="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-90 transition-opacity duration-300"
-                      onClick={() => openFullScreen(notice.file)}
-                      data-aos="zoom-in"
-                    />
-                  ) : (
+                {notice.image && isImageFile(notice.image) ? (
+                  <img
+                    src={notice.image}
+                    alt={notice.title}
+                    className="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-90 transition-opacity duration-300"
+                    onClick={() => openFullScreen(notice.image)}
+                    data-aos="zoom-in"
+                  />
+                ) : (
+                  notice.image && (
                     <a
-                      href={notice.file}
+                      href={notice.image}
                       className="block text-center bg-blue-600 text-white px-4 py-2 rounded-lg mt-2 hover:bg-blue-700 transition-colors duration-300"
                       download
                     >
-                      Download File
+                      Download Image
                     </a>
                   )
-                ) : null}
+                )}
 
                 <p className="text-sm text-gray-500 text-center">
                   Posted on: {formatDateTime(notice.created_at)}
@@ -127,12 +119,10 @@ const Notices = () => {
         )}
       </div>
 
-      {/* Fullscreen Image Modal */}
-      {selectedImage && (
+      {isModalOpen && selectedImage && (
         <div
           ref={imageModalRef}
           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
-          style={{ display: "none" }}
           onClick={closeFullScreen}
         >
           <div className="relative">
@@ -141,10 +131,9 @@ const Notices = () => {
               alt="Full Screen"
               className="w-full h-auto max-w-screen-lg object-contain rounded-lg"
             />
-            {/* Close Button */}
             <button
               className="absolute top-4 right-4 text-white text-4xl font-bold hover:text-gray-300 transition-colors duration-300"
-              onClick={handleClose}
+              onClick={() => setIsModalOpen(false)}
             >
               &times;
             </button>

@@ -3,43 +3,45 @@ import axios from "axios";
 import Admin from "../Admin/Admin";
 import { Link } from "react-router-dom";
 
-const AdCourse = () => {
-  const [subjects, setSubjects] = useState([]);
-  const [newSubject, setNewSubject] = useState({
-    name: "",
-    code: "",
+// Set up base URL for axios
+const API_BASE_URL = "https://school-management-dusky.vercel.app/academics";
+
+const AdNotices = () => {
+  const [notices, setNotices] = useState([]);
+  const [noticeForm, setNoticeForm] = useState({
+    title: "",
     description: "",
-    photo: "",
+    file: null,
+    image: "",  // For storing the image URL
   });
-  const [editSubject, setEditSubject] = useState(null);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
+  const [editingNotice, setEditingNotice] = useState(null);
+  const [imageFile, setImageFile] = useState(null);  // To store the selected image file
 
-  const imgBBAPIKey = "ea67728858ffc5a28d530570bfc45b40";
+  const imgBBAPIKey = "ea67728858ffc5a28d530570bfc45b40";  // ImgBB API key
 
-  // Fetch all subjects
+  // Fetch notices
   useEffect(() => {
-    fetchSubjects();
+    fetchNotices();
   }, []);
 
-  const fetchSubjects = async () => {
+  const fetchNotices = async () => {
     try {
-      const response = await axios.get(
-        "https://school-management-dusky.vercel.app/academics/subjects/"
-      );
-      setSubjects(response.data);
+      const response = await axios.get(`${API_BASE_URL}/notices/`);
+      setNotices(response.data);
     } catch (error) {
-      console.error("Error fetching subjects:", error);
+      console.error(
+        "Error fetching notices:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
-  // Handle form input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewSubject({ ...newSubject, [name]: value });
-    if (isEditMode) {
-      setEditSubject({ ...editSubject, [name]: value });
-    }
+    setNoticeForm({
+      ...noticeForm,
+      [name]: value,
+    });
   };
 
   // Handle image file change
@@ -47,7 +49,10 @@ const AdCourse = () => {
     setImageFile(e.target.files[0]);
   };
 
+  // Upload image to ImgBB
   const uploadImageToImgBB = async () => {
+    if (!imageFile) return "";  // If no image file is selected, return empty string
+
     const formDataImage = new FormData();
     formDataImage.append("image", imageFile);
 
@@ -59,118 +64,180 @@ const AdCourse = () => {
       return imgBBResponse.data.data.url;
     } catch (error) {
       console.error("Error uploading image:", error);
-      return null;
+      return "";  // Return empty string in case of error
     }
   };
 
-  const addSubject = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const imageUrl = await uploadImageToImgBB();
-
-    if (imageUrl) {
-      try {
-        const newSubjectData = { ...newSubject, photo: imageUrl };
-        const response = await axios.post(
-          "https://school-management-dusky.vercel.app/academics/subjects/",
-          newSubjectData
-        );
-        setSubjects([...subjects, response.data]);
-        setNewSubject({ name: "", code: "", description: "", photo: "" });
-        setImageFile(null);
-      } catch (error) {
-        console.error("Error adding subject:", error);
-      }
-    }
-  };
-
-  const editExistingSubject = async (e) => {
-    e.preventDefault();
-
-    let imageUrl = editSubject.photo;
+    // If image is selected, upload it to ImgBB and get the URL
+    let imageURL = noticeForm.image;
     if (imageFile) {
-      imageUrl = await uploadImageToImgBB();
+      imageURL = await uploadImageToImgBB();
     }
 
-    if (imageUrl) {
-      try {
-        const updatedSubjectData = { ...editSubject, photo: imageUrl };
-        const response = await axios.put(
-          `https://school-management-dusky.vercel.app/academics/subjects/${editSubject.id}/`,
-          updatedSubjectData
-        );
-        const updatedSubjects = subjects.map((subject) =>
-          subject.id === editSubject.id ? response.data : subject
-        );
-        setSubjects(updatedSubjects);
-        setIsEditMode(false);
-        setEditSubject(null);
-        setImageFile(null);
-      } catch (error) {
-        console.error("Error editing subject:", error);
+    const formData = new FormData();
+    Object.keys(noticeForm).forEach((key) => {
+      if (key === "image") {
+        formData.append(key, imageURL);  // Add image URL to form data
+      } else {
+        formData.append(key, noticeForm[key]);
       }
-    }
-  };
+    });
 
-  const deleteSubject = async (id) => {
     try {
-      await axios.delete(
-        `https://school-management-dusky.vercel.app/academics/subjects/${id}/`
-      );
-      setSubjects(subjects.filter((subject) => subject.id !== id));
+      if (editingNotice) {
+        // Update notice
+        await axios.put(
+          `${API_BASE_URL}/notices/${editingNotice.id}/`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setEditingNotice(null);
+      } else {
+        // Create notice
+        await axios.post(`${API_BASE_URL}/notices/`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
+      fetchNotices();
+      setNoticeForm({
+        title: "",
+        description: "",
+        file: null,
+        image: "",  // Reset the image URL after submission
+      });
+      setImageFile(null);  // Reset the image file input as well
     } catch (error) {
-      console.error("Error deleting subject:", error);
+      console.error(
+        "Error saving notice:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
-  const openEditMode = (subject) => {
-    setIsEditMode(true);
-    setEditSubject(subject);
-    setNewSubject({ name: "", code: "", description: "", photo: "" });
+  const handleEdit = (notice) => {
+    setEditingNotice(notice);
+    setNoticeForm({
+      title: notice.title,
+      description: notice.description,
+      image: notice.image || "", // Set image URL if exists
+    });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/notices/${id}/`);
+      fetchNotices();
+    } catch (error) {
+      console.error(
+        "Error deleting notice:",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   return (
-    <div>
-      <Admin>
-        <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-4">Subjects</h1>
+    <Admin>
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Notices</h1>
 
-          {/* Subject List Table */}
-          <table className="table-auto w-full border-collapse">
+        {/* Notice Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="mb-8 bg-white p-4 rounded shadow-md"
+        >
+          <h2 className="text-xl font-semibold mb-4">
+            {editingNotice ? "Edit Notice" : "Add New Notice"}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              value={noticeForm.title}
+              onChange={handleInputChange}
+              className="p-2 border rounded"
+            />
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={noticeForm.description}
+              onChange={handleInputChange}
+              className="p-2 border rounded"
+            />
+            <input
+              type="file"
+              name="file"
+              onChange={(e) => handleImageChange(e)}
+              className="p-2 border rounded"
+            />
+            {/* Image URL field (only for editing) */}
+            {editingNotice && noticeForm.image && (
+              <div className="col-span-2">
+                <img src={noticeForm.image} alt="Notice Image" className="w-32 h-32 object-cover" />
+              </div>
+            )}
+          </div>
+          <div className="flex space-x-4">
+            <button
+              type="submit"
+              className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              {editingNotice ? "Update Notice" : "Add Notice"}
+            </button>
+          </div>
+        </form>
+
+        {/* Notices List */}
+        <div className="bg-white p-4 rounded shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Notices List</h2>
+          <table className="w-full table-auto border-collapse">
             <thead>
-              <tr>
-                <th className="border px-4 py-2">Name</th>
-                <th className="border px-4 py-2">Code</th>
-                <th className="border px-4 py-2">Description</th>
-                <th className="border px-4 py-2">Photo</th>
-                <th className="border px-4 py-2">Actions</th>
+              <tr className="bg-gray-100">
+                <th className="border p-2">Title</th>
+                <th className="border p-2">Description</th>
+                <th className="border p-2">File</th>
+                <th className="border p-2">Created At</th>
+                <th className="border p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {subjects.map((subject) => (
-                <tr key={subject.id}>
-                  <td className="border px-4 py-2">{subject.name}</td>
-                  <td className="border px-4 py-2">{subject.code}</td>
-                  <td className="border px-4 py-2">{subject.description}</td>
-                  <td className="border px-4 py-2">
-                    <img
-                      src={subject.photo}
-                      alt={subject.name}
-                      className="h-20 w-20 object-cover"
-                    />
+              {notices.map((notice) => (
+                <tr key={notice.id} className="text-center">
+                  <td className="border p-2">{notice.title}</td>
+                  <td className="border p-2">{notice.description}</td>
+                  <td className="border p-2">
+                    <a
+                      href={notice.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View File
+                    </a>
                   </td>
-                  <td className="border px-4 py-2">
-                    <div className="flex space-x-2">
+                  <td className="border p-2">
+                    {new Date(notice.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="border p-2">
+                    <div className="flex justify-center space-x-2">
                       <Link
-                        to={`/admin/course/edit/${subject.id}`}
-                        className="px-4 py-2 bg-blue-500 text-white rounded"
-                        onClick={() => openEditMode(subject)}
+                        to={`/admin/notices/edit/${notice.id}`}
+                        onClick={() => handleEdit(notice)}
+                        className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
                       >
                         Edit
                       </Link>
                       <button
-                        className="px-4 py-2 bg-red-500 text-white rounded"
-                        onClick={() => deleteSubject(subject.id)}
+                        onClick={() => handleDelete(notice.id)}
+                        className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                       >
                         Delete
                       </button>
@@ -180,83 +247,13 @@ const AdCourse = () => {
               ))}
             </tbody>
           </table>
-
-          {/* Add/Edit Form */}
-          <form
-            onSubmit={isEditMode ? editExistingSubject : addSubject}
-            className="border p-4 rounded shadow mt-4"
-          >
-            <h2 className="text-xl font-bold mb-4">
-              {isEditMode ? "Edit Subject" : "Add Subject"}
-            </h2>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={isEditMode ? editSubject.name : newSubject.name}
-                onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Code
-              </label>
-              <input
-                type="text"
-                name="code"
-                value={isEditMode ? editSubject.code : newSubject.code}
-                onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Description
-              </label>
-              <textarea
-                name="description"
-                value={
-                  isEditMode ? editSubject.description : newSubject.description
-                }
-                onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                required
-              ></textarea>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Photo
-              </label>
-              <input
-                type="file"
-                name="photo"
-                onChange={handleImageChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                required={!isEditMode}
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded"
-            >
-              {isEditMode ? "Save Changes" : "Add Subject"}
-            </button>
-          </form>
         </div>
-      </Admin>
-    </div>
+      </div>
+    </Admin>
   );
 };
 
-export default AdCourse;
+
+
+
+export default AdNotices;

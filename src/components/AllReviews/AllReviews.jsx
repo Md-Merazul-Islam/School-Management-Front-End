@@ -4,7 +4,7 @@ import axios from "axios";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const API_BASE_URL = "https://school-management-five-iota.vercel.app";
+const API_BASE_URL = "https://school-management-dusky.vercel.app";
 
 const AllReviews = () => {
   const [reviews, setReviews] = useState([]);

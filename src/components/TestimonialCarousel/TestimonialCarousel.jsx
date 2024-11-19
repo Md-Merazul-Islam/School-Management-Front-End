@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
 import './TestimonialCarousel.css'
 
-const API_BASE_URL = "https://school-management-five-iota.vercel.app";
+const API_BASE_URL = "https://school-management-dusky.vercel.app";
 
 const TestimonialCarousel = () => {
   const [reviews, setReviews] = useState([]);
