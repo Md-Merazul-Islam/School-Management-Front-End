@@ -15,7 +15,7 @@ const Contact = () => {
 
   return (
     <div>
-      <section className="py-24 z-10 relative overflow-hidden">
+      <section className="py-11 z-10 relative overflow-hidden">
         <div
           className="text-center mx-auto pb-12"
           style={{ maxWidth: '800px' }}

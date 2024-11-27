@@ -9,8 +9,8 @@ const Feature = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 py-20">
-      <div className="container mx-auto py-20">
+    <div className="bg-gray-100 py-11">
+      <div className="container mx-auto ">
         <div
           className="text-center mx-auto pb-12"
           style={{ maxWidth: '800px' }}

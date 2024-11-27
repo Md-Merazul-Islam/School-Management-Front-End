@@ -99,7 +99,7 @@ const TestimonialCarousel = () => {
 
   return (
   <div>
-      <section className="py-12 bg-gray-50 mx-w-[1536px] sm:py-16 lg:py-20">
+      <section className="py-12 bg-gray-50 mx-w-[1536px] sm:py-16 lg:py-11">
       <div className="px-4 mx-auto sm:px-6 lg:px-8">
         <div className="flex flex-col items-center">
           <div className="text-center">

@@ -9,7 +9,7 @@ const About = () => {
 
   return (
    <div>
-     <div className="bg-gray-200 py-24">
+     <div className="bg-gray-200 py-11">
       <div
         className="text-center mx-auto pb-12"
         style={{ maxWidth: "800px" }}
