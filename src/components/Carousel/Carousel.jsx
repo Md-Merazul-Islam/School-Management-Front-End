@@ -35,10 +35,10 @@ const Carousel = () => {
                 data-aos="fade-right"
                 className="w-full lg:w-7/12 text-center md:text-left "
               >
-                <h4 className="text-white uppercase font-bold mb-4">
+                <h4 className="text-white uppercase font-bold mb-4 mt-9 md:mt-0" >
                   Welcome to Our CST
                 </h4>
-                <h1 className="text-white text-6xl md:text-7xl lg:text-8xl mb-4">
+                <h1 className="text-white text-5xl  md:text-7xl lg:text-8xl mb-4">
                   Empowering Future Leaders
                 </h1>
                 <p className="mb-5 text-lg text-white max-w-[819px]">
